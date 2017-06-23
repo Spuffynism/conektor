@@ -1,6 +1,4 @@
-package com.springmvc.model.provider;
-
-import com.springmvc.model.account.Account;
+package com.springmvc.model;
 
 import javax.persistence.*;
 import java.util.Set;

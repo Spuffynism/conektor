@@ -1,4 +1,4 @@
-package com.springmvc.security;
+package com.springmvc.security.auth.jwt;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

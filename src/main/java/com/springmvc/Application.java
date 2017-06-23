@@ -1,5 +1,6 @@
 package com.springmvc;
 
+import com.springmvc.security.hashing.Argon2Hasher;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -8,12 +9,12 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 
 @SpringBootApplication
 public class Application {
     public static void main(String[] args) {
+        //System.out.println("username:" + new Argon2Hasher().hash("password"));
         SpringApplication.run(Application.class, args);
     }
 

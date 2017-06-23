@@ -1,9 +1,7 @@
-package com.springmvc.model.user;
+package com.springmvc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.springmvc.model.account.Account;
-import org.hibernate.annotations.BatchSize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -100,6 +98,26 @@ public class User implements UserDetails {
 
     public void setAccounts(Set<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    public boolean isAdmin() {
+        return Permission.ADMIN.isContainedIn(permission);
+    }
+
+    public boolean isUser() {
+        return Permission.USER.isContainedIn(permission);
+    }
+
+    public void addPermission(Permission newPermission) {
+        setPermission(newPermission.addTo(permission));
+    }
+    
+    public void removePermission(Permission oldPermission) {
+        setPermission(oldPermission.removeFrom(permission));
+    }
+
+    public boolean hasNoPermissions() {
+        return permission == Permission.NONE.value();
     }
 
     //<editor-fold> UserDetails Authorization getters and setters

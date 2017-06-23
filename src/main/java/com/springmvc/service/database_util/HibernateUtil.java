@@ -1,4 +1,4 @@
-package com.springmvc.model.database_util;
+package com.springmvc.service.database_util;
 
 
 import org.hibernate.SessionFactory;

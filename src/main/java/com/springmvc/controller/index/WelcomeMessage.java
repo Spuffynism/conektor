@@ -5,6 +5,7 @@ import java.util.Date;
 public class WelcomeMessage {
     private long timestamp;
     private String message;
+    private boolean authenticated;
 
     public WelcomeMessage(String message) {
         this.timestamp = new Date().getTime();
@@ -25,5 +26,13 @@ public class WelcomeMessage {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
+
+    public void setAuthenticated(boolean authenticated) {
+        this.authenticated = authenticated;
     }
 }

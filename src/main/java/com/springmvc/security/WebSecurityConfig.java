@@ -1,6 +1,8 @@
 package com.springmvc.security;
 
-import com.springmvc.model.user.UserService;
+import com.springmvc.security.auth.jwt.JWTAuthenticationFilter;
+import com.springmvc.security.auth.jwt.JWTLoginFilter;
+import com.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

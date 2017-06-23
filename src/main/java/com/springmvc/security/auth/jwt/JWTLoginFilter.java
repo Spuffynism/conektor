@@ -1,12 +1,12 @@
-package com.springmvc.security;
+package com.springmvc.security.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springmvc.model.user.User;
-import com.springmvc.model.user.UserService;
+import com.springmvc.model.User;
 import com.springmvc.security.auth.AccountCredentials;
 import com.springmvc.security.auth.exception.InvalidPasswordException;
 import com.springmvc.security.hashing.Argon2Hasher;
 import com.springmvc.security.hashing.IPasswordHasher;
+import com.springmvc.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,6 +51,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         return authenticateUser(creds.getUsername(), creds.getPassword());
     }
 
+    // TODO Integrate hashing in authentication
     public Authentication authenticateUser(String username, String password)
             throws InvalidPasswordException {
         IPasswordHasher argon2Hasher = new Argon2Hasher();

@@ -1,6 +1,6 @@
 package com.springmvc.security.auth;
 
-import com.springmvc.model.database_util.QueryExecutor;
+import com.springmvc.service.database_util.QueryExecutor;
 import org.hibernate.Query;
 
 import java.math.BigInteger;

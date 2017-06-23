@@ -12,9 +12,9 @@
         <property name="connection.username">root</property>
         <property name="hibernate.current_session_context_class">thread</property>
 
-        <mapping class="com.springmvc.model.user.User"/>
-        <mapping class="com.springmvc.model.account.Account"/>
-        <mapping class="com.springmvc.model.provider.Provider"/>
+        <mapping class="com.springmvc.model.User"/>
+        <mapping class="com.springmvc.model.Account"/>
+        <mapping class="com.springmvc.model.Provider"/>
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
 </hibernate-configuration>

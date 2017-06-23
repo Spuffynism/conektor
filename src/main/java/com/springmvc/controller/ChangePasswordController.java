@@ -1,8 +1,8 @@
 package com.springmvc.controller;
 
-import com.springmvc.model.user.UserService;
 import com.springmvc.security.auth.NewPassword;
 import com.springmvc.security.auth.exception.InvalidPasswordException;
+import com.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping({"/change_password/", "/change_password"})
+@RequestMapping("/change_password")
 public class ChangePasswordController {
     private final UserService userService;
 

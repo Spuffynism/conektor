@@ -1,15 +1,16 @@
-package com.springmvc.model.user;
+package com.springmvc.service;
 
-import com.springmvc.model.database_util.AbstractService;
-import com.springmvc.model.database_util.QueryExecutor;
+import com.springmvc.model.User;
+import com.springmvc.service.database_util.AbstractService;
+import com.springmvc.service.database_util.QueryExecutor;
 import com.springmvc.security.auth.NewPassword;
 import com.springmvc.security.auth.exception.InvalidPasswordException;
 import com.springmvc.security.hashing.Argon2Hasher;
 import com.springmvc.security.hashing.IPasswordHasher;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -19,9 +20,12 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
 
     private final AccountStatusUserDetailsChecker detailsChecker
             = new AccountStatusUserDetailsChecker();
+    private final AuthHolder authHolder;
 
-    public UserService() {
+    @Autowired
+    public UserService(AuthHolder authHolder) {
         super(User.class);
+        this.authHolder = authHolder;
     }
 
     @Override
@@ -53,10 +57,7 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
      * @return l'utilisateur authentifié
      */
     public User getAuthenticatedUser() {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-
-        return loadUserByUsername(username);
+        return (User) authHolder.getUser();
     }
 
     public void changerMotDePasse(NewPassword newPassword) throws InvalidPasswordException {
@@ -85,7 +86,7 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
         modifier(userCourant);
     }
 
-    private Void modifierMotDePasse(User user, String hash) {
+    private Void updatePassword(User user, String hash) {
         return new QueryExecutor<Void>(session -> {
             Query query = session.createQuery("update User set password = :hash where id " +
                     "= :userId")
@@ -99,10 +100,10 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
         }).execute();
     }
 
-    public Void ajouterTentativeChangementMotDePasse(int userId) {
+    public Void AddAttemptedPasswordChanges(int userId) {
         return new QueryExecutor<Void>(session -> {
-            String sql = "update User set nbTentativesChangementMotDePasse " +
-                    "= nbTentativesChangementMotDePasse + 1 where id = :userId";
+            String sql = "update User set attemptedPasswordChanges " +
+                    "= attemptedPasswordChanges + 1 where id = :userId";
             Query query = session.createQuery(sql)
                     .setParameter("userId", userId);
 
@@ -113,9 +114,9 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
         }).execute();
     }
 
-    public Void resetTentativesChangementMotDePasse(int userId) {
+    public Void resetAttemptedPasswordChanges(int userId) {
         return new QueryExecutor<Void>(session -> {
-            String sql = "update User set nbTentativesChangementMotDePasse = 0 where id = :userId";
+            String sql = "update User set attemptedPasswordChanges = 0 where id = :userId";
             Query query = session.createQuery(sql)
                     .setParameter("userId", userId);
 

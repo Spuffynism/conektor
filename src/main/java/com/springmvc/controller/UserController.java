@@ -1,7 +1,8 @@
 package com.springmvc.controller;
 
-import com.springmvc.model.user.User;
-import com.springmvc.model.user.UserService;
+import com.springmvc.model.User;
+import com.springmvc.service.AuthHolder;
+import com.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,18 +13,23 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/users/", "/users"})
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
+    private final AuthHolder authHolder;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthHolder authHolder) {
         this.userService = userService;
+        this.authHolder = authHolder;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<User>> listAllUsers() {
+        if(authHolder.getUser().isAccountNonLocked())
+            return new ResponseEntity<>(HttpStatus.OK);
+
         List<User> users = userService.getAll();
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -1,5 +1,6 @@
-package com.springmvc.security;
+package com.springmvc.security.auth.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,10 +26,11 @@ public class TokenAuthenticationService {
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, SECRET.getBytes("UTF-8"))
                 .compact();
+        JWTToken token = new JWTToken(JWT);
 
-        response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+        response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + token.getToken());
         response.setContentType("application/json");
-        response.getWriter().write("{\"token\": \"" + JWT + "\"}");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(token));
     }
 
     static Authentication getAuthentication(HttpServletRequest request) throws UnsupportedEncodingException {

@@ -7,7 +7,8 @@ CREATE TABLE user_usr (
   usr_username VARCHAR(32) NULL UNIQUE,
   usr_email VARCHAR(255) NULL UNIQUE,
   usr_password VARCHAR(255) NULL,
-  usr_tentatives_changement_mot_de_passe INT NOT NULL DEFAULT 0,
+  usr_attempted_password_changes INT NOT NULL DEFAULT 0,
+  usr_permission INT DEFAULT 0,
   usr_date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
   usr_date_modified DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE = InnoDB;

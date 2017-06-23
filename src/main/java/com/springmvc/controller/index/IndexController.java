@@ -1,4 +1,4 @@
-package com.springmvc.controller;
+package com.springmvc.controller.index;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/")
-public class DefaultController {
+public class IndexController {
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> get() {
-        return new ResponseEntity<>(null, HttpStatus.OK);
+    public ResponseEntity<WelcomeMessage> get() {
+        WelcomeMessage welcome = new WelcomeMessage("this is conektor");
+
+        return new ResponseEntity<>(welcome, HttpStatus.OK);
     }
 }

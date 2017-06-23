@@ -2,7 +2,8 @@ package com.springmvc.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.springmvc.model.achat.Achat;
+import com.springmvc.model.account.Account;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,13 +16,14 @@ import java.util.Set;
 @Table(name = "user_usr")
 public class User implements UserDetails {
     private int id;
-    private String prenom;
-    private String nom;
     private String username;
     private String email;
     private String password;
-    private int nbTentativesChangementMotDePasse;
-    private Set<Achat> achats;
+    private int permission;
+    private int attemptedPasswordChanges;
+    private Set<Account> accounts;
+
+    //<editor-fold> Basic getters and setters
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,31 +32,8 @@ public class User implements UserDetails {
         return id;
     }
 
-    public User setId(int id) {
+    public void setId(int id) {
         this.id = id;
-        return this;
-    }
-
-    @Basic
-    @Column(name = "usr_prenom")
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public User setPrenom(String prenom) {
-        this.prenom = prenom;
-        return this;
-    }
-
-    @Basic
-    @Column(name = "usr_nom")
-    public String getNom() {
-        return nom;
-    }
-
-    public User setNom(String nom) {
-        this.nom = nom;
-        return this;
     }
 
     @Basic
@@ -63,9 +42,8 @@ public class User implements UserDetails {
         return username;
     }
 
-    public User setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
-        return this;
     }
 
     @Basic
@@ -74,46 +52,57 @@ public class User implements UserDetails {
         return email;
     }
 
-    public User setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
-        return this;
     }
 
     @JsonIgnore
     @Basic
-    @Column(name = "usr_mot_de_passe")
+    @Column(name = "usr_password")
     public String getPassword() {
         return password;
     }
 
     @JsonProperty
-    public User setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
-        return this;
     }
 
     @JsonIgnore
     @Basic
-    @Column(name = "usr_tentatives_changement_mot_de_passe")
-    public int getNbTentativesChangementMotDePasse() {
-        return nbTentativesChangementMotDePasse;
+    @Column(name = "usr_permission")
+    public int getPermission() {
+        return permission;
+    }
+
+    public void setPermission(int permission) {
+        this.permission = permission;
+    }
+
+    @JsonIgnore
+    @Basic
+    @Column(name = "usr_attempted_password_changes")
+    public int getAttemptedPasswordChanges() {
+        return attemptedPasswordChanges;
     }
 
     @JsonProperty
-    public User setNbTentativesChangementMotDePasse(int nbTentativesChangementMotDePasse) {
-        this.nbTentativesChangementMotDePasse = nbTentativesChangementMotDePasse;
-        return this;
+    public void setAttemptedPasswordChanges(int nbTentativesChangementMotDePasse) {
+        this.attemptedPasswordChanges = attemptedPasswordChanges;
     }
+
+    //</editor-fold>
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    public Set<Achat> getAchats() {
-        return achats;
+    public Set<Account> getAccounts() {
+        return accounts;
     }
 
-    public User setAchats(Set<Achat> achats) {
-        this.achats = achats;
-        return this;
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
     }
+
+    //<editor-fold> UserDetails Authorization getters and setters
 
     @JsonIgnore
     @Override
@@ -168,5 +157,8 @@ public class User implements UserDetails {
 
     @JsonProperty
     public void setEnabled(boolean enabled) {
+
     }
+
+    //</editor-fold>
 }

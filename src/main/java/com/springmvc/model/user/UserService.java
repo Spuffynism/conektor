@@ -1,6 +1,6 @@
 package com.springmvc.model.user;
 
-import com.springmvc.model.database_util.AbstractManager;
+import com.springmvc.model.database_util.AbstractService;
 import com.springmvc.model.database_util.QueryExecutor;
 import com.springmvc.security.auth.NewPassword;
 import com.springmvc.security.auth.exception.InvalidPasswordException;
@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserService extends AbstractManager<User> implements UserDetailsService {
+public class UserService extends AbstractService<User> implements UserDetailsService {
 
     private final AccountStatusUserDetailsChecker detailsChecker
             = new AccountStatusUserDetailsChecker();
@@ -65,7 +65,7 @@ public class UserService extends AbstractManager<User> implements UserDetailsSer
         IPasswordHasher argon2 = new Argon2Hasher();
 
         // Vérifie qu'on n'excède pas le nombre de tentatives de changement de mot de passe
-        if (userCourant.getNbTentativesChangementMotDePasse()
+        if (userCourant.getAttemptedPasswordChanges()
                 > NewPassword.NB_MAX_TENTATIVES_CHANGEMENT_MOT_DE_PASSE)
             throw new InvalidPasswordException("Le nombre de tentatives de changement de mot de " +
                     "passe a été excédé.");

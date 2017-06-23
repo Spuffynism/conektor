@@ -67,10 +67,8 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        currentUser.setUsername(user.getUsername())
-                .setPrenom(user.getPrenom())
-                .setNom(user.getNom())
-                .setEmail(user.getEmail());
+        currentUser.setUsername(user.getUsername());
+        currentUser.setEmail(user.getEmail());
 
         userService.modifier(currentUser);
         return new ResponseEntity<>(currentUser, HttpStatus.OK);

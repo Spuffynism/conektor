@@ -1,17 +1,18 @@
 package com.springmvc.model.database_util;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * Contient les opérations CRUD de base pouvant être faites sur des T liés à une table dans la
  * bd par leurs managers respectifs
  *
- * @param <T> l'objet managé par le manager qui extend cette classe
+ * @param <T> l'objet managé par le service qui extend cette classe
  */
-public abstract class AbstractManager<T> {
-    private Class<T> tClass;
+public abstract class AbstractService<T> {
+    private final Class<T> tClass;
 
-    protected AbstractManager(Class<T> tClass) {
+    protected AbstractService(Class<T> tClass) {
         this.tClass = tClass;
     }
 
@@ -25,6 +26,23 @@ public abstract class AbstractManager<T> {
     public T get(int id) {
         return new QueryExecutor<>(session -> {
             return (T) session.get(tClass, id);
+        }).execute();
+    }
+
+    /**
+     * TODO Faire ça
+     * @param id
+     * @return
+     */
+    public Date getDateCreate(int id) {
+        return new QueryExecutor<>(session -> {
+            return (Date) session.get(tClass, id);
+        }).execute();
+    }
+
+    public Date getDateCreated(int id) {
+        return new QueryExecutor<>(session -> {
+            return (Date) session.get(tClass, id);
         }).execute();
     }
 

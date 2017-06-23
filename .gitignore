@@ -6,3 +6,4 @@ conf/common_passwords/
 api.iml
 conf/ssl/
 src/main/main.iml
+src/main/resources/application.yml

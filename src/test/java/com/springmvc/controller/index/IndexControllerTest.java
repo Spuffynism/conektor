@@ -1,37 +1,33 @@
 package com.springmvc.controller.index;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class IndexControllerTest {
 
-    @LocalServerPort
-    private int port;
-
     @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Before
-    public void overrideHostnameVerifier() {
-        setDefaultHostnameVerifier(
-                (hostname, sslSession) -> hostname.equals("localhost")
-        );
-    }
+    private MockMvc mockMvc;
 
     @Test
-    public void contextLoads() throws Exception {
-        assertThat(this.restTemplate.getForObject("https://localhost:8443", String.class))
-                .contains("this is conektor");
+    public void indexShowsWelcomeMessage() throws Exception {
+        this.mockMvc.perform(get("/").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("this is conektor")))
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
     }
 }

@@ -6,7 +6,9 @@ import com.springmvc.security.auth.AccountCredentials;
 import com.springmvc.security.auth.exception.InvalidPasswordException;
 import com.springmvc.security.hashing.Argon2Hasher;
 import com.springmvc.security.hashing.IPasswordHasher;
+import com.springmvc.service.AuthHolder;
 import com.springmvc.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,16 +26,19 @@ import java.util.Collections;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    public JWTLoginFilter(String url, AuthenticationManager authManager) {
+    private final UserService userService;
+
+    public JWTLoginFilter(String url, AuthenticationManager authManager, UserService userService) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
+        this.userService = userService;
     }
 
     @Override
     public Authentication attemptAuthentication(
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
             throws AuthenticationException, IOException, ServletException {
-        AccountCredentials creds = null;
+        AccountCredentials creds;
         Authentication authentication = null;
         try {
             creds = new ObjectMapper()
@@ -46,16 +51,16 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         return authentication;
     }
 
-    public Authentication authenticateUser(AccountCredentials creds)
+    private Authentication authenticateUser(AccountCredentials creds)
             throws InvalidPasswordException {
         return authenticateUser(creds.getUsername(), creds.getPassword());
     }
 
     // TODO Integrate hashing in authentication
-    public Authentication authenticateUser(String username, String password)
+    private Authentication authenticateUser(String username, String password)
             throws InvalidPasswordException {
+        User user = userService.loadUserByUsername(username);
         IPasswordHasher argon2Hasher = new Argon2Hasher();
-        User user = new UserService().loadUserByUsername(username);
         boolean passwordOK = argon2Hasher.verify(user.getPassword(), password);
 
         if (!passwordOK)

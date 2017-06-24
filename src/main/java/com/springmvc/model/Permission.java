@@ -1,9 +1,9 @@
 package com.springmvc.model;
 
 public enum Permission {
-    NONE (0x0, ""),
-    USER (0x1, ""), // 2^0
-    ADMIN (0x2, ""); // 2^1
+    NONE (0x0, "No permissions"),
+    USER (0x1, "Basic user role"), // 2^0
+    ADMIN (0x2, "Basic admin role"); // 2^1
 
     private final int value;
     private final String description;

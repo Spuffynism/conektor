@@ -1,24 +1,30 @@
 package com.springmvc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "user_usr")
-public class User implements UserDetails {
+public class User extends Datable implements UserDetails {
     private int id;
     private String username;
     private String email;
+    @JsonIgnore
     private String password;
+    @JsonIgnore
     private int permission;
+    @JsonIgnore
     private int attemptedPasswordChanges;
+    @JsonIgnoreProperties("user")
     private Set<Account> accounts;
 
     //<editor-fold> Basic getters and setters
@@ -54,19 +60,16 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    @JsonIgnore
     @Basic
     @Column(name = "usr_password")
     public String getPassword() {
         return password;
     }
 
-    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @JsonIgnore
     @Basic
     @Column(name = "usr_permission")
     public int getPermission() {
@@ -77,14 +80,12 @@ public class User implements UserDetails {
         this.permission = permission;
     }
 
-    @JsonIgnore
     @Basic
     @Column(name = "usr_attempted_password_changes")
     public int getAttemptedPasswordChanges() {
         return attemptedPasswordChanges;
     }
 
-    @JsonProperty
     public void setAttemptedPasswordChanges(int nbTentativesChangementMotDePasse) {
         this.attemptedPasswordChanges = attemptedPasswordChanges;
     }
@@ -100,10 +101,28 @@ public class User implements UserDetails {
         this.accounts = accounts;
     }
 
+    @Override
+    @JsonIgnore
+    @Column(name = "usr_date_created")
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    @Override
+    @JsonIgnore
+    @Column(name = "usr_date_modified")
+    public Date getDateModified() {
+        return dateModified;
+    }
+
+    @Transient
+    @JsonIgnore
     public boolean isAdmin() {
         return Permission.ADMIN.isContainedIn(permission);
     }
 
+    @Transient
+    @JsonIgnore
     public boolean isUser() {
         return Permission.USER.isContainedIn(permission);
     }
@@ -175,7 +194,6 @@ public class User implements UserDetails {
 
     @JsonProperty
     public void setEnabled(boolean enabled) {
-
     }
 
     //</editor-fold>

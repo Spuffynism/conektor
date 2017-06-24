@@ -16,7 +16,7 @@ import java.util.Date;
 public class TokenAuthenticationService {
     private static final long EXPIRATION_TIME = 864_000_000; // 10 jours
     private static final String SECRET = "secret-securite-tp4";
-    private static final String TOKEN_PREFIX = "Bearer";
+    private static final String TOKEN_PREFIX = "Bearer: ";
     private static final String HEADER_STRING = "Authorization";
 
     static void addAuthentication(HttpServletResponse response, String username)

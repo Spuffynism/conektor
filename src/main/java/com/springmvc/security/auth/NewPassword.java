@@ -12,7 +12,8 @@ public class NewPassword {
     private String newPassword;
     private String newPasswordConfirmation;
 
-    public NewPassword(){}
+    public NewPassword() {
+    }
 
     public NewPassword(String currentPassword, String newPassword, String newPasswordConfirmation) {
         this.setCurrentPassword(currentPassword);
@@ -40,9 +41,9 @@ public class NewPassword {
      * @return si le nouveau mot de passe correspont à notre police de mots de passe
      */
     private boolean newPasswordMatchesPolicy() {
-        if(newPassword.length() < 8) return false;
-        if(newPassword.length() > 255) return false;
-        if(isCommonPassword()) return false;
+        if (newPassword.length() < 8) return false;
+        if (newPassword.length() > 255) return false;
+        if (isCommonPassword()) return false;
         return true;
     }
 
@@ -54,12 +55,13 @@ public class NewPassword {
      */
     private boolean isCommonPassword() {
         return new QueryExecutor<>(session -> {
-            String sql = "SELECT COUNT(*) FROM common_passwords_cpa WHERE cpa_password = :password LIMIT 1";
+            String sql = "SELECT COUNT(*) FROM common_passwords_cpa WHERE cpa_password = " +
+                    ":password LIMIT 1";
             Query query = session.createSQLQuery(sql);
             query.setParameter("password", newPassword);
 
             // Si on a plus que 0 résultat, c'est que le mot de passe est commun
-            return ((BigInteger)query.uniqueResult()).longValue() > 0;
+            return ((BigInteger) query.uniqueResult()).longValue() > 0;
         }).execute();
     }
 

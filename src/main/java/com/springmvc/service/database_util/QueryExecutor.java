@@ -15,22 +15,17 @@ public class QueryExecutor<T> {
     }
 
     /**
-     * - Va chercher une session
-     * - Débute une transaction
-     * - Exécute la QueryFunction
-     * - Ferme la session
+     * - Gets a session
+     * - Starts a transaction
+     * - Executes the QueryFunction
+     * - Closes the sessions
      *
      * @return le résultat T de la QueryFunction
      */
     public T execute() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
 
-        T t = queryFunction.apply(session);
-
-        session.close();
-
-        return t;
+        return queryFunction.apply(session);
     }
 
     private void setQueryFunction(QueryFunction<T> queryFunction) {

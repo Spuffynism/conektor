@@ -1,5 +1,8 @@
 package com.springmvc.service.database_util;
 
+import com.springmvc.model.Datable;
+import org.hibernate.Query;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +20,7 @@ public abstract class AbstractService<T> {
     }
 
     /**
+     * TODO
      * Get a T by its id
      *
      * @param id the T's id
@@ -30,15 +34,14 @@ public abstract class AbstractService<T> {
     }
 
     /**
+     * TODO
      * Gets a T's creation date
      *
      * @param id the T's id
      * @return the T's creation date
      */
     public Date getDateCreated(int id) {
-        return new QueryExecutor<>(session -> {
-            return (Date) session.get(tClass, id);
-        }).execute();
+        return (Date) getSinglePropertyById("dateCreated", id);
     }
 
     /**
@@ -48,8 +51,24 @@ public abstract class AbstractService<T> {
      * @return the T's last modification date
      */
     public Date getDateModified(int id) {
+        return (Date) getSinglePropertyById("dateModified", id);
+    }
+
+    private void checkIfDatable() throws ClassCastException {
+        if (!Datable.class.isAssignableFrom(tClass)) {
+            throw new ClassCastException(tClass.getName() + " is not assignable from " +
+                    Datable.class.getName());
+        }
+    }
+
+    public Object getSinglePropertyById(String propertyName, int id) {
         return new QueryExecutor<>(session -> {
-            return (Date) session.get(tClass, id);
+            String hql = String.format("select %s from %s where id = :id",
+                    propertyName, tClass.getSimpleName());
+            Query query = session.createQuery(hql);
+            query.setParameter("id", id);
+
+            return session.get(tClass, id);
         }).execute();
     }
 
@@ -73,6 +92,7 @@ public abstract class AbstractService<T> {
      */
     public T add(T t) {
         return new QueryExecutor<>(session -> {
+            session.beginTransaction();
             session.save(t);
             session.getTransaction().commit();
 
@@ -88,6 +108,7 @@ public abstract class AbstractService<T> {
      */
     public T update(T t) {
         return new QueryExecutor<>(session -> {
+            session.beginTransaction();
             session.update(t);
             session.getTransaction().commit();
 
@@ -104,8 +125,9 @@ public abstract class AbstractService<T> {
     public void delete(int id) {
         new QueryExecutor<Void>(session -> {
             T t = (T) session.load(tClass, id);
-            session.delete(t);
 
+            session.beginTransaction();
+            session.delete(t);
             session.getTransaction().commit();
 
             return null;

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -27,6 +28,13 @@ public class UserController {
         this.authHolder = authHolder;
     }
 
+    @RequestMapping(value="/me/date_created", method = RequestMethod.GET)
+    public ResponseEntity<Date> getDateModified() {
+        Date dateModified = userService.getDateCreated(authHolder.getUser().getId());
+
+        return new ResponseEntity<>(dateModified, HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<User>> getAllUsers() {
         if (!authHolder.getUser().isAdmin())
@@ -39,8 +47,9 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+    @RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.GET)
+    public ResponseEntity<User> getUser(@PathVariable("id") int id,
+                                        @RequestParam("accounts") boolean includeAccounts) {
         if (!authHolder.isMe(id) && !authHolder.getUser().isAdmin())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
@@ -125,7 +134,7 @@ public class UserController {
     private void tryChangePassword(int userId, NewPassword newPassword)
             throws InvalidPasswordException {
         userService.addAttemptedPasswordChanges(userId);
-        userService.changerPassword(newPassword);
+        userService.changePassword(authHolder.getUser(), newPassword);
         userService.resetAttemptedPasswordChanges(userId);
     }
 }

@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new SimpleCorsFilter(), ChannelProcessingFilter.class)
                 // Filtre JWT qui s'occupe du login
-                .addFilterBefore(new JWTLoginFilter("/auth/login", authenticationManager()),
+                .addFilterBefore(new JWTLoginFilter("/auth/login", authenticationManager(), userService),
                         UsernamePasswordAuthenticationFilter.class)
                 // Filtre JWT qui s'assure que les utilisateurs sont authentifiés
                 .addFilterBefore(new JWTAuthenticationFilter(),

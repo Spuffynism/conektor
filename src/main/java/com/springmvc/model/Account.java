@@ -1,16 +1,25 @@
 package com.springmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "account_acc")
 public class Account {
     private int id;
+    @JsonProperty("json_details")
     private String jsonDetails;
     private String token;
+    @JsonProperty("user_id")
     private int userId;
+    @JsonIgnoreProperties("accounts")
     private User user;
+    @JsonProperty("provider_id")
     private int providerId;
+    @JsonIgnore
     private Provider provider;
 
     //<editor-fold> Default getters and setters

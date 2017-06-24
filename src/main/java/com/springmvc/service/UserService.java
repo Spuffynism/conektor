@@ -51,23 +51,14 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
         }).execute();
     }
 
-    /**
-     * Get l'utilisateur authentifié
-     *
-     * @return l'utilisateur authentifié
-     */
-    public User getAuthenticatedUser() {
-        return (User) authHolder.getUser();
-    }
-
-    public void changerMotDePasse(NewPassword newPassword) throws InvalidPasswordException {
-        User userCourant = getAuthenticatedUser();
+    public void changerPassword(NewPassword newPassword) throws InvalidPasswordException {
+        User userCourant = authHolder.getUser();
         String hashMotDePasseCourant = userCourant.getPassword();
         IPasswordHasher argon2 = new Argon2Hasher();
 
         // Vérifie qu'on n'excède pas le nombre de tentatives de changement de mot de passe
         if (userCourant.getAttemptedPasswordChanges()
-                > NewPassword.NB_MAX_TENTATIVES_CHANGEMENT_MOT_DE_PASSE)
+                > NewPassword.MAX_ALLOWED_PASSWORD_CHANGE_ATTEMPS)
             throw new InvalidPasswordException("Le nombre de tentatives de changement de mot de " +
                     "passe a été excédé.");
 
@@ -83,7 +74,7 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
             throw new InvalidPasswordException("Le mot de passe courant n'est pas le bon");
 
         userCourant.setPassword(argon2.hash(newPassword.getNewPassword()));
-        modifier(userCourant);
+        update(userCourant);
     }
 
     private Void updatePassword(User user, String hash) {
@@ -100,7 +91,7 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
         }).execute();
     }
 
-    public Void AddAttemptedPasswordChanges(int userId) {
+    public Void addAttemptedPasswordChanges(int userId) {
         return new QueryExecutor<Void>(session -> {
             String sql = "update User set attemptedPasswordChanges " +
                     "= attemptedPasswordChanges + 1 where id = :userId";

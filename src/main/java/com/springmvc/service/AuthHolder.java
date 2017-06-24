@@ -30,4 +30,12 @@ public class AuthHolder {
 
         return authenticatedUser;
     }
+
+    public boolean isMe(int userId) {
+        return userId == getUser().getId();
+    }
+
+    public boolean isMe(User user) {
+        return user != null && user.getId() == getUser().getId();
+    }
 }

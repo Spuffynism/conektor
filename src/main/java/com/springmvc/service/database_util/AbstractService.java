@@ -4,10 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Contient les opérations CRUD de base pouvant être faites sur des T liés à une table dans la
- * bd par leurs managers respectifs
+ * This class Contains basic CRUD operations that can be made on T entities which are mapped to
+ * tables by their respectives services (ex.: TService<T>).
  *
- * @param <T> l'objet managé par le service qui extend cette classe
+ * @param <T> the object that is managed by its service which extends this class
  */
 public abstract class AbstractService<T> {
     private final Class<T> tClass;
@@ -17,10 +17,10 @@ public abstract class AbstractService<T> {
     }
 
     /**
-     * Get un T par son id
+     * Get a T by its id
      *
-     * @param id l'id du T
-     * @return le T
+     * @param id the T's id
+     * @return the T
      */
     @SuppressWarnings(value = "unchecked")
     public T get(int id) {
@@ -30,16 +30,11 @@ public abstract class AbstractService<T> {
     }
 
     /**
-     * TODO Faire ça
-     * @param id
-     * @return
+     * Gets a T's creation date
+     *
+     * @param id the T's id
+     * @return the T's creation date
      */
-    public Date getDateCreate(int id) {
-        return new QueryExecutor<>(session -> {
-            return (Date) session.get(tClass, id);
-        }).execute();
-    }
-
     public Date getDateCreated(int id) {
         return new QueryExecutor<>(session -> {
             return (Date) session.get(tClass, id);
@@ -47,9 +42,21 @@ public abstract class AbstractService<T> {
     }
 
     /**
-     * Get tous les T
+     * Gets a T's last modification date
      *
-     * @return une List de T
+     * @param id the T's id
+     * @return the T's last modification date
+     */
+    public Date getDateModified(int id) {
+        return new QueryExecutor<>(session -> {
+            return (Date) session.get(tClass, id);
+        }).execute();
+    }
+
+    /**
+     * Gets all the Ts
+     *
+     * @return a T List
      */
     @SuppressWarnings(value = "unchecked")
     public List<T> getAll() {
@@ -59,12 +66,12 @@ public abstract class AbstractService<T> {
     }
 
     /**
-     * Ajoute un T
+     * Adds a T
      *
-     * @param t le T à ajouter
-     * @return le T ajouté
+     * @param t le T to add
+     * @return the added T
      */
-    public T ajouter(T t) {
+    public T add(T t) {
         return new QueryExecutor<>(session -> {
             session.save(t);
             session.getTransaction().commit();
@@ -74,12 +81,12 @@ public abstract class AbstractService<T> {
     }
 
     /**
-     * Modifie un T
+     * Updates a T
      *
-     * @param t le T à modifier
-     * @return le T modifié
+     * @param t the T to update
+     * @return the updated T
      */
-    public T modifier(T t) {
+    public T update(T t) {
         return new QueryExecutor<>(session -> {
             session.update(t);
             session.getTransaction().commit();
@@ -89,12 +96,12 @@ public abstract class AbstractService<T> {
     }
 
     /**
-     * Supprime un T par son id
+     * Deletes a T by its id
      *
-     * @param id l'identifiant du T à supprimer
+     * @param id the T's id to delete
      */
     @SuppressWarnings(value = "unchecked")
-    public void supprimer(int id) {
+    public void delete(int id) {
         new QueryExecutor<Void>(session -> {
             T t = (T) session.load(tClass, id);
             session.delete(t);
@@ -106,12 +113,12 @@ public abstract class AbstractService<T> {
     }
 
     /**
-     * Vérifie si un T existe par son id
+     * Checks if a T exists by its id
      *
-     * @param id l'identifiant du T
-     * @return si le T existe ou non
+     * @param id the T's id
+     * @return if the T exists or not
      */
-    public Boolean existe(int id) {
+    public Boolean exists(int id) {
         return new QueryExecutor<>(session -> get(id) != null).execute();
     }
 }

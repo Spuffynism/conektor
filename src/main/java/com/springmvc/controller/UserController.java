@@ -1,6 +1,8 @@
 package com.springmvc.controller;
 
 import com.springmvc.model.User;
+import com.springmvc.security.auth.NewPassword;
+import com.springmvc.security.auth.exception.InvalidPasswordException;
 import com.springmvc.service.AuthHolder;
 import com.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,39 +28,48 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<User>> listAllUsers() {
-        if(authHolder.getUser().isAccountNonLocked())
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<List<User>> getAllUsers() {
+        if (!authHolder.getUser().isAdmin())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         List<User> users = userService.getAll();
-        if (users.isEmpty()) {
+        if (users.isEmpty())
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+        if (!authHolder.isMe(id) && !authHolder.getUser().isAdmin())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
         User user = userService.get(id);
-        if (user == null) {
+        if (user == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/me", method = RequestMethod.GET)
     public ResponseEntity<User> getMe() {
-        return new ResponseEntity<>(userService.getAuthenticatedUser(), HttpStatus.OK);
+        return new ResponseEntity<>(authHolder.getUser(), HttpStatus.OK);
     }
 
+    /**
+     * User account creation.
+     *
+     * @param user
+     * @param ucBuilder
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-        if (userService.existe(user.getId())) {
+        if (userService.exists(user.getId()))
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
 
-        //TODO Valider données reçues ?
-        userService.ajouter(user);
+        //TODO Filter user properties
+        userService.add(user);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/users/{id}").buildAndExpand(user.getId()).toUri());
@@ -68,26 +79,53 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
+        if (!authHolder.isMe(id) && !authHolder.getUser().isAdmin())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
         User currentUser = userService.get(id);
-        if (!userService.existe(id)) {
+        if (!userService.exists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        //TODO Filter username & email and then only update those properties
         currentUser.setUsername(user.getUsername());
         currentUser.setEmail(user.getEmail());
 
-        userService.modifier(currentUser);
+        userService.update(currentUser);
         return new ResponseEntity<>(currentUser, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<User> deleteUser(@PathVariable("id") int id) {
-        if (!userService.existe(id)) {
+        if (!authHolder.isMe(id) && !authHolder.getUser().isAdmin())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        if (!userService.exists(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        userService.delete(id);
+
+        //TODO Return OK?
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/change_password", method = RequestMethod.POST)
+    public ResponseEntity<Exception> changePassword(@RequestBody NewPassword newPassword) {
+        int userId = authHolder.getUser().getId();
+
+        try {
+            tryChangePassword(userId, newPassword);
+        } catch (InvalidPasswordException e) {
+            return new ResponseEntity<>(e, HttpStatus.UNAUTHORIZED);
         }
 
-        userService.supprimer(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    private void tryChangePassword(int userId, NewPassword newPassword)
+            throws InvalidPasswordException {
+        userService.addAttemptedPasswordChanges(userId);
+        userService.changerPassword(newPassword);
+        userService.resetAttemptedPasswordChanges(userId);
     }
 }

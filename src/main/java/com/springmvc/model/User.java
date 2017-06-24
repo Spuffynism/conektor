@@ -111,7 +111,7 @@ public class User implements UserDetails {
     public void addPermission(Permission newPermission) {
         setPermission(newPermission.addTo(permission));
     }
-    
+
     public void removePermission(Permission oldPermission) {
         setPermission(oldPermission.removeFrom(permission));
     }

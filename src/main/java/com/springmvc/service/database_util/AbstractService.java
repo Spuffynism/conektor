@@ -41,7 +41,7 @@ public abstract class AbstractService<T> {
      * @return the T's creation date
      */
     public Date getDateCreated(int id) {
-        return (Date) getSinglePropertyById("dateCreated", id);
+        return (Date) getPropertyById("dateCreated", id);
     }
 
     /**
@@ -51,7 +51,7 @@ public abstract class AbstractService<T> {
      * @return the T's last modification date
      */
     public Date getDateModified(int id) {
-        return (Date) getSinglePropertyById("dateModified", id);
+        return (Date) getPropertyById("dateModified", id);
     }
 
     private void checkIfDatable() throws ClassCastException {
@@ -61,14 +61,14 @@ public abstract class AbstractService<T> {
         }
     }
 
-    public Object getSinglePropertyById(String propertyName, int id) {
+    public Object getPropertyById(String propertyName, int id) {
         return new QueryExecutor<>(session -> {
             String hql = String.format("select %s from %s where id = :id",
                     propertyName, tClass.getSimpleName());
             Query query = session.createQuery(hql);
             query.setParameter("id", id);
 
-            return session.get(tClass, id);
+            return query.uniqueResult();
         }).execute();
     }
 

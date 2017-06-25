@@ -1,14 +1,12 @@
 package com.springmvc.security.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springmvc.exception.InvalidPasswordException;
 import com.springmvc.model.User;
 import com.springmvc.security.auth.AccountCredentials;
-import com.springmvc.security.auth.exception.InvalidPasswordException;
 import com.springmvc.security.hashing.Argon2Hasher;
 import com.springmvc.security.hashing.IPasswordHasher;
-import com.springmvc.service.AuthHolder;
 import com.springmvc.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,12 +24,9 @@ import java.util.Collections;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    private final UserService userService;
-
-    public JWTLoginFilter(String url, AuthenticationManager authManager, UserService userService) {
+    public JWTLoginFilter(String url, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
-        this.userService = userService;
     }
 
     @Override
@@ -59,7 +54,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     // TODO Integrate hashing in authentication
     private Authentication authenticateUser(String username, String password)
             throws InvalidPasswordException {
-        User user = userService.loadUserByUsername(username);
+        User user = new UserService().loadUserByUsername(username);
         IPasswordHasher argon2Hasher = new Argon2Hasher();
         boolean passwordOK = argon2Hasher.verify(user.getPassword(), password);
 

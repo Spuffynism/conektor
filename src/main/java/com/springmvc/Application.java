@@ -1,6 +1,5 @@
 package com.springmvc;
 
-import com.springmvc.security.hashing.Argon2Hasher;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;

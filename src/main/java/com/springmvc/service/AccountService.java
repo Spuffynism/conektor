@@ -2,9 +2,9 @@ package com.springmvc.service;
 
 import com.springmvc.model.Account;
 import com.springmvc.service.database_util.AbstractService;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class AccountService extends AbstractService<Account> {
     public AccountService() {
         super(Account.class);

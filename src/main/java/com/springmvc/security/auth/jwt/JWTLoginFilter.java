@@ -1,7 +1,9 @@
 package com.springmvc.security.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springmvc.exception.InvalidCredentialsException;
 import com.springmvc.exception.InvalidPasswordException;
+import com.springmvc.exception.UserNotFoundException;
 import com.springmvc.model.User;
 import com.springmvc.security.auth.AccountCredentials;
 import com.springmvc.security.hashing.Argon2Hasher;
@@ -38,32 +40,29 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         try {
             creds = new ObjectMapper()
                     .readValue(httpServletRequest.getInputStream(), AccountCredentials.class);
-            authentication = authenticateUser(creds);
+            authentication = authenticateUser(creds.getIdentifier(), creds.getPassword());
         } catch (Exception e) {
+            // We don't tell if it was an invalidCredentialsException or a UserNotFoundException.
+            // We only say there was an error.
             httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         }
 
         return authentication;
     }
 
-    private Authentication authenticateUser(AccountCredentials creds)
-            throws InvalidPasswordException {
-        return authenticateUser(creds.getUsername(), creds.getPassword());
-    }
-
     // TODO Integrate hashing in authentication
-    private Authentication authenticateUser(String username, String password)
-            throws InvalidPasswordException {
-        User user = new UserService().loadUserByUsername(username);
+    private Authentication authenticateUser(String identifier, String password)
+            throws InvalidCredentialsException, UserNotFoundException {
+        User user = new UserService().loadByIdentifier(identifier);
         IPasswordHasher argon2Hasher = new Argon2Hasher();
         boolean passwordOK = argon2Hasher.verify(user.getPassword(), password);
 
         if (!passwordOK)
-            throw new InvalidPasswordException("");
+            throw new InvalidCredentialsException("Invalid credentials");
 
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        username,
+                        identifier,
                         user.getPassword(),
                         Collections.emptyList()
                 )

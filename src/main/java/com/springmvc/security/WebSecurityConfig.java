@@ -49,6 +49,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+        // TODO Implement custom Argon2Encoder instead of Argon2Hasher
+        //authProvider.setPasswordEncoder();
         authProvider.setUserDetailsService(userService);
 
         return authProvider;

@@ -2,6 +2,7 @@ package com.springmvc.service;
 
 import com.springmvc.exception.EmailTakenException;
 import com.springmvc.exception.InvalidPasswordException;
+import com.springmvc.exception.UserNotFoundException;
 import com.springmvc.exception.UsernameTakenException;
 import com.springmvc.model.User;
 import com.springmvc.security.auth.NewPassword;
@@ -32,6 +33,19 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
             throw new UsernameNotFoundException("user not found");
         }
 
+        detailsChecker.check(user);
+        return user;
+    }
+
+    public User loadByIdentifier(String identifier) throws UserNotFoundException {
+        User userByUsername = getByUsername(identifier);
+        User userByEmail = getByEmail(identifier);
+
+        if(userByUsername == null && userByEmail == null) {
+            throw new UserNotFoundException("user not found");
+        }
+
+        User user = userByUsername == null ? userByEmail : userByUsername;
         detailsChecker.check(user);
         return user;
     }

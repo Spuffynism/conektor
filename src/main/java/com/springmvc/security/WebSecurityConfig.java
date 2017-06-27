@@ -2,6 +2,7 @@ package com.springmvc.security;
 
 import com.springmvc.security.auth.jwt.JWTAuthenticationFilter;
 import com.springmvc.security.auth.jwt.JWTLoginFilter;
+import com.springmvc.security.hashing.Argon2Encoder;
 import com.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration
         .WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -50,10 +52,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-        // TODO Implement custom Argon2Encoder instead of Argon2Hasher
-        //authProvider.setPasswordEncoder();
         authProvider.setUserDetailsService(userService);
+        authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        Argon2Encoder encoder = new Argon2Encoder();
+        return encoder;
     }
 }

@@ -2,13 +2,8 @@ package com.springmvc.security.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springmvc.exception.InvalidCredentialsException;
-import com.springmvc.exception.InvalidPasswordException;
 import com.springmvc.exception.UserNotFoundException;
-import com.springmvc.model.User;
 import com.springmvc.security.auth.AccountCredentials;
-import com.springmvc.security.hashing.Argon2Hasher;
-import com.springmvc.security.hashing.IPasswordHasher;
-import com.springmvc.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,20 +45,12 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         return authentication;
     }
 
-    // TODO Integrate hashing in authentication
     private Authentication authenticateUser(String identifier, String password)
             throws InvalidCredentialsException, UserNotFoundException {
-        User user = new UserService().loadByIdentifier(identifier);
-        IPasswordHasher argon2Hasher = new Argon2Hasher();
-        boolean passwordOK = argon2Hasher.verify(user.getPassword(), password);
-
-        if (!passwordOK)
-            throw new InvalidCredentialsException("Invalid credentials");
-
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
                         identifier,
-                        user.getPassword(),
+                        password,
                         Collections.emptyList()
                 )
         );

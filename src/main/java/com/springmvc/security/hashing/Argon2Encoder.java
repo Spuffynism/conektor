@@ -27,6 +27,6 @@ public class Argon2Encoder implements PasswordEncoder {
 
     @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
-        return argon2Instance.verify(rawPassword.toString(), encodedPassword, StandardCharsets.UTF_8);
+        return argon2Instance.verify(encodedPassword, rawPassword.toString(), StandardCharsets.UTF_8);
     }
 }

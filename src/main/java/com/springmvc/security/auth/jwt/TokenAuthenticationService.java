@@ -1,10 +1,11 @@
 package com.springmvc.security.auth.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,39 +14,54 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Date;
 
+@Component
 public class TokenAuthenticationService {
     private static final long EXPIRATION_TIME = 864_000_000; // 10 jours
-    private static final String SECRET = "secret-securite-tp4";
-    private static final String TOKEN_PREFIX = "Bearer: ";
-    private static final String HEADER_STRING = "Authorization";
+    private static byte[] SECRET;
+    private static final String TOKEN_PREFIX = "Bearer";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+
+    @Value("${jwt.secret}")
+    private void setSecret(String secret) throws UnsupportedEncodingException {
+        SECRET = secret.getBytes("UTF-8");
+    }
 
     static void addAuthentication(HttpServletResponse response, String username)
             throws IOException {
         String JWT = Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET.getBytes("UTF-8"))
+                .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
         JWTToken token = new JWTToken(JWT);
 
-        response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + token.getToken());
+        // the jwt token is sent both in the http headers and the response body
         response.setContentType("application/json");
-        response.getWriter().write(new ObjectMapper().writeValueAsString(token));
+        response.addHeader(AUTHORIZATION_HEADER, String.format("%s %s", TOKEN_PREFIX, token
+                .getToken()));
+        response.getWriter().write(token.toJson());
     }
 
-    static Authentication getAuthentication(HttpServletRequest request) throws UnsupportedEncodingException {
-        String token = request.getHeader(HEADER_STRING);
-        if (token != null) {
-            String username = Jwts.parser()
-                    .setSigningKey(SECRET.getBytes("UTF-8"))
-                    .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-                    .getBody()
-                    .getSubject();
+    static Authentication getAuthentication(HttpServletRequest request) {
+        Authentication authentication = null;
+        String token = request.getHeader(AUTHORIZATION_HEADER);
 
-            return username != null
-                    ? new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList())
-                    : null;
+        if (token != null) {
+            String username = null;
+            try {
+                username = Jwts.parser()
+                        .setSigningKey(SECRET)
+                        .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+                        .getBody()
+                        .getSubject();
+            } catch(Exception ignored){}
+
+            if (username != null) {
+                authentication = new UsernamePasswordAuthenticationToken(username, null,
+                        Collections.emptyList());
+            }
         }
-        return null;
+
+        return authentication;
     }
 }

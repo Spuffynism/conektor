@@ -1,5 +1,8 @@
 package com.springmvc.security.auth.jwt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class JWTToken {
     private String token;
 
@@ -13,5 +16,9 @@ public class JWTToken {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String toJson() throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(this);
     }
 }

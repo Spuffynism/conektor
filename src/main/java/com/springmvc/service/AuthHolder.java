@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthHolder {
     private final UserDetailsService userDetailsService;
-    private User authenticatedUser = null;
 
     @Autowired
     public AuthHolder(UserDetailsService userDetailsService) {
@@ -24,10 +23,7 @@ public class AuthHolder {
         String username = (String) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
 
-        if (authenticatedUser == null)
-            authenticatedUser = (User) userDetailsService.loadUserByUsername(username);
-
-        return authenticatedUser;
+        return (User) userDetailsService.loadUserByUsername(username);
     }
 
     public boolean isMe(int userId) {

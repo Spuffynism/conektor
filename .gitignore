@@ -1,9 +1,16 @@
 .idea/
-target/classes/
-classes/
 target/
-conf/common_passwords/
 api.iml
-conf/ssl/
+
 src/main/main.iml
 src/main/resources/application.yml
+src/main/resources/hibernate.cfg.xml
+
+# private sql files
+conf/database/.*.sql
+
+# useless big sql files
+conf/common_passwords/
+
+# ssl configuration files
+conf/ssl/

@@ -1,4 +1,4 @@
-package com.springmvc.controller.receiver;
+package com.springmvc.controller;
 
 import com.springmvc.exception.InvalidFacebookVerificationToken;
 import com.springmvc.model.facebook.FacebookReceivedMessage;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/facebook/webhook")
-public class FacebookMessageReceiverController {
+public class FacebookWebhookController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> verifyRequest(@RequestParam Map<String, String> requestParams) {

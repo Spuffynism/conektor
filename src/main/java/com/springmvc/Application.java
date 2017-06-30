@@ -8,14 +8,18 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 
 @SpringBootApplication
 public class Application {
     public static void main(String[] args) {
-        //System.out.println("username:" + new Argon2Hasher().hash("password"));
         SpringApplication.run(Application.class, args);
     }
+
+    @Bean
+    @Profile("http")
+    public void noop(){}
 
     /**
      * Lance l'app dans un servlet avec https en utilisant le fichier de keystore spécifié en paramètre.
@@ -28,6 +32,7 @@ public class Application {
      * @throws Exception e
      */
     @Bean
+    @Profile("https")
     EmbeddedServletContainerCustomizer containerCustomizer(
             @Value("${keystore.file}") Resource keystoreFile,
             @Value("${server.port}") int port,

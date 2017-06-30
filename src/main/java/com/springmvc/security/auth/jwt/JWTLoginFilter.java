@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
+/**
+ * Intercepts http requets before they reach the controllers and attempts to authenticate the user
+ */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     public JWTLoginFilter(String url, AuthenticationManager authManager) {
@@ -32,6 +35,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             throws AuthenticationException, IOException, ServletException {
         AccountCredentials creds;
         Authentication authentication = null;
+
         try {
             creds = new ObjectMapper()
                     .readValue(httpServletRequest.getInputStream(), AccountCredentials.class);
@@ -47,13 +51,11 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private Authentication authenticateUser(String identifier, String password)
             throws InvalidCredentialsException, UserNotFoundException {
-        return getAuthenticationManager().authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        identifier,
-                        password,
-                        Collections.emptyList()
-                )
-        );
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken
+                (identifier, password,
+                Collections.emptyList());
+
+        return getAuthenticationManager().authenticate(authToken);
     }
 
     @Override

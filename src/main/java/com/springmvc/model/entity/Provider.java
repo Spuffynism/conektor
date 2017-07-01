@@ -1,4 +1,4 @@
-package com.springmvc.model;
+package com.springmvc.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "provider_pro")
-public class Provider extends Datable {
+public class Provider extends AbstractDatable {
     private int id;
     private String name;
     private Set<Account> accounts;

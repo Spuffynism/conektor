@@ -1,4 +1,4 @@
-package com.springmvc.model;
+package com.springmvc.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -10,8 +10,8 @@ import javax.persistence.*;
 @Table(name = "account_acc")
 public class Account {
     private int id;
-    @JsonProperty("json_details")
-    private String jsonDetails;
+    @JsonProperty("details")
+    private String details;
     private String token;
     @JsonProperty("user_id")
     private int userId;
@@ -34,13 +34,13 @@ public class Account {
     }
 
     @Basic
-    @Column(name = "acc_json_details")
-    public String getJsonDetails() {
-        return jsonDetails;
+    @Column(name = "acc_details")
+    public String getDetails() {
+        return details;
     }
 
-    public void setJsonDetails(String jsonDetails) {
-        this.jsonDetails = jsonDetails;
+    public void setDetails(String jsonDetails) {
+        this.details = jsonDetails;
     }
 
     @Basic

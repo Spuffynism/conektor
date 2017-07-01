@@ -1,8 +1,7 @@
-package com.springmvc.model.facebook;
+package com.springmvc.model.provider.facebook;
 
 import com.springmvc.exception.InvalidFacebookVerificationToken;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -10,12 +9,14 @@ import java.util.Map;
 @Component
 public class FacebookVerificationToken {
     private static String tokenFromHere;
+    private final static String subscribeMode = "subscribe";
 
     private String mode;
     private String challenge;
     private String tokenFromFacebook;
 
-    public FacebookVerificationToken(){}
+    public FacebookVerificationToken() {
+    }
 
     public FacebookVerificationToken(Map<String, String> requestParams) {
         this.mode = requestParams.get("hub.mode");
@@ -24,9 +25,9 @@ public class FacebookVerificationToken {
     }
 
     public void validate() throws InvalidFacebookVerificationToken {
-        if (tokenFromHere == null || tokenFromFacebook == null ||
-                !tokenFromHere.equals(tokenFromFacebook))
-            throw new InvalidFacebookVerificationToken("");
+        if (!getMode().equalsIgnoreCase(subscribeMode) || tokenFromHere == null ||
+                tokenFromFacebook == null || !tokenFromHere.equals(tokenFromFacebook))
+            throw new InvalidFacebookVerificationToken();
     }
 
     @Value("${facebook.verify_token}")

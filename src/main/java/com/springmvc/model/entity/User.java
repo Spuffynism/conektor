@@ -1,4 +1,4 @@
-package com.springmvc.model;
+package com.springmvc.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user_usr")
-public class User extends Datable implements UserDetails {
+public class User extends AbstractDatable implements UserDetails {
     private int id;
     private String username;
     private String email;

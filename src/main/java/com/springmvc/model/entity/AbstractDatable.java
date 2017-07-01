@@ -1,10 +1,10 @@
-package com.springmvc.model;
+package com.springmvc.model.entity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import java.util.Date;
 
-public abstract class Datable {
+public abstract class AbstractDatable {
     Date dateCreated;
     Date dateModified;
 

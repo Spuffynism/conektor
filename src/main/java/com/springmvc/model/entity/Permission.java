@@ -1,4 +1,4 @@
-package com.springmvc.model;
+package com.springmvc.model.entity;
 
 public enum Permission {
     NONE (0x0, "No permissions"),

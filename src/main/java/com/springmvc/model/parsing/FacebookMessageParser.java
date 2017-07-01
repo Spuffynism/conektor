@@ -12,12 +12,17 @@ public class FacebookMessageParser {
     private static Pattern argumentsPattern =
             Pattern.compile("-([a-zA-Z-]+){1}\\s([^\"\\s]+|\"[^\"]+\"){1}");
     private String message;
+    private String appName;
+    private Map<String, String> arguments;
 
-    public FacebookMessageParser(String message) {
+    public FacebookMessageParser(String message) throws InvalidArgumentException {
         this.message = message;
+
+        this.appName = tryGetAppName();
+        this.arguments = tryGetArguments();
     }
 
-    public String getAppName() throws InvalidArgumentException {
+    private String tryGetAppName() throws InvalidArgumentException {
         Matcher matcher = appNamePattern.matcher(message);
         String appName = parseAppname(matcher);
 
@@ -36,7 +41,7 @@ public class FacebookMessageParser {
         return appName;
     }
 
-    public Map<String, String> getArguments() throws InvalidArgumentException {
+    private Map<String, String> tryGetArguments() throws InvalidArgumentException {
         Matcher matcher = argumentsPattern.matcher(message);
         Map<String, String> arguments = parseArguments(matcher);
 
@@ -69,6 +74,8 @@ public class FacebookMessageParser {
         return argumentValue;
     }
 
+    ///<editor-fold> Basic getters and setters
+
     public String getMessage() {
         return message;
     }
@@ -76,4 +83,22 @@ public class FacebookMessageParser {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public Map<String, String> getArguments() {
+        return arguments;
+    }
+
+    public void setArguments(Map<String, String> arguments) {
+        this.arguments = arguments;
+    }
+
+    ///</editor-fold>
 }

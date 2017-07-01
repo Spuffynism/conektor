@@ -1,6 +1,6 @@
 package com.springmvc.service.database_util;
 
-import com.springmvc.model.Datable;
+import com.springmvc.model.entity.AbstractDatable;
 import org.hibernate.Query;
 
 import java.util.Date;
@@ -55,9 +55,9 @@ public abstract class AbstractService<T> {
     }
 
     private void checkIfDatable() throws ClassCastException {
-        if (!Datable.class.isAssignableFrom(tClass)) {
+        if (!AbstractDatable.class.isAssignableFrom(tClass)) {
             throw new ClassCastException(tClass.getName() + " is not assignable from " +
-                    Datable.class.getName());
+                    AbstractDatable.class.getName());
         }
     }
 

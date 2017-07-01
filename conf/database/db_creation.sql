@@ -25,7 +25,7 @@ CREATE TABLE provider_pro (
 
 CREATE TABLE account_acc (
   acc_id INT AUTO_INCREMENT PRIMARY KEY,
-  acc_json_details TEXT NOT NULL,
+  acc_details TEXT NOT NULL,
   acc_token MEDIUMTEXT NOT NULL,
   acc_user_id INT NOT NULL,
   acc_provider_id INT NOT NULL,
@@ -74,7 +74,7 @@ INSERT INTO provider_pro (pro_id, pro_name) VALUES
   (2, 'trello'),
   (3, 'twitter');
 
-INSERT INTO account_acc (acc_json_details, acc_token, acc_user_id, acc_provider_id) VALUES
+INSERT INTO account_acc (acc_details, acc_token, acc_user_id, acc_provider_id) VALUES
   ('{}', 'facebook_test_token', 1, 1),
   ('{}', 'trello_test_token', 1, 2),
   ('{}', 'twitter_test_token', 1, 3);

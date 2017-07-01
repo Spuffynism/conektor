@@ -1,7 +1,7 @@
 package com.springmvc.service;
 
 import com.springmvc.exception.InvalidPasswordException;
-import com.springmvc.model.User;
+import com.springmvc.model.entity.User;
 import com.springmvc.security.auth.NewPassword;
 import com.springmvc.security.hashing.Argon2Hasher;
 import com.springmvc.security.hashing.IPasswordHasher;

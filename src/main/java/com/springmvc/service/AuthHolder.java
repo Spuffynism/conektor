@@ -1,6 +1,6 @@
 package com.springmvc.service;
 
-import com.springmvc.model.User;
+import com.springmvc.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;

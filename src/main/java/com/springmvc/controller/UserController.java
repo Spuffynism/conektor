@@ -1,6 +1,6 @@
 package com.springmvc.controller;
 
-import com.springmvc.model.User;
+import com.springmvc.model.entity.User;
 import com.springmvc.service.AuthHolder;
 import com.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

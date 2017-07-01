@@ -6,6 +6,7 @@ import com.springmvc.exception.UnregisteredAccountException;
 import com.springmvc.model.dispatching.Dispatcher;
 import com.springmvc.model.provider.IProviderResponse;
 import com.springmvc.model.provider.facebook.*;
+import com.springmvc.service.provider.FacebookMessageSender;
 import com.springmvc.service.provider.FacebookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,17 +26,24 @@ public class FacebookWebhookController {
     // Move to mapper class
     private Function<IProviderResponse, FacebookResponsePayload> providerResponseToHumanMessage
             = providerResponse -> {
-                FacebookResponsePayload responseForUser = new FacebookResponsePayload();
-                responseForUser.setMessage(providerResponse.getMessage());
+        FacebookResponsePayload responseForUser = new FacebookResponsePayload();
+        responseForUser.setMessage(providerResponse.getMessage());
 
-                return responseForUser;
-            };
+        return responseForUser;
+    };
 
     @Autowired
     public FacebookWebhookController(FacebookService facebookService) {
         this.facebookService = facebookService;
     }
 
+    /**
+     * Entry point Facebook uses to verify OUR webhook authenticity by having us return a
+     * challenge. We also validate the verify_token that they send to verify THEIR authenticity.
+     *
+     * @param requestParams the params. facebook sends to use to authentify
+     * @return a confirmation response
+     */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> subscribe(@RequestParam Map<String, String> requestParams) {
         FacebookVerificationToken token = new FacebookVerificationToken(requestParams);
@@ -49,24 +57,37 @@ public class FacebookWebhookController {
         return new ResponseEntity<>(token.getChallenge(), HttpStatus.OK);
     }
 
+    /**
+     * Entry point for messages sent to our Facebook page. Since Facebook wants a 200 OK response
+     * ASAP, we process the payload in an other thread and tell Facebook we successfully received
+     * their message.
+     *
+     * @param payload payload send by facebook
+     */
     @RequestMapping(method = RequestMethod.POST)
-    public void receiveMessage(@RequestBody FacebookPayload payload)
-            throws UnregisteredAccountException {
+    public ResponseEntity<String> receiveMessage(@RequestBody FacebookPayload payload) {
+        new Thread(() -> {
+            try {
+                processMessage(payload);
+            } catch (Exception e) {
+                new FacebookMessageSender().sendError(payload, e);
+            }
+        }).start();
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void processMessage(FacebookPayload payload) throws UnregisteredAccountException,
+            CannotDispatchException {
         FacebookMessageFacade facebokMessageFacade = new FacebookMessageFacade(payload);
         String senderId = facebokMessageFacade.getSender().getId();
 
         if (!facebookService.userIsRegistered(senderId))
-            throw new UnregisteredAccountException(); //TODO Send obj facebook wants
+            throw new UnregisteredAccountException();
 
         List<FacebookMessaging> messagings = facebokMessageFacade.getMessagings();
 
-        try {
-            // There should  be one thread per sent message
-            tryDispatchAndRespondToUser(senderId, messagings);
-        } catch (Exception e) {
-            // Tell user we've got a problem
-            System.out.println("Error has occured during dispatch");
-        }
+        tryDispatchAndRespondToUser(senderId, messagings);
     }
 
     private void tryDispatchAndRespondToUser(String senderId, List<FacebookMessaging> messagings)

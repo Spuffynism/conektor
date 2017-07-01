@@ -1,13 +1,11 @@
 package com.springmvc.controller;
 
+import com.springmvc.exception.CannotDispatchException;
 import com.springmvc.exception.InvalidFacebookVerificationToken;
 import com.springmvc.exception.UnregisteredAccountException;
 import com.springmvc.model.dispatching.Dispatcher;
 import com.springmvc.model.provider.IProviderResponse;
-import com.springmvc.model.provider.facebook.FacebookMessageFacade;
-import com.springmvc.model.provider.facebook.FacebookMessaging;
-import com.springmvc.model.provider.facebook.FacebookPayload;
-import com.springmvc.model.provider.facebook.FacebookVerificationToken;
+import com.springmvc.model.provider.facebook.*;
 import com.springmvc.service.provider.FacebookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +14,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 @RestController
 @RequestMapping("/facebook/webhook")
 public class FacebookWebhookController {
 
     private final FacebookService facebookService;
+
+    // Move to mapper class
+    private Function<IProviderResponse, FacebookResponsePayload> providerResponseToHumanMessage
+            = providerResponse -> {
+                FacebookResponsePayload responseForUser = new FacebookResponsePayload();
+                responseForUser.setMessage(providerResponse.getMessage());
+
+                return responseForUser;
+            };
 
     @Autowired
     public FacebookWebhookController(FacebookService facebookService) {
@@ -42,27 +50,50 @@ public class FacebookWebhookController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> receiveMessage(@RequestBody FacebookPayload payload)
+    public void receiveMessage(@RequestBody FacebookPayload payload)
             throws UnregisteredAccountException {
         FacebookMessageFacade facebokMessageFacade = new FacebookMessageFacade(payload);
         String senderId = facebokMessageFacade.getSender().getId();
+
         if (!facebookService.userIsRegistered(senderId))
             throw new UnregisteredAccountException(); //TODO Send obj facebook wants
 
         List<FacebookMessaging> messagings = facebokMessageFacade.getMessagings();
 
-        Dispatcher dispatcher = new Dispatcher();
-        List<IProviderResponse> responses;
         try {
-            // TODO Get response(s) to send back to user
+            // There should  be one thread per sent message
+            tryDispatchAndRespondToUser(senderId, messagings);
+        } catch (Exception e) {
+            // Tell user we've got a problem
+            System.out.println("Error has occured during dispatch");
+        }
+    }
+
+    private void tryDispatchAndRespondToUser(String senderId, List<FacebookMessaging> messagings)
+            throws CannotDispatchException {
+        Dispatcher dispatcher = new Dispatcher();
+        dispatcher.setFacebookSenderId(senderId);
+
+        List<IProviderResponse> providerResponses;
+        try {
             dispatcher.dispatch(messagings);
-            responses = dispatcher.getResponses();
+            providerResponses = dispatcher.getResponses();
+
         } catch (Exception e) { //CannotDispatchException
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CannotDispatchException();
         }
 
-        //TODO Return the objet facebook wants instead of this
-        return new ResponseEntity<>(toHumanMessage(responses), HttpStatus.OK);
+        // Move to mapper class
+        for (IProviderResponse r : providerResponses) {
+            FacebookResponsePayload responseForUser = providerResponseToHumanMessage.apply(r);
+            responseForUser.setRecipient(senderId);
+        }
+
+        // Send back all messages to user!!!!!
+    }
+
+    public void sendMessage(FacebookResponsePayload message) {
+
     }
 
     private String toHumanMessage(List<IProviderResponse> responses) {

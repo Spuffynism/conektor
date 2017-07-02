@@ -1,3 +1,4 @@
+/*
 package com.springmvc.model.provider.ssh;
 
 import com.springmvc.model.provider.IProviderDispatcher;
@@ -17,3 +18,4 @@ public class SSHDispatcher implements IProviderDispatcher {
         return null;
     }
 }
+*/

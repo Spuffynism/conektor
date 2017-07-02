@@ -1,6 +1,6 @@
 package com.springmvc.model.provider.trello;
 
-import com.springmvc.model.provider.IProviderAction;
+        import com.springmvc.model.provider.IProviderAction;
 
 public enum TrelloAction implements IProviderAction {
     ADD_CARD_TO_LIST ("add"),

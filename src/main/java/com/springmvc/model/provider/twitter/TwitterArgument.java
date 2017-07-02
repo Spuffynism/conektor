@@ -1,21 +1,12 @@
 package com.springmvc.model.provider.twitter;
 
-import com.springmvc.model.provider.IProviderArgument;
+import com.springmvc.model.provider.AbstractProviderArgument;
 
-public class TwitterArgument implements IProviderArgument<String, String> {
-    @Override
-    public String getAction() {
-        return null;
-    }
+public class TwitterArgument extends AbstractProviderArgument<String, String> {
 
     @Override
     public void setAction(String action) {
 
-    }
-
-    @Override
-    public String getValue() {
-        return null;
     }
 
     @Override

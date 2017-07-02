@@ -9,6 +9,9 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
 
+/**
+ * Logs restTemplate requests
+ */
 public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(LoggingRequestInterceptor.class);

@@ -1,3 +1,4 @@
+/*
 package com.springmvc.model.provider.ssh;
 
 import com.springmvc.model.provider.IProviderResponse;
@@ -18,3 +19,4 @@ public class SSHResponse implements IProviderResponse {
         return null;
     }
 }
+*/

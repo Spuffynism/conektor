@@ -17,6 +17,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
+/**
+ * Sends messages to facebook
+ */
 @Component
 public class FacebookMessageSenderController {
     private static String pageAccessToken;
@@ -44,11 +47,10 @@ public class FacebookMessageSenderController {
         pageAccessToken = token;
     }
 
-    public void sendError(FacebookPayload payload, Exception e) {
+    void sendError(FacebookPayload payload, Exception e) {
         String recipientId;
         try {
-            recipientId = payload.getEntry().get(0).getMessaging().get(0).getSender
-                    ().getId();
+            recipientId = payload.getEntry().get(0).getMessaging().get(0).getSender().getId();
         } catch (Exception ignored) {
             System.out.println("No recipient!");
             // Without a recipient, we can't send a message!
@@ -72,7 +74,7 @@ public class FacebookMessageSenderController {
     }
 
     private void send(FacebookResponsePayload payload) {
-        if(payload.getMessage().getText() == null)
+        if (payload.getMessage().getText() == null)
             payload.setMessage("no message");
 
         HttpEntity<FacebookResponsePayload> responsePayloadEntity

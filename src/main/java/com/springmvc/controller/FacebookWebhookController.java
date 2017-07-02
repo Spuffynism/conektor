@@ -7,6 +7,7 @@ import com.springmvc.model.dispatching.Dispatcher;
 import com.springmvc.model.provider.IProviderResponse;
 import com.springmvc.model.provider.facebook.*;
 import com.springmvc.service.provider.FacebookService;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,11 +72,12 @@ public class FacebookWebhookController {
         if(payload != null && payload.isPage()) {
             Thread processing = new Thread(() -> {
                 try {
-                    processMessage(payload);
+                    processPayload(payload);
                 } catch (Exception e) {
+                    System.out.println("Error during payload processing:");
+                    e.printStackTrace();
                     messageSender.sendError(payload, e);
                 }
-                Thread.currentThread().interrupt();
             });
 
             processing.start();
@@ -84,24 +86,24 @@ public class FacebookWebhookController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private void processMessage(FacebookPayload payload) throws UnregisteredAccountException,
-            CannotDispatchException {
-        FacebookMessageFacade facebokMessageFacade = new FacebookMessageFacade(payload);
-        String senderId = facebokMessageFacade.getSender().getId();
+    private void processPayload(FacebookPayload payload) throws UnregisteredAccountException,
+            CannotDispatchException, InvalidArgumentException {
+        FacebookMessageFacade messageFacade = new FacebookMessageFacade(payload);
+
+        if(messageFacade.getSender() == null || messageFacade.getSender().getId() == null)
+            throw new InvalidArgumentException(new String[]{"no sender"});
+
+        String senderId = messageFacade.getSender().getId();
 
         if (!facebookService.userIsRegistered(senderId))
             throw new UnregisteredAccountException();
 
-        List<FacebookMessaging> messagings = facebokMessageFacade.getMessagings();
-
-        tryDispatchAndRespondToUser(senderId, messagings);
-        System.out.println("done process");
+        tryDispatchAndRespondToUser(senderId, messageFacade.getMessagings());
     }
 
     private void tryDispatchAndRespondToUser(String senderId, List<FacebookMessaging> messagings)
             throws CannotDispatchException {
-        Dispatcher dispatcher = new Dispatcher();
-        dispatcher.setFacebookSenderId(senderId);
+        Dispatcher dispatcher = new Dispatcher(senderId);
 
         List<IProviderResponse> providerResponses;
         try {
@@ -125,6 +127,5 @@ public class FacebookWebhookController {
 
         // Send back all messages to user!!!!!
         messageSender.send(responsesForUser);
-        System.out.println("done try dispatch");
     }
 }

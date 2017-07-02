@@ -1,3 +1,4 @@
+/*
 package com.springmvc.model.provider.ssh;
 
 import com.springmvc.model.provider.IProviderArgument;
@@ -23,3 +24,4 @@ public class SSHArgument implements IProviderArgument<String, String> {
 
     }
 }
+*/

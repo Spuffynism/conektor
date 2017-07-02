@@ -1,8 +1,8 @@
 package com.springmvc.model.provider;
 
 public interface IProviderArgument<T, U> {
-    public T getAction();
-    public void setAction(T action);
-    public U getValue();
-    public void setValue(U value);
+    T getAction();
+    void setAction(T action);
+    U getValue();
+    void setValue(U value);
 }

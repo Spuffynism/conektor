@@ -1,7 +1,6 @@
 package com.springmvc.service.provider;
 
 import com.springmvc.service.AccountService;
-import com.springmvc.service.database_util.QueryExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

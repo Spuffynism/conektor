@@ -27,7 +27,7 @@ public class PasswordChangeService {
 
         // Checks that we haven't exceeded the maximum allowed password change attempts
         if (currentUser.getAttemptedPasswordChanges() > NewPassword
-                .MAX_ALLOWED_PASSWORD_CHANGE_ATTEMPS)
+                .MAX_ALLOWED_PASSWORD_CHANGE_ATTEMPTS)
             throw new InvalidPasswordException("The maximum allowed password change attempts has " +
                     "been reached.");
 

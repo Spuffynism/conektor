@@ -1,7 +1,6 @@
 package com.springmvc.model.provider.trello;
 
 import com.springmvc.model.provider.IProviderDispatcher;
-import com.springmvc.model.provider.IProviderResponse;
 import com.springmvc.service.provider.TrelloService;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.springframework.beans.factory.annotation.Configurable;

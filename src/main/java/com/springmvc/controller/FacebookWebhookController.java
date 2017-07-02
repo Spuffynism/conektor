@@ -6,13 +6,13 @@ import com.springmvc.exception.UnregisteredAccountException;
 import com.springmvc.model.dispatching.Dispatcher;
 import com.springmvc.model.provider.IProviderResponse;
 import com.springmvc.model.provider.facebook.*;
-import com.springmvc.service.provider.FacebookMessageSender;
 import com.springmvc.service.provider.FacebookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -22,8 +22,9 @@ import java.util.function.Function;
 public class FacebookWebhookController {
 
     private final FacebookService facebookService;
+    private final FacebookMessageSenderController messageSender;
 
-    // Move to mapper class
+    //TODO Move to mapper class
     private Function<IProviderResponse, FacebookResponsePayload> providerResponseToHumanMessage
             = providerResponse -> {
         FacebookResponsePayload responseForUser = new FacebookResponsePayload();
@@ -35,6 +36,7 @@ public class FacebookWebhookController {
     @Autowired
     public FacebookWebhookController(FacebookService facebookService) {
         this.facebookService = facebookService;
+        messageSender = new FacebookMessageSenderController();
     }
 
     /**
@@ -70,7 +72,7 @@ public class FacebookWebhookController {
             try {
                 processMessage(payload);
             } catch (Exception e) {
-                new FacebookMessageSender().sendError(payload, e);
+                messageSender.sendError(payload, e);
             }
         }).start();
 
@@ -104,20 +106,18 @@ public class FacebookWebhookController {
             throw new CannotDispatchException();
         }
 
-        // Move to mapper class
+        List<FacebookResponsePayload> responsesForUser = new ArrayList<>();
+
+        FacebookResponsePayload responseForUser;
+        //TODO Move to mapper class
         for (IProviderResponse r : providerResponses) {
-            FacebookResponsePayload responseForUser = providerResponseToHumanMessage.apply(r);
+            responseForUser = providerResponseToHumanMessage.apply(r);
             responseForUser.setRecipient(senderId);
+
+            responsesForUser.add(responseForUser);
         }
 
         // Send back all messages to user!!!!!
-    }
-
-    public void sendMessage(FacebookResponsePayload message) {
-
-    }
-
-    private String toHumanMessage(List<IProviderResponse> responses) {
-        return "Everything is a-ok!";
+        messageSender.send(responsesForUser);
     }
 }

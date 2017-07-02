@@ -86,7 +86,7 @@ public class User extends AbstractDatable implements UserDetails {
         return attemptedPasswordChanges;
     }
 
-    public void setAttemptedPasswordChanges(int nbTentativesChangementMotDePasse) {
+    public void setAttemptedPasswordChanges(int attemptedPasswordChanges) {
         this.attemptedPasswordChanges = attemptedPasswordChanges;
     }
 

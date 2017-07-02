@@ -3,6 +3,8 @@ package com.springmvc.model.provider.facebook;
 public class FacebookRecipient {
     private String id;
 
+    public FacebookRecipient(){}
+
     public FacebookRecipient(String id) {
         this.id = id;
     }

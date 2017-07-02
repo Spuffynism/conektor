@@ -5,19 +5,16 @@ import java.util.List;
 public class FacebookMessageFacade {
     private FacebookPayload payload;
 
-    public FacebookMessageFacade() {
-    }
-
     public FacebookMessageFacade(FacebookPayload payload) {
         this.payload = payload;
     }
 
     public FacebookSender getSender() {
-        return payload.getEntries().get(0).getMessagings().get(0).getSender();
+        return payload.getEntry().get(0).getMessaging().get(0).getSender();
     }
 
     public List<FacebookMessaging> getMessagings() {
-        return payload.getEntries().get(0).getMessagings();
+        return payload.getEntry().get(0).getMessaging();
     }
 
     public FacebookPayload getPayload() {

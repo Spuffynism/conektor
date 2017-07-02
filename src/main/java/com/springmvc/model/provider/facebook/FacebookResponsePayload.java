@@ -2,14 +2,14 @@ package com.springmvc.model.provider.facebook;
 
 public class FacebookResponsePayload {
     private FacebookRecipient recipient;
-    private FacebookMessage message;
+    private FacebookResponseMessage message;
 
     public FacebookResponsePayload() {
     }
 
     public FacebookResponsePayload(String recipientId, String message) {
         this.recipient = new FacebookRecipient(recipientId);
-        this.message = new FacebookMessage(message);
+        this.message = new FacebookResponseMessage(message);
     }
 
     public FacebookRecipient getRecipient() {
@@ -24,15 +24,15 @@ public class FacebookResponsePayload {
         this.recipient = new FacebookRecipient(recipient);
     }
 
-    public FacebookMessage getMessage() {
+    public FacebookResponseMessage getMessage() {
         return message;
     }
 
-    public void setMessage(FacebookMessage message) {
+    public void setMessage(FacebookResponseMessage message) {
         this.message = message;
     }
 
     public void setMessage(String message) {
-        this.message = new FacebookMessage(message);
+        this.message = new FacebookResponseMessage(message);
     }
 }

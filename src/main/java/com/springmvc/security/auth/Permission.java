@@ -1,9 +1,9 @@
-package com.springmvc.model.entity;
+package com.springmvc.security.auth;
 
 public enum Permission {
-    NONE (0x0, "No permissions"),
-    USER (0x1, "Basic user role"), // 2^0
-    ADMIN (0x2, "Basic admin role"); // 2^1
+    NONE (0b0, "No permissions"),
+    USER (0b1, "Basic user role - can only manipulate ones belongings"),
+    ADMIN (0b10, "Basic admin role - can do everything");
 
     private final int value;
     private final String description;
@@ -29,8 +29,8 @@ public enum Permission {
      * Adds a permission mask to a mask composed of many masks (permissions).
      * If a permission mask is already present in permissions, permissions will not change.
      *
-     * 0100 | 0010 -> 0110
-     * 0110 | 0010 -> 0110
+     * 0b0100 | 0b0010 -> 0b0110
+     * 0b0110 | 0b0010 -> 0b0110
      *
      * @param permissions a number representing many masks
      * @return the new permissions
@@ -43,8 +43,8 @@ public enum Permission {
      * Removes a permission mask from a mask composed of many masks (permissions).
      * If a permission mask is not present in permissions, permissions will not change.
      *
-     * 0110 ^ (0110 & 0010) = 0100
-     * 0110 ^ (0101 & 0010) = 0110
+     * 0b0110 ^ (0b0110 & 0b0010) = 0b0100
+     * 0b0110 ^ (0b0101 & 0b0010) = 0b0110
      *
      * @param permissions a number representing many masks
      * @return the new permissions

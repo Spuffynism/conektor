@@ -35,6 +35,8 @@ public class FacebookVerificationToken {
         tokenFromHere = token;
     }
 
+    ///<editor-fold> getters & setters
+
     public String getMode() {
         return mode;
     }
@@ -58,4 +60,6 @@ public class FacebookVerificationToken {
     public void setTokenFromFacebook(String tokenFromFacebook) {
         this.tokenFromFacebook = tokenFromFacebook;
     }
+
+    ///</editor-fold>
 }

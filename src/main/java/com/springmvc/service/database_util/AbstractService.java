@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * This class Contains basic CRUD operations that can be made on T entities which are mapped to
- * tables by their respectives services (ex.: TService<T>).
+ * tables by their respective services (ex.: TService<T>).
  *
  * @param <T> the object that is managed by its service which extends this class
  */
@@ -28,9 +28,7 @@ public abstract class AbstractService<T> {
      */
     @SuppressWarnings(value = "unchecked")
     public T get(int id) {
-        return new QueryExecutor<>(session -> {
-            return (T) session.get(tClass, id);
-        }).execute();
+        return new QueryExecutor<>(session -> (T) session.get(tClass, id)).execute();
     }
 
     /**

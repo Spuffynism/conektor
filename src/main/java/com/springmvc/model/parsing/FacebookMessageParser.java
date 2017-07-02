@@ -55,7 +55,7 @@ public class FacebookMessageParser {
             throws StringIndexOutOfBoundsException {
         HashMap<String, String> arguments = new HashMap<>();
 
-        String argument, value = "";
+        String argument, value;
         while (matcher.find()) {
             argument = matcher.group(1);
             value = deserializeArgumentValue(matcher.group(2));

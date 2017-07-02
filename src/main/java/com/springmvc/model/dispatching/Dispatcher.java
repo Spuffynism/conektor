@@ -4,7 +4,6 @@ import com.springmvc.exception.CannotDispatchException;
 import com.springmvc.model.parsing.FacebookMessageParser;
 import com.springmvc.model.provider.IProviderResponse;
 import com.springmvc.model.provider.facebook.FacebookMessaging;
-import com.springmvc.model.provider.facebook.FacebookSender;
 import com.springmvc.model.provider.trello.TrelloDispatcher;
 import com.springmvc.model.provider.twitter.TwitterDispatcher;
 import com.sun.javaws.exceptions.InvalidArgumentException;

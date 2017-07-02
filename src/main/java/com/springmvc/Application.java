@@ -22,13 +22,13 @@ public class Application {
     public void noop(){}
 
     /**
-     * Lance l'app dans un servlet avec https en utilisant le fichier de keystore spécifié en paramètre.
+     * Starts app in a servlet with https using the specified keystore file.
      * ex.:
      * # mvn clean install
      * # java -Dspring.profiles.active=https -Dkeystore.file=file:///C:/g/api/keys/tp4keystore
      *
-     * @param keystoreFile le fichier de clés
-     * @return ConfigurableEmbeddedServletContainer le servlet de l'app
+     * @param keystoreFile the keystore's file path
+     * @return ConfigurableEmbeddedServletContainer the app's servlet
      * @throws Exception e
      */
     @Bean

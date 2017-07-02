@@ -6,7 +6,7 @@ import org.hibernate.Query;
 import java.math.BigInteger;
 
 public class NewPassword {
-    public static final int MAX_ALLOWED_PASSWORD_CHANGE_ATTEMPS = 3;
+    public static final int MAX_ALLOWED_PASSWORD_CHANGE_ATTEMPTS = 3;
 
     private String currentPassword;
     private String newPassword;

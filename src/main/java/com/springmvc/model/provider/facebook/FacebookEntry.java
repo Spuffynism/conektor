@@ -4,16 +4,16 @@ import java.util.List;
 
 public class FacebookEntry {
     private String id;
-    private int time;
-    private List<FacebookMessaging> messagings;
+    private long time;
+    private List<FacebookMessaging> messaging;
 
     public FacebookEntry() {
     }
 
-    public FacebookEntry(String id, int time, List<FacebookMessaging> messagings) {
+    public FacebookEntry(String id, int time, List<FacebookMessaging> messaging) {
         this.id = id;
         this.time = time;
-        this.messagings = messagings;
+        this.messaging = messaging;
     }
 
     public String getId() {
@@ -24,19 +24,19 @@ public class FacebookEntry {
         this.id = id;
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 
-    public List<FacebookMessaging> getMessagings() {
-        return messagings;
+    public List<FacebookMessaging> getMessaging() {
+        return messaging;
     }
 
-    public void setMessagings(List<FacebookMessaging> messagings) {
-        this.messagings = messagings;
+    public void setMessaging(List<FacebookMessaging> messaging) {
+        this.messaging = messaging;
     }
 }

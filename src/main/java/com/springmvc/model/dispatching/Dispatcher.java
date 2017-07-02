@@ -18,17 +18,13 @@ public class Dispatcher {
     public Dispatcher() {
     }
 
-    public Dispatcher(String facebookSenderId) {
-        this.facebookSenderId = facebookSenderId;
-    }
-
     public void dispatch(List<FacebookMessaging> messagings) throws CannotDispatchException {
         for (FacebookMessaging m : messagings)
             dispatch(m);
     }
 
     public void dispatch(FacebookMessaging messaging) throws CannotDispatchException {
-        String message = messaging.getMessage();
+        String message = messaging.getMessage().getText();
 
         try {
             FacebookMessageParser parser = new FacebookMessageParser(message);

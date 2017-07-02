@@ -3,14 +3,10 @@ package com.springmvc.model.provider.facebook;
 public class FacebookMessaging {
     private FacebookSender sender;
     private FacebookRecipient recipient;
-    private String message;
+    private long timestamp;
+    private FacebookMessage message;
 
     public FacebookMessaging() {
-    }
-
-    public FacebookMessaging(FacebookSender sender, FacebookRecipient recipient, String message) {
-        this.sender = sender;
-        this.recipient = recipient;
     }
 
     public FacebookSender getSender() {
@@ -29,11 +25,19 @@ public class FacebookMessaging {
         this.recipient = recipient;
     }
 
-    public String getMessage() {
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public FacebookMessage getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(FacebookMessage message) {
         this.message = message;
     }
 }

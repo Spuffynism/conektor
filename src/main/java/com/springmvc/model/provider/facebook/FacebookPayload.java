@@ -4,14 +4,18 @@ import java.util.List;
 
 public class FacebookPayload {
     private String object;
-    private List<FacebookEntry> entries;
+    private List<FacebookEntry> entry;
 
     public FacebookPayload() {
     }
 
-    public FacebookPayload(String object, List<FacebookEntry> entries) {
+    public FacebookPayload(String object, List<FacebookEntry> entry) {
         this.object = object;
-        this.entries = entries;
+        this.entry = entry;
+    }
+
+    public boolean isPage() {
+        return object != null && object.equalsIgnoreCase("page");
     }
 
     public String getObject() {
@@ -22,11 +26,11 @@ public class FacebookPayload {
         this.object = object;
     }
 
-    public List<FacebookEntry> getEntries() {
-        return entries;
+    public List<FacebookEntry> getEntry() {
+        return entry;
     }
 
-    public void setEntries(List<FacebookEntry> entries) {
-        this.entries = entries;
+    public void setEntry(List<FacebookEntry> entry) {
+        this.entry = entry;
     }
 }

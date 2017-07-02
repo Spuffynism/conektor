@@ -68,13 +68,18 @@ public class FacebookWebhookController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> receiveMessage(@RequestBody FacebookPayload payload) {
-        new Thread(() -> {
-            try {
-                processMessage(payload);
-            } catch (Exception e) {
-                messageSender.sendError(payload, e);
-            }
-        }).start();
+        if(payload != null && payload.isPage()) {
+            Thread processing = new Thread(() -> {
+                try {
+                    processMessage(payload);
+                } catch (Exception e) {
+                    messageSender.sendError(payload, e);
+                }
+                Thread.currentThread().interrupt();
+            });
+
+            processing.start();
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -90,6 +95,7 @@ public class FacebookWebhookController {
         List<FacebookMessaging> messagings = facebokMessageFacade.getMessagings();
 
         tryDispatchAndRespondToUser(senderId, messagings);
+        System.out.println("done process");
     }
 
     private void tryDispatchAndRespondToUser(String senderId, List<FacebookMessaging> messagings)
@@ -119,5 +125,6 @@ public class FacebookWebhookController {
 
         // Send back all messages to user!!!!!
         messageSender.send(responsesForUser);
+        System.out.println("done try dispatch");
     }
 }

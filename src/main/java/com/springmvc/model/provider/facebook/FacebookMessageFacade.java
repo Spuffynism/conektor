@@ -1,7 +1,5 @@
 package com.springmvc.model.provider.facebook;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 import java.util.List;
 
 public class FacebookMessageFacade {
@@ -12,14 +10,14 @@ public class FacebookMessageFacade {
     }
 
     public static FacebookMessageFacade fromPayload(FacebookPayload payload) throws
-            InvalidArgumentException {
+            IllegalArgumentException {
         FacebookMessageFacade messageFacade = new FacebookMessageFacade(payload);
 
         if (messageFacade.getSender() == null || messageFacade.getSender().getId() == null)
-            throw new InvalidArgumentException(new String[]{"no sender"});
+            throw new IllegalArgumentException("no sender");
 
         if (messageFacade.getMessagings() == null || messageFacade.getMessagings().get(0) == null)
-            throw new InvalidArgumentException(new String[]{"no message"});
+            throw new IllegalArgumentException("no message");
 
         return messageFacade;
     }

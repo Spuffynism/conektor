@@ -1,7 +1,6 @@
 package com.springmvc.model.provider.twitter;
 
 import com.springmvc.model.provider.AbstractProviderDispatcher;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.List;
 
@@ -13,13 +12,13 @@ public class TwitterDispatcher extends AbstractProviderDispatcher<TwitterArgumen
     }
 
     public List<TwitterResponse> act(List<TwitterArgument> arguments) throws
-            InvalidArgumentException {
+            IllegalArgumentException {
         return null;
     }
 
     @Override
     protected List<TwitterResponse> dispatch(List<TwitterArgument> arguments) throws
-            InvalidArgumentException {
+            IllegalArgumentException {
         return null;
     }
 }

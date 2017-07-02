@@ -1,7 +1,5 @@
 package com.springmvc.model.parsing;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -15,19 +13,19 @@ public class FacebookMessageParser {
     private String appName;
     private Map<String, String> arguments;
 
-    public FacebookMessageParser(String message) throws InvalidArgumentException {
+    public FacebookMessageParser(String message) throws IllegalArgumentException {
         this.message = message;
 
         this.appName = tryGetAppName();
         this.arguments = tryGetArguments();
     }
 
-    private String tryGetAppName() throws InvalidArgumentException {
+    private String tryGetAppName() throws IllegalArgumentException {
         Matcher matcher = appNamePattern.matcher(message);
         String appName = parseAppname(matcher);
 
         if (appName == null || appName.isEmpty())
-            throw new InvalidArgumentException(new String[]{message});
+            throw new IllegalArgumentException("invalid app name");
 
         return appName;
     }
@@ -41,12 +39,12 @@ public class FacebookMessageParser {
         return appName;
     }
 
-    private Map<String, String> tryGetArguments() throws InvalidArgumentException {
+    private Map<String, String> tryGetArguments() throws IllegalArgumentException {
         Matcher matcher = argumentsPattern.matcher(message);
         Map<String, String> arguments = parseArguments(matcher);
 
         if (arguments.isEmpty())
-            throw new InvalidArgumentException(new String[]{message});
+            throw new IllegalArgumentException("no arguments");
 
         return arguments;
     }

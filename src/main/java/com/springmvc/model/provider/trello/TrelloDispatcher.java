@@ -2,7 +2,6 @@ package com.springmvc.model.provider.trello;
 
 import com.springmvc.model.provider.AbstractProviderDispatcher;
 import com.springmvc.service.provider.TrelloService;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ public class TrelloDispatcher extends AbstractProviderDispatcher<TrelloArgument,
     }
 
     protected List<TrelloResponse> dispatch(List<TrelloArgument> arguments) throws
-            InvalidArgumentException {
+            IllegalArgumentException {
         List<TrelloResponse> responses = new ArrayList<>();
 
         // TODO Add cases for all possible TrelloActions that can be done on a provider
@@ -32,7 +31,7 @@ public class TrelloDispatcher extends AbstractProviderDispatcher<TrelloArgument,
         }
 
         if (responses.isEmpty())
-            throw new InvalidArgumentException(new String[]{});
+            throw new IllegalArgumentException("no responses");
 
         return responses;
     }

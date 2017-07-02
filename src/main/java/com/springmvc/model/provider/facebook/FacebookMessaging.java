@@ -1,5 +1,8 @@
 package com.springmvc.model.provider.facebook;
 
+/**
+ * Holds info on messages sent to the bot.
+ */
 public class FacebookMessaging {
     private FacebookSender sender;
     private FacebookRecipient recipient;

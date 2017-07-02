@@ -5,6 +5,7 @@ import com.springmvc.model.parsing.FacebookMessageParser;
 import com.springmvc.model.provider.AbstractProviderDispatcher;
 import com.springmvc.model.provider.IProviderResponse;
 import com.springmvc.model.provider.facebook.FacebookMessaging;
+import com.springmvc.model.provider.facebook.FacebookResponsePayload;
 import com.springmvc.model.provider.trello.TrelloDispatcher;
 import com.springmvc.model.provider.twitter.TwitterDispatcher;
 import com.sun.javaws.exceptions.InvalidArgumentException;
@@ -15,9 +16,11 @@ import java.util.Map;
 public class Dispatcher {
     private List<IProviderResponse> responses;
     private String facebookSenderId;
+    private ProviderResponseToFacebookPayloadMapper mapper;
 
     public Dispatcher(String facebookSenderId) {
         this.facebookSenderId = facebookSenderId;
+        this.mapper = new ProviderResponseToFacebookPayloadMapper();
     }
 
     public void dispatch(List<FacebookMessaging> messagings) throws CannotDispatchException {
@@ -25,7 +28,7 @@ public class Dispatcher {
             dispatch(m);
     }
 
-    public void dispatch(FacebookMessaging messaging) throws CannotDispatchException {
+    private void dispatch(FacebookMessaging messaging) throws CannotDispatchException {
         if (facebookSenderId == null)
             throw new CannotDispatchException("facebook sender id cannot be null - a message " +
                     "needs a destination");
@@ -73,16 +76,11 @@ public class Dispatcher {
         responses = (List<IProviderResponse>) dispatcher.dispatch(arguments);
     }
 
+    public List<FacebookResponsePayload> getFacebookResponsePayloads() {
+        return mapper.apply(responses);
+    }
 
     public List<IProviderResponse> getResponses() {
         return responses;
-    }
-
-    public String getFacebookSenderId() {
-        return facebookSenderId;
-    }
-
-    public void setFacebookSenderId(String facebookSenderId) {
-        this.facebookSenderId = facebookSenderId;
     }
 }

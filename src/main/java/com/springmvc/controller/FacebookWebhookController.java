@@ -4,12 +4,12 @@ import com.springmvc.exception.CannotDispatchException;
 import com.springmvc.exception.InvalidFacebookVerificationToken;
 import com.springmvc.exception.UnregisteredAccountException;
 import com.springmvc.model.dispatching.Dispatcher;
+import com.springmvc.model.entity.User;
 import com.springmvc.model.provider.facebook.FacebookMessageFacade;
 import com.springmvc.model.provider.facebook.FacebookMessaging;
 import com.springmvc.model.provider.facebook.FacebookPayload;
 import com.springmvc.model.provider.facebook.FacebookVerificationToken;
 import com.springmvc.service.provider.FacebookService;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -84,15 +84,17 @@ public class FacebookWebhookController {
      * @param payload the message payload sent by facebook
      * @throws UnregisteredAccountException when a user is not registered
      * @throws CannotDispatchException      when an error occurs during dispatching
-     * @throws InvalidArgumentException     when some payload info is invalid
+     * @throws IllegalArgumentException     when some payload info is invalid
      */
     private void processPayload(FacebookPayload payload) throws UnregisteredAccountException,
-            CannotDispatchException, InvalidArgumentException {
+            CannotDispatchException, IllegalArgumentException {
         FacebookMessageFacade messageFacade = FacebookMessageFacade.fromPayload(payload);
 
         String senderId = messageFacade.getSender().getId();
         if (!facebookService.userIsRegistered(senderId))
             throw new UnregisteredAccountException();
+
+        User user = facebookService.getBySenderId(senderId);
 
         dispatchAndAnswerUser(senderId, messageFacade.getMessagings());
     }

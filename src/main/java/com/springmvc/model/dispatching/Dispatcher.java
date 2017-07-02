@@ -40,6 +40,18 @@ public class Dispatcher {
         }
     }
 
+    /**
+     * Dispatches the aguments' handling to appName' provider
+     * <p>
+     * It's ok to suppress the unchecked warning because the dispatchers' dispatch method always
+     * returns a list of objects which extend IProviderResponse and we'll only need to call
+     * IProviderResponse's methods, not the implementation's when we play with the responses.
+     *
+     * @param appName   the app's name
+     * @param arguments arguments ex.: -add card -list "list x"
+     * @throws InvalidArgumentException if the app name's invalid
+     */
+    @SuppressWarnings("unchecked")
     private void dispatchToApp(String appName, Map<String, String> arguments)
             throws InvalidArgumentException {
         AbstractProviderDispatcher dispatcher;
@@ -58,7 +70,7 @@ public class Dispatcher {
                 throw new InvalidArgumentException(new String[]{appName});
         }
 
-        responses.addAll(dispatcher.dispatch(arguments));
+        responses = (List<IProviderResponse>) dispatcher.dispatch(arguments);
     }
 
 

@@ -94,7 +94,7 @@ public class FacebookWebhookController {
         if (!facebookService.userIsRegistered(senderId))
             throw new UnregisteredAccountException();
 
-        User user = facebookService.getBySenderId(senderId);
+        User user = facebookService.getUserByIdentifier(senderId);
 
         dispatchAndAnswerUser(senderId, messageFacade.getMessagings());
     }

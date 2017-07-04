@@ -1,6 +1,7 @@
 package com.springmvc.model.dispatching;
 
 import com.springmvc.exception.CannotDispatchException;
+import com.springmvc.model.SupportedProvider;
 import com.springmvc.model.parsing.FacebookMessageParser;
 import com.springmvc.model.provider.AbstractProviderDispatcher;
 import com.springmvc.model.provider.IProviderResponse;
@@ -55,7 +56,6 @@ public class Dispatcher {
     private void dispatchToApp(String appName, Map<String, String> arguments)
             throws IllegalArgumentException {
         SupportedProvider provider = SupportedProvider.valueOf(appName.toUpperCase());
-
         AbstractProviderDispatcher dispatcher = provider.getProviderDispatcher();
 
         responses = dispatcher.dispatch(arguments);

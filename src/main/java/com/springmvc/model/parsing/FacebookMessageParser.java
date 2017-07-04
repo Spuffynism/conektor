@@ -14,6 +14,9 @@ public class FacebookMessageParser {
     private Map<String, String> arguments;
 
     public FacebookMessageParser(String message) throws IllegalArgumentException {
+        if(message == null || message.isEmpty())
+            throw new IllegalArgumentException("message cannot be null or empty");
+
         this.message = message;
 
         this.appName = tryGetAppName();
@@ -64,8 +67,16 @@ public class FacebookMessageParser {
         return arguments;
     }
 
+    /**
+     * TODO Maybe add other deserializing steps?
+     *
+     * @param argumentValue the argument's value to deserialize
+     * @return the cleansed argument value
+     * @throws StringIndexOutOfBoundsException
+     */
     private String deserializeArgumentValue(String argumentValue)
             throws StringIndexOutOfBoundsException {
+        // Strips out nesting double quotes
         if (argumentValue.startsWith("\"") && argumentValue.endsWith("\""))
             argumentValue = argumentValue.substring(1, argumentValue.length() - 1);
 
@@ -86,16 +97,8 @@ public class FacebookMessageParser {
         return appName;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
     public Map<String, String> getArguments() {
         return arguments;
-    }
-
-    public void setArguments(Map<String, String> arguments) {
-        this.arguments = arguments;
     }
 
     ///</editor-fold>

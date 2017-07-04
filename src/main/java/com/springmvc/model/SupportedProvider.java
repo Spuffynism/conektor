@@ -1,20 +1,23 @@
-package com.springmvc.model.dispatching;
+package com.springmvc.model;
 
 import com.springmvc.model.provider.AbstractProviderDispatcher;
 import com.springmvc.model.provider.trello.TrelloDispatcher;
 import com.springmvc.model.provider.twitter.TwitterDispatcher;
 
 public enum SupportedProvider {
-    TRELLO("trello", new TrelloDispatcher()),
-    TWITTER("twitter", new TwitterDispatcher()),
-    SSH("ssh", null);
+    FACEBOOK("facebook", null, 1),
+    TRELLO("trello", new TrelloDispatcher(), 2),
+    TWITTER("twitter", new TwitterDispatcher(), 3),
+    SSH("ssh", null, -1);
 
     private String value;
     private AbstractProviderDispatcher providerDispatcher;
+    private int providerId;
 
-    SupportedProvider(String value, AbstractProviderDispatcher providerDispatcher) {
+    SupportedProvider(String value, AbstractProviderDispatcher providerDispatcher, int providerId) {
         this.value = value;
         this.providerDispatcher = providerDispatcher;
+        this.providerId = providerId;
     }
 
     public String getValue() {
@@ -31,5 +34,13 @@ public enum SupportedProvider {
 
     public void setProviderDispatcher(AbstractProviderDispatcher providerDispatcher) {
         this.providerDispatcher = providerDispatcher;
+    }
+
+    public int getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(int providerId) {
+        this.providerId = providerId;
     }
 }

@@ -14,3 +14,5 @@ conf/common_passwords/
 
 # ssl configuration files
 conf/ssl/
+conf/notes.md
+src/main/java/com/springmvc/Nothing.java

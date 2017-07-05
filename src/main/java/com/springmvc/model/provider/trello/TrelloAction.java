@@ -1,19 +1,26 @@
 package com.springmvc.model.provider.trello;
 
-        import com.springmvc.model.provider.IProviderAction;
+import com.springmvc.model.provider.IProviderAction;
 
 public enum TrelloAction implements IProviderAction {
-    ADD_CARD_TO_LIST ("add"),
-    DELETE_CARD_FROM_LIST ("delete"),
-    CREATE_BOARD ("create-board"),
-    CREATE_LIST("create-list"),
-    SWITCH_TO("switch-to"),
-    BOARD("board");
+    ADD("add"),
+    DELETE("delete"),
+    REMOVE("remove"),
+    BOARD("board"),
+    BOARDS("boards"),
+    LIST("list"),
+    LISTS("lists"),
+    CARD("card"),
+    CARDS("cards"),
+    SWITCH_TO("switch-to");
 
-    private String action;
+    private String value;
 
-    TrelloAction(String action) {
-        this.action = action;
+    TrelloAction(String value) {
+        this.value = value;
     }
 
+    public String value() {
+        return value;
+    }
 }

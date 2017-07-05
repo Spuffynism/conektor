@@ -78,9 +78,16 @@ public class FacebookMessageParser {
             throws StringIndexOutOfBoundsException {
         // Strips out nesting double quotes
         if (argumentValue.startsWith("\"") && argumentValue.endsWith("\""))
-            argumentValue = argumentValue.substring(1, argumentValue.length() - 1);
+            argumentValue = trimStartAndEndChar(argumentValue);
+
+        if (argumentValue.startsWith("'") && argumentValue.endsWith("'"))
+            argumentValue = trimStartAndEndChar(argumentValue);
 
         return argumentValue;
+    }
+
+    private String trimStartAndEndChar(String value) {
+        return value.substring(1, value.length() - 1);
     }
 
     ///<editor-fold> Basic getters and setters

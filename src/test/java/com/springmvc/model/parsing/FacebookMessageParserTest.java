@@ -8,17 +8,17 @@ public class FacebookMessageParserTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private String trelloMessage = "trello -add cardX -list listX";
+    private String trelloMessage = "trello -add test_card -list test_list";
     private String twitterMessage = "twitter -tweet \"this is a test tweet\"";
     private String emptyArgs = "trello";
 
     @Test
     public void testAppNameIsProperlyParsed() {
         FacebookMessageParser trelloParser = new FacebookMessageParser(trelloMessage);
-        assertThat("trello".equals(trelloParser.getAppName()));
+        assertThat(trelloParser.getAppName()).isEqualTo("trello");
 
         FacebookMessageParser twitterParser = new FacebookMessageParser(twitterMessage);
-        assertThat("twitter".equals(twitterParser.getAppName()));
+        assertThat(twitterParser.getAppName()).isEqualTo("twitter");
     }
 
     @Test
@@ -49,6 +49,18 @@ public class FacebookMessageParserTest {
 
     @Test
     public void testArgumentsAreProperlyParsed() {
+        FacebookMessageParser parser = new FacebookMessageParser(trelloMessage);
+        assertThat(parser.getArguments().size()).isEqualTo(2);
 
+        assertThat(parser.getArguments().get("add")).isEqualTo("test_card");
+        assertThat(parser.getArguments().get("list")).isEqualTo("test_list");
+    }
+
+    @Test
+    public void testArgumentsInDoubleQuotesAreProperlyParsed() {
+        FacebookMessageParser parser = new FacebookMessageParser(twitterMessage);
+        assertThat(parser.getArguments().size()).isEqualTo(1);
+
+        assertThat(parser.getArguments().get("tweet")).isEqualTo("this is a test tweet");
     }
 }

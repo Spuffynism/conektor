@@ -10,6 +10,7 @@ import com.springmvc.model.provider.facebook.FacebookResponsePayload;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Dispatcher {
     private List<IProviderResponse> responses;
@@ -62,6 +63,12 @@ public class Dispatcher {
     }
 
     public List<FacebookResponsePayload> getFacebookResponsePayloads() {
-        return mapper.apply(responses);
+        List<FacebookResponsePayload> payloads = mapper.apply(responses, facebookSenderId);
+
+        return payloads.stream()
+                .map(x -> {
+                    x.setRecipient(facebookSenderId);
+                    return x;
+                }).collect(Collectors.toList());
     }
 }

@@ -1,26 +1,22 @@
 package com.springmvc.model.provider;
 
-public abstract class AbstractProviderArgument<T, U> {
-    protected T action;
-    protected U value;
+public abstract class AbstractProviderArgument {
+    protected String action;
+    protected String value;
 
-    public T getAction() {
+    public String getAction() {
         return action;
     }
 
-    void setAction(T action) {
+    void setAction(String action) {
         this.action = action;
     }
 
-    public abstract void setAction(String action);
-
-    public U getValue() {
+    public String getValue() {
         return value;
     }
 
-    void setValue(U value) {
+    void setValue(String value) {
         this.value = value;
     }
-
-    public abstract void setValue(String value);
 }

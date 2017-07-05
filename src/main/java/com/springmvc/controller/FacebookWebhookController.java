@@ -1,6 +1,7 @@
 package com.springmvc.controller;
 
 import com.springmvc.exception.CannotDispatchException;
+import com.springmvc.exception.CannotSendMessageException;
 import com.springmvc.exception.InvalidFacebookVerificationToken;
 import com.springmvc.exception.UnregisteredAccountException;
 import com.springmvc.model.dispatching.Dispatcher;
@@ -65,9 +66,15 @@ public class FacebookWebhookController {
                 try {
                     processPayload(payload);
                 } catch (Exception e) {
-                    System.out.println("Error during payload processing:");
+                    System.out.println("An error during payload processing:");
                     e.printStackTrace();
-                    messageSender.sendError(payload, e);
+                    //TODO Move this out of here
+                    try {
+                        messageSender.sendError(payload, e);
+                    } catch (Exception e2) {
+                        System.out.println("Could not sen error message: ");
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -111,6 +118,11 @@ public class FacebookWebhookController {
             throws CannotDispatchException {
         Dispatcher dispatcher = new Dispatcher(senderId);
         dispatcher.dispatch(messagings);
-        messageSender.send(dispatcher.getFacebookResponsePayloads());
+
+        try {
+            messageSender.send(dispatcher.getFacebookResponsePayloads());
+        } catch (CannotSendMessageException e) {
+            e.printStackTrace();
+        }
     }
 }

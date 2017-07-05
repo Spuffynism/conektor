@@ -2,6 +2,7 @@ package com.springmvc.controller;
 
 import com.springmvc.controller.logging.LoggingRequestInterceptor;
 import com.springmvc.exception.CannotDispatchException;
+import com.springmvc.exception.CannotSendMessageException;
 import com.springmvc.exception.UnregisteredAccountException;
 import com.springmvc.model.provider.facebook.FacebookPayload;
 import com.springmvc.model.provider.facebook.FacebookResponsePayload;
@@ -47,7 +48,7 @@ public class FacebookMessageSenderController {
         pageAccessToken = token;
     }
 
-    void sendError(FacebookPayload payload, Exception e) {
+    void sendError(FacebookPayload payload, Exception e) throws CannotSendMessageException {
         String recipientId;
         try {
             recipientId = payload.getEntry().get(0).getMessaging().get(0).getSender().getId();
@@ -64,21 +65,23 @@ public class FacebookMessageSenderController {
         }
     }
 
-    public void send(String recipientId, String message) {
+    public void send(String recipientId, String message) throws CannotSendMessageException {
         send(new FacebookResponsePayload(recipientId, message));
     }
 
-    public void send(List<FacebookResponsePayload> payloads) {
+    public void send(List<FacebookResponsePayload> payloads) throws CannotSendMessageException {
         for (FacebookResponsePayload p : payloads)
             send(p);
     }
 
-    private void send(FacebookResponsePayload payload) {
+    private void send(FacebookResponsePayload payload) throws CannotSendMessageException {
         if (payload.getMessage().getText() == null)
             payload.setMessage("no message");
 
-        HttpEntity<FacebookResponsePayload> responsePayloadEntity
-                = new HttpEntity<>(payload);
+        if (payload.getRecipient() == null)
+            throw new CannotSendMessageException("recipient was null");
+
+        HttpEntity<FacebookResponsePayload> responsePayloadEntity = new HttpEntity<>(payload);
 
         // Facebook tells us if everything was ok
         ResponseEntity<FacebookResponsePayloadResponse> responsePayloadResponse = null;
@@ -101,7 +104,7 @@ public class FacebookMessageSenderController {
         }
     }
 
-    private void sendGenericErrorMessage(String recipientId) {
+    private void sendGenericErrorMessage(String recipientId) throws CannotSendMessageException {
         String genericErrorMessage = "An unknown error has occured. Please check your message is " +
                 "correctly formatted.";
         send(recipientId, genericErrorMessage);

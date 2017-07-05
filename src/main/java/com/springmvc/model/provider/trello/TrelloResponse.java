@@ -7,12 +7,7 @@ public class TrelloResponse implements IProviderResponse {
     private boolean isSuccessful;
     private String message;
 
-    public TrelloResponse() {
-    }
-
-    public TrelloResponse(int tripTime, boolean isSuccessful, String message) {
-        this.tripTime = tripTime;
-        this.isSuccessful = isSuccessful;
+    public TrelloResponse(String message) {
         this.message = message;
     }
 

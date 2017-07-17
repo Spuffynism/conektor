@@ -1,0 +1,10 @@
+jwt:
+  secret: test_jwt_secret
+facebook:
+  app_secret: test_facebook_app_secret
+  app_id: test_app_id
+  verify_token: test_facebook_verify_token
+  page_access_token: test_facebook_page_access_token
+trello:
+  application_key: test_trello_application_key
+  oauth_secret: test_trello_oauth_secret

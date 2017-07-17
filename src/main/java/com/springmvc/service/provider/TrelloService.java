@@ -1,34 +1,39 @@
 package com.springmvc.service.provider;
 
-import com.springmvc.model.provider.trello.TrelloArgument;
 import com.springmvc.model.provider.trello.TrelloResponse;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 public class TrelloService {
 
-    public TrelloResponse add(List<TrelloArgument> arguments) {
+    @NotNull
+    public TrelloResponse add(Map<String, String> arguments) {
         String message = "You sent a message to Trello. The arguments were:\n";
-        for (TrelloArgument arg : arguments) {
-            message += String.format("%s : %s\n", arg.getAction(), arg.getValue());
+        for (String arg : arguments.keySet()) {
+            message += String.format("%s : %s\n", arg, arguments.get(arg));
         }
 
         return new TrelloResponse(message);
     }
 
-    public TrelloResponse remove(List<TrelloArgument> arguments) {
-        return null;
+    @NotNull
+    public TrelloResponse remove(Map<String, String> arguments) {
+        return new TrelloResponse("no response");
     }
 
-    public TrelloResponse getBoards() {
-        return null;
+    @NotNull
+    public TrelloResponse getBoards(Map<String, String> arguments) {
+        return new TrelloResponse("no response");
     }
 
-    public TrelloResponse getListsFromBoard() {
-        return null;
+    @NotNull
+    public TrelloResponse getListsFromBoard(Map<String, String> arguments) {
+        return new TrelloResponse("no response");
     }
 
-    public TrelloResponse getCards() {
-        return null;
+    @NotNull
+    public TrelloResponse getCards(Map<String, String> arguments) {
+        return new TrelloResponse("no response");
     }
 }

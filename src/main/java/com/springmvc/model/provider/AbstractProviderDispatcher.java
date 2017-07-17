@@ -1,42 +1,25 @@
 package com.springmvc.model.provider;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Provider's individual dispatcher
  */
-public abstract class AbstractProviderDispatcher<T extends AbstractProviderArgument, U extends
-        IProviderResponse> {
-    private Class<T> argumentType;
+public abstract class AbstractProviderDispatcher<T extends IProviderResponse> {
+    public abstract List<T> dispatch(Map<String, String> arguments) throws IllegalArgumentException;
 
-    public AbstractProviderDispatcher(Class<T> argumentType) {
-        this.argumentType = argumentType;
-    }
+    protected static <E extends Enum<E>> E getFirstAction(Map<String, String> arguments,
+                                                          Class<E> action) {
+        Map.Entry<String, String> firstEntry = arguments.entrySet().iterator().next();
+        E firstAction;
 
-    public List<U> dispatch(Map<String, String> arguments) throws
-            IllegalArgumentException {
-        List<T> trelloArguments = new ArrayList<>();
-        for (String key : arguments.keySet())
-            trelloArguments.add(tryConvert(key, arguments.get(key)));
-
-        return dispatch(trelloArguments);
-    }
-
-    private T tryConvert(String action, String value) throws IllegalArgumentException {
-        T t;
         try {
-            t = argumentType.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new IllegalArgumentException("invalid argument class");
+            firstAction = E.valueOf(action, firstEntry.getKey().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("unknown action");
         }
 
-        t.setAction(action);
-        t.setValue(value);
-
-        return t;
+        return firstAction;
     }
-
-    protected abstract List<U> dispatch(List<T> arguments) throws IllegalArgumentException;
 }

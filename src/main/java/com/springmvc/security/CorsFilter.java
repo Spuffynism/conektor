@@ -27,7 +27,7 @@ public class CorsFilter extends GenericFilterBean {
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Expose-Headers", "authorization");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with, authorization, " +
-                "content-type");
+                "content-attachmentType");
 
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);

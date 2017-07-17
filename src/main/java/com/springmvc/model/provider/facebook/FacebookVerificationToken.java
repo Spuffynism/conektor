@@ -9,7 +9,7 @@ import java.util.Map;
 @Component
 public class FacebookVerificationToken {
     private static String tokenFromHere;
-    private final static String subscribeMode = "subscribe";
+    private final static String SUBSCRIBE_MODE = "subscribe";
 
     private String mode;
     private String challenge;
@@ -25,8 +25,8 @@ public class FacebookVerificationToken {
     }
 
     public void validate() throws InvalidFacebookVerificationToken {
-        if (!getMode().equalsIgnoreCase(subscribeMode) || tokenFromHere == null ||
-                tokenFromFacebook == null || !tokenFromHere.equals(tokenFromFacebook))
+        if (mode == null || tokenFromFacebook == null || !mode.equalsIgnoreCase(SUBSCRIBE_MODE) ||
+                !tokenFromHere.equals(tokenFromFacebook))
             throw new InvalidFacebookVerificationToken();
     }
 

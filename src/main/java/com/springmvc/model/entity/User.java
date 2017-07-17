@@ -28,6 +28,8 @@ public class User extends AbstractDatable implements UserDetails {
     @JsonIgnoreProperties("user")
     private Set<Account> accounts;
 
+    public User(){}
+
     //<editor-fold> Basic getters and setters
 
     @Id

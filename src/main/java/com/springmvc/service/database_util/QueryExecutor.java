@@ -15,11 +15,6 @@ public class QueryExecutor<T> {
     }
 
     /**
-     * - Gets a session
-     * - Starts a transaction
-     * - Executes the QueryFunction
-     * - Closes the sessions
-     *
      * @return le résultat T de la QueryFunction
      */
     public T execute() {
@@ -30,15 +25,5 @@ public class QueryExecutor<T> {
 
     private void setQueryFunction(QueryFunction<T> queryFunction) {
         this.queryFunction = queryFunction;
-    }
-
-    /**
-     * Interface fonctionnel définissant les callback utilisé par QueryExecutor
-     *
-     * @param <T>
-     */
-    @FunctionalInterface
-    public interface QueryFunction<T> {
-        T apply(Session session);
     }
 }

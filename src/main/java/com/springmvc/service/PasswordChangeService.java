@@ -23,8 +23,6 @@ public class PasswordChangeService {
 
     private void changePassword(User currentUser, NewPassword newPassword)
             throws InvalidPasswordException {
-        IPasswordHasher argon2 = new Argon2Hasher();
-
         // Checks that we haven't exceeded the maximum allowed password change attempts
         if (currentUser.getAttemptedPasswordChanges() > NewPassword
                 .MAX_ALLOWED_PASSWORD_CHANGE_ATTEMPTS)
@@ -35,6 +33,7 @@ public class PasswordChangeService {
         if (!newPassword.complies())
             throw new InvalidPasswordException("New password is invalid.");
 
+        IPasswordHasher argon2 = new Argon2Hasher();
         // Checks that the user knows their password (protection against session token theft)
         boolean currentPasswordIsRight = argon2.verify(currentUser.getPassword(),
                 newPassword.getCurrentPassword());
@@ -46,9 +45,9 @@ public class PasswordChangeService {
     }
 
     private void updatePassword(int userId, String newPasswordHash) {
+        String sql = "update User set password = :newPasswordHash where id = :userId";
         new QueryExecutor<Void>(session -> {
-            Query query = session.createQuery("update User set password = :newPasswordHash where " +
-                    "id = :userId")
+            Query query = session.createQuery(sql)
                     .setParameter("newPasswordHash", newPasswordHash)
                     .setParameter("userId", userId);
 
@@ -61,9 +60,10 @@ public class PasswordChangeService {
     }
 
     private void addPasswordChangeAttempt(int userId) {
+        String sql = "update User set attemptedPasswordChanges = attemptedPasswordChanges + 1" +
+                " where id = :userId";
+
         new QueryExecutor<Void>(session -> {
-            String sql = "update User set attemptedPasswordChanges = attemptedPasswordChanges + 1" +
-                    " where id = :userId";
             Query query = session.createQuery(sql)
                     .setParameter("userId", userId);
 
@@ -76,8 +76,9 @@ public class PasswordChangeService {
     }
 
     private void resetPasswordChangeAttempts(int userId) {
+        String sql = "update User set attemptedPasswordChanges = 0 where id = :userId";
+
         new QueryExecutor<Void>(session -> {
-            String sql = "update User set attemptedPasswordChanges = 0 where id = :userId";
             Query query = session.createQuery(sql)
                     .setParameter("userId", userId);
 

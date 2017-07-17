@@ -29,6 +29,7 @@ public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
         System.out.println(request.getMethod().toString());
         System.out.println(request.getURI().toString());
         System.out.println(new String(body));
+
         try {
             System.out.println(response.getBody());
         } catch (Exception ignored){}

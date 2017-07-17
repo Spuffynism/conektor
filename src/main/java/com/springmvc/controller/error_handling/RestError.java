@@ -1,4 +1,4 @@
-package com.springmvc.controller.error;
+package com.springmvc.controller.error_handling;
 
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.web.context.request.RequestAttributes;

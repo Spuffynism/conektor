@@ -7,9 +7,9 @@ import com.springmvc.exception.UnregisteredAccountException;
 import com.springmvc.model.dispatching.Dispatcher;
 import com.springmvc.model.entity.User;
 import com.springmvc.model.provider.facebook.FacebookMessageFacade;
-import com.springmvc.model.provider.facebook.FacebookMessaging;
-import com.springmvc.model.provider.facebook.FacebookPayload;
 import com.springmvc.model.provider.facebook.FacebookVerificationToken;
+import com.springmvc.model.provider.facebook.webhook.Messaging;
+import com.springmvc.model.provider.facebook.webhook.Payload;
 import com.springmvc.service.provider.FacebookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,12 +24,12 @@ import java.util.Map;
 public class FacebookWebhookController {
 
     private final FacebookService facebookService;
-    private final FacebookMessageSenderController messageSender;
+    private final FacebookMessageSender messageSender;
 
     @Autowired
     public FacebookWebhookController(FacebookService facebookService) {
         this.facebookService = facebookService;
-        messageSender = new FacebookMessageSenderController();
+        messageSender = new FacebookMessageSender();
     }
 
     /**
@@ -60,26 +60,19 @@ public class FacebookWebhookController {
      * @param payload the message payload sent by facebook
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> receiveMessage(@RequestBody FacebookPayload payload) {
-        if (payload != null && payload.isPage()) {
-            Thread processing = new Thread(() -> {
-                try {
-                    processPayload(payload);
-                } catch (Exception e) {
-                    System.out.println("An error during payload processing:");
-                    e.printStackTrace();
-                    //TODO Move this out of here
-                    try {
-                        messageSender.sendError(payload, e);
-                    } catch (Exception e2) {
-                        System.out.println("Could not sen error message: ");
-                        e.printStackTrace();
-                    }
-                }
-            });
+    public ResponseEntity<String> receiveMessage(@RequestBody Payload payload) {
+        Thread payloadProcessing = new Thread(() -> {
+            try {
+                processPayload(payload);
+            } catch (UnregisteredAccountException | CannotDispatchException |
+                    IllegalArgumentException e) {
+                System.out.println("An error during payload processing:");
+                e.printStackTrace();
+                messageSender.sendError(payload, e);
+            }
+        });
 
-            processing.start();
-        }
+        payloadProcessing.start();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -93,15 +86,17 @@ public class FacebookWebhookController {
      * @throws CannotDispatchException      when an error occurs during dispatching
      * @throws IllegalArgumentException     when some payload info is invalid
      */
-    private void processPayload(FacebookPayload payload) throws UnregisteredAccountException,
+    private void processPayload(Payload payload) throws UnregisteredAccountException,
             CannotDispatchException, IllegalArgumentException {
+        if (payload == null || !payload.isPage())
+            throw new IllegalArgumentException("unsupported payload");
+
         FacebookMessageFacade messageFacade = FacebookMessageFacade.fromPayload(payload);
 
         String senderId = messageFacade.getSender().getId();
         if (!facebookService.userIsRegistered(senderId))
-            throw new UnregisteredAccountException();
-
-        User user = facebookService.getUserByIdentifier(senderId);
+            throw new UnregisteredAccountException("unrecognized facebook account - are you " +
+                    "registered?");
 
         dispatchAndAnswerUser(senderId, messageFacade.getMessagings());
     }
@@ -110,17 +105,19 @@ public class FacebookWebhookController {
      * Creates a dispatcher which will query the appropriate third parties and then send their
      * responses to the facebook user.
      *
-     * @param senderId the user which sent and which will receive the messages
+     * @param senderId   the user which sent and which will receive the messages
      * @param messagings messagings to be parsed
      * @throws CannotDispatchException when an error occured during the message dispatching process
      */
-    private void dispatchAndAnswerUser(String senderId, List<FacebookMessaging> messagings)
+    private void dispatchAndAnswerUser(String senderId, List<Messaging> messagings)
             throws CannotDispatchException {
-        Dispatcher dispatcher = new Dispatcher(senderId);
+        User user = facebookService.getUserByIdentifier(senderId);
+
+        Dispatcher dispatcher = new Dispatcher(user, senderId);
         dispatcher.dispatch(messagings);
 
         try {
-            messageSender.send(dispatcher.getFacebookResponsePayloads());
+            messageSender.send(dispatcher.collectFacebookResponsePayloads());
         } catch (CannotSendMessageException e) {
             e.printStackTrace();
         }

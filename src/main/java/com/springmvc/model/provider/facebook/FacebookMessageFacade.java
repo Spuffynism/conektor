@@ -1,15 +1,19 @@
 package com.springmvc.model.provider.facebook;
 
+import com.springmvc.model.provider.facebook.webhook.Messaging;
+import com.springmvc.model.provider.facebook.webhook.Payload;
+import com.springmvc.model.provider.facebook.webhook.Sender;
+
 import java.util.List;
 
 public class FacebookMessageFacade {
-    private FacebookPayload payload;
+    private Payload payload;
 
-    private FacebookMessageFacade(FacebookPayload payload) {
+    private FacebookMessageFacade(Payload payload) {
         this.payload = payload;
     }
 
-    public static FacebookMessageFacade fromPayload(FacebookPayload payload) throws
+    public static FacebookMessageFacade fromPayload(Payload payload) throws
             IllegalArgumentException {
         FacebookMessageFacade messageFacade = new FacebookMessageFacade(payload);
 
@@ -22,11 +26,11 @@ public class FacebookMessageFacade {
         return messageFacade;
     }
 
-    public FacebookSender getSender() {
+    public Sender getSender() {
         return payload.getEntry().get(0).getMessaging().get(0).getSender();
     }
 
-    public List<FacebookMessaging> getMessagings() {
+    public List<Messaging> getMessagings() {
         return payload.getEntry().get(0).getMessaging();
     }
 }

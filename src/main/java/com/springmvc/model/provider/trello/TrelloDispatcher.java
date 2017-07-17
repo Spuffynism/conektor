@@ -5,22 +5,18 @@ import com.springmvc.service.provider.TrelloService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
-public class TrelloDispatcher extends AbstractProviderDispatcher<TrelloArgument, TrelloResponse> {
-    private static TrelloService trelloService = new TrelloService();
+public class TrelloDispatcher extends AbstractProviderDispatcher<TrelloResponse> {
+    private static final TrelloService trelloService = new TrelloService();
 
-    public TrelloDispatcher() {
-        super(TrelloArgument.class);
-    }
-
-    protected List<TrelloResponse> dispatch(List<TrelloArgument> arguments) throws
+    public List<TrelloResponse> dispatch(Map<String, String> arguments) throws
             IllegalArgumentException {
         List<TrelloResponse> responses = new ArrayList<>();
 
-        String firstAction = arguments.get(0).getAction();
+        switch (getFirstAction(arguments, TrelloAction.class)) {
 
-        switch (TrelloAction.valueOf(firstAction.toUpperCase())) {
             case ADD:
                 responses.add(trelloService.add(arguments));
                 break;
@@ -33,7 +29,7 @@ public class TrelloDispatcher extends AbstractProviderDispatcher<TrelloArgument,
         }
 
         if (responses.isEmpty())
-            throw new IllegalArgumentException("no responses");
+            throw new IllegalArgumentException("no response from provider");
 
         return responses;
     }

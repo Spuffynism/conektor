@@ -1,0 +1,112 @@
+package com.springmvc.model.parsing;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class MessageParser {
+    private static Pattern commandPattern = Pattern.compile("^([a-zA-Z]+){1}");
+    private static Pattern argumentsPattern =
+            Pattern.compile("-([a-zA-Z-]+){1}\\s([^\"\\s]+|\"[^\"]+\"){1}");
+    private String message;
+    private String command;
+    private Map<String, String> arguments;
+
+    public MessageParser(String message) throws IllegalArgumentException {
+        if(message == null || message.isEmpty())
+            throw new IllegalArgumentException("a message must be present");
+
+        this.message = message;
+
+        this.setCommand();
+        this.setArguments();
+    }
+
+    private void setCommand() throws IllegalArgumentException {
+        Matcher matcher = commandPattern.matcher(message);
+        String command = parseCommand(matcher);
+
+        if (command == null || command.isEmpty())
+            throw new IllegalArgumentException("no command");
+
+        this.command = command;
+    }
+
+    private String parseCommand(Matcher matcher) {
+        String command = null;
+
+        while (matcher.find())
+            command = matcher.group(1);
+
+        return command;
+    }
+
+    private void setArguments() throws IllegalArgumentException {
+        Matcher matcher = argumentsPattern.matcher(message);
+        Map<String, String> arguments = parseArguments(matcher);
+
+        if (arguments.isEmpty()) //TODO Maybe not throw exception?
+            throw new IllegalArgumentException("no arguments");
+
+        this.arguments = arguments;
+    }
+
+    private Map<String, String> parseArguments(Matcher matcher)
+            throws StringIndexOutOfBoundsException {
+        Map<String, String> arguments = new HashMap<>();
+
+        String argument, value;
+        while (matcher.find()) {
+            argument = matcher.group(1);
+            value = deserializeArgumentValue(matcher.group(2));
+
+            arguments.put(argument, value);
+        }
+
+        return arguments;
+    }
+
+    /**
+     * TODO Maybe add other deserializing steps?
+     *
+     * @param argumentValue the argument's value to deserialize
+     * @return the cleansed argument value
+     * @throws StringIndexOutOfBoundsException
+     */
+    private String deserializeArgumentValue(String argumentValue)
+            throws StringIndexOutOfBoundsException {
+        // Strips out nesting double quotes
+        if (argumentValue.startsWith("\"") && argumentValue.endsWith("\""))
+            argumentValue = trimStartAndEndChar(argumentValue);
+
+        if (argumentValue.startsWith("'") && argumentValue.endsWith("'"))
+            argumentValue = trimStartAndEndChar(argumentValue);
+
+        return argumentValue;
+    }
+
+    private String trimStartAndEndChar(String value) {
+        return value.substring(1, value.length() - 1);
+    }
+
+    ///<editor-fold> Basic getters and setters
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public Map<String, String> getArguments() {
+        return arguments;
+    }
+
+    ///</editor-fold>
+}

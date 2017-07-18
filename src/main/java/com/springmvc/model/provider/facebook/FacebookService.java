@@ -1,7 +1,8 @@
-package com.springmvc.service.provider;
+package com.springmvc.model.provider.facebook;
 
 import com.springmvc.model.dispatching.SupportedProvider;
 import com.springmvc.service.AccountService;
+import com.springmvc.model.provider.AbstractProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

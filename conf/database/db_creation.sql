@@ -72,7 +72,8 @@ INSERT INTO user_usr (usr_id, usr_username, usr_email, usr_password, usr_permiss
 INSERT INTO provider_pro (pro_id, pro_name) VALUES
   (1, 'facebook'),
   (2, 'trello'),
-  (3, 'twitter');
+  (3, 'twitter'),
+  (4, 'imgur');
 
 INSERT INTO account_acc (acc_details, acc_token, acc_user_id, acc_provider_id) VALUES
   ('{}', 'facebook_test_token', 1, 1),

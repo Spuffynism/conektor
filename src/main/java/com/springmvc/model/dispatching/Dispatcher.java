@@ -4,16 +4,17 @@ import com.springmvc.exception.CannotDispatchException;
 import com.springmvc.model.entity.User;
 import com.springmvc.model.parsing.MessageParser;
 import com.springmvc.model.provider.AbstractProviderDispatcher;
-import com.springmvc.model.provider.IProviderResponse;
+import com.springmvc.model.provider.ProviderResponse;
 import com.springmvc.model.provider.facebook.sendAPI.Payload;
 import com.springmvc.model.provider.facebook.webhook.Messaging;
+import com.springmvc.model.provider.imgur.ImgurDispatcher;
 import com.springmvc.model.provider.trello.TrelloDispatcher;
 
 import java.util.List;
 import java.util.Map;
 
 public class Dispatcher {
-    private List<IProviderResponse> responses;
+    private List<ProviderResponse> responses;
     private User user;
     private String facebookSenderId;
     private ProviderResponseToFacebookMessagePayloadMapper mapper;
@@ -64,6 +65,9 @@ public class Dispatcher {
             switch (SupportedProvider.valueOf(command.toUpperCase())) {
                 case FACEBOOK:
                     dispatcher = null;
+                    break;
+                case IMGUR:
+                    dispatcher = new ImgurDispatcher();
                     break;
                 case SSH:
                     dispatcher = null;

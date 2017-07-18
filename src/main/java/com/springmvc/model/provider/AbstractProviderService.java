@@ -1,4 +1,4 @@
-package com.springmvc.service.provider;
+package com.springmvc.model.provider;
 
 import com.springmvc.model.entity.User;
 import com.springmvc.service.database_util.AbstractService;
@@ -6,7 +6,7 @@ import com.springmvc.service.database_util.QueryExecutor;
 import org.hibernate.SQLQuery;
 
 public abstract class AbstractProviderService extends AbstractService<User> {
-    int providerId;
+    protected int providerId;
 
     protected AbstractProviderService(int providerId) {
         super(User.class);

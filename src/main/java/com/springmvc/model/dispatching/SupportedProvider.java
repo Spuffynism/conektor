@@ -2,6 +2,7 @@ package com.springmvc.model.dispatching;
 
 public enum SupportedProvider {
     FACEBOOK("facebook", 1),
+    IMGUR("imgur", 4),
     TRELLO("trello", 2),
     SSH("ssh", 3);
 

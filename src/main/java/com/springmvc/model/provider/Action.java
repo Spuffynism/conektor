@@ -6,12 +6,10 @@ import java.util.function.Function;
 
 /**
  * Describes an action that can be made to a provider
- *
- * @param <T> the action's output type
  */
-public class Action<T extends IProviderResponse> {
-    private Function<Map<String, String>, T> action;
-    private T actionResult;
+public class Action {
+    private Function<Map<String, String>, ProviderResponse> action;
+    private ProviderResponse actionResult;
     private Action parent;
     private List<Action> children;
 

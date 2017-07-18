@@ -6,8 +6,9 @@ import java.util.Map;
 /**
  * Provider's individual dispatcher
  */
-public abstract class AbstractProviderDispatcher<T extends IProviderResponse> {
-    public abstract List<T> dispatch(Map<String, String> arguments) throws IllegalArgumentException;
+public abstract class AbstractProviderDispatcher {
+    public abstract List<ProviderResponse> dispatch(Map<String, String> arguments)
+            throws IllegalArgumentException;
 
     protected static <E extends Enum<E>> E getFirstAction(Map<String, String> arguments,
                                                           Class<E> action) {

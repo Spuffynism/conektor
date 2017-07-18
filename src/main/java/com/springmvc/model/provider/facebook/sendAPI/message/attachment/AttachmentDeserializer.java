@@ -24,22 +24,25 @@ public class AttachmentDeserializer extends JsonDeserializer<Attachment> {
         Class<? extends AbstractPayload> payloadClass = tryGetPayloadClass(type);
 
         AbstractPayload payload = codec.treeToValue(attachment.get("payload"), payloadClass);
+        Attachment parsedAttachment = new Attachment(type, payload);
+        parsedAttachment.setTitle(attachment.get("title").asText());
+        parsedAttachment.setURL(attachment.get("URL").asText());
 
-        return new Attachment(type, payload);
+        return parsedAttachment;
     }
 
-    private AttachmentType tryParseAttachmentType(JsonNode tree) {
+    private static AttachmentType tryParseAttachmentType(JsonNode tree) {
         AttachmentType type;
         try {
             type = AttachmentType.valueOf(tree.get("type").asText().toUpperCase());
-        } catch (IllegalArgumentException | NullPointerException e) {
+        } catch (Exception e) {
             throw new RuntimeException("unsupported attachment type");
         }
 
         return type;
     }
 
-    private Class<? extends AbstractPayload> tryGetPayloadClass(AttachmentType type) {
+    private static Class<? extends AbstractPayload> tryGetPayloadClass(AttachmentType type) {
         Class<? extends AbstractPayload> payloadClass;
         if (AttachmentType.isMultimedia(type)) {
             payloadClass = MultimediaPayload.class;

@@ -10,7 +10,7 @@ import com.springmvc.model.provider.facebook.FacebookMessageFacade;
 import com.springmvc.model.provider.facebook.FacebookVerificationToken;
 import com.springmvc.model.provider.facebook.webhook.Messaging;
 import com.springmvc.model.provider.facebook.webhook.Payload;
-import com.springmvc.service.provider.FacebookService;
+import com.springmvc.model.provider.facebook.FacebookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -97,6 +97,7 @@ public class FacebookWebhookController {
         if (!facebookService.userIsRegistered(senderId))
             throw new UnregisteredAccountException("unrecognized facebook account - are you " +
                     "registered?");
+
 
         dispatchAndAnswerUser(senderId, messageFacade.getMessagings());
     }

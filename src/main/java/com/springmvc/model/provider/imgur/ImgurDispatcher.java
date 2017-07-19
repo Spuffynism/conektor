@@ -2,6 +2,7 @@ package com.springmvc.model.provider.imgur;
 
 import com.springmvc.model.provider.AbstractProviderDispatcher;
 import com.springmvc.model.provider.ProviderResponse;
+import com.springmvc.model.provider.facebook.PipelinedMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,16 +12,17 @@ public class ImgurDispatcher extends AbstractProviderDispatcher {
     private static final ImgurService imgurService = new ImgurService();
 
     @Override
-    public List<ProviderResponse> dispatch(Map<String, String> arguments) throws
+    public List<ProviderResponse> dispatch(PipelinedMessage pipelinedMessage) throws
             IllegalArgumentException {
         List<ProviderResponse> responses = new ArrayList<>();
 
-        switch (getFirstAction(arguments, ImgurAction.class)) {
+        switch (getFirstAction(pipelinedMessage.getParsedMessage().getArguments(),
+                ImgurAction.class)) {
             case UPLOAD:
-                responses.add(imgurService.upload(arguments));
+                responses.add(imgurService.upload(pipelinedMessage));
                 break;
             case DELETE:
-                responses.add(imgurService.delete(arguments));
+                responses.add(imgurService.delete(pipelinedMessage));
                 break;
             default:
                 break;

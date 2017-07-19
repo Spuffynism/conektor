@@ -72,7 +72,7 @@ public class MessageParser {
      *
      * @param argumentValue the argument's value to deserialize
      * @return the cleansed argument value
-     * @throws StringIndexOutOfBoundsException
+     * @throws StringIndexOutOfBoundsException when the argument's too small
      */
     private String deserializeArgumentValue(String argumentValue)
             throws StringIndexOutOfBoundsException {
@@ -91,6 +91,10 @@ public class MessageParser {
     }
 
     ///<editor-fold> Basic getters and setters
+
+    public ParsedMessage getParsedMessage() {
+        return new ParsedMessage(command, arguments);
+    }
 
     public String getMessage() {
         return message;

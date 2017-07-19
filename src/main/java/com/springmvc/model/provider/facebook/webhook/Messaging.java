@@ -3,7 +3,10 @@ package com.springmvc.model.provider.facebook.webhook;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * TODO Create MessageMessaing & PostbackMessaging AND make abstract
+ * This object is defined as a complete payload from
+ * https://developers.facebook.com/docs/messenger-platform/webhook-reference/message
+ *
+ * TODO Create ReceivedMessaging & PostbackMessaging AND make abstract
  */
 public class Messaging {
     @JsonProperty("sender")

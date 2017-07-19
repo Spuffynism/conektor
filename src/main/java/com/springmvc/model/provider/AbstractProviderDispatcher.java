@@ -1,5 +1,7 @@
 package com.springmvc.model.provider;
 
+import com.springmvc.model.provider.facebook.PipelinedMessage;
+
 import java.util.List;
 import java.util.Map;
 
@@ -7,7 +9,7 @@ import java.util.Map;
  * Provider's individual dispatcher
  */
 public abstract class AbstractProviderDispatcher {
-    public abstract List<ProviderResponse> dispatch(Map<String, String> arguments)
+    public abstract List<ProviderResponse> dispatch(PipelinedMessage message)
             throws IllegalArgumentException;
 
     protected static <E extends Enum<E>> E getFirstAction(Map<String, String> arguments,

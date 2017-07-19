@@ -3,17 +3,18 @@ package com.springmvc.model.dispatching;
 import com.springmvc.exception.CannotDispatchException;
 import com.springmvc.model.entity.User;
 import com.springmvc.model.parsing.MessageParser;
+import com.springmvc.model.parsing.ParsedMessage;
 import com.springmvc.model.provider.AbstractProviderDispatcher;
 import com.springmvc.model.provider.ProviderResponse;
+import com.springmvc.model.provider.facebook.PipelinedMessage;
 import com.springmvc.model.provider.facebook.sendAPI.Payload;
 import com.springmvc.model.provider.facebook.webhook.Messaging;
-import com.springmvc.model.provider.imgur.ImgurDispatcher;
-import com.springmvc.model.provider.trello.TrelloDispatcher;
 
 import java.util.List;
-import java.util.Map;
 
 public class Dispatcher {
+    private static final ProviderDispatcherFactory providerDispatcherFactory
+            = new ProviderDispatcherFactory();
     private List<ProviderResponse> responses;
     private User user;
     private String facebookSenderId;
@@ -39,7 +40,8 @@ public class Dispatcher {
 
         try {
             MessageParser parser = new MessageParser(message);
-            dispatchToProvider(parser.getCommand(), parser.getArguments());
+
+            dispatchToProvider(parser.getParsedMessage(), messaging);
         } catch (IllegalArgumentException e) {
             throw new CannotDispatchException(e.getMessage());
         }
@@ -47,43 +49,19 @@ public class Dispatcher {
 
     /**
      * Dispatches the aguments' handling to command' provider
-     * <p>
-     * It's ok to suppress the unchecked warning because the dispatchers' dispatch method always
-     * returns a list of objects which implement IProviderResponse and we'll only need to call
-     * IProviderResponse's methods, not the implementation's when we manipulate the responses.
      *
-     * @param command   the app's name
-     * @param arguments arguments ex.: -add card -list "list x"
+     * @param parsedMessage the parse message which contains information for dispatching
+     * @param messaging the original raw messaging from the user
      * @throws IllegalArgumentException if the app name's invalid
      */
-    @SuppressWarnings("unchecked")
-    private void dispatchToProvider(String command, Map<String, String> arguments)
+    private void dispatchToProvider(ParsedMessage parsedMessage, Messaging messaging)
             throws IllegalArgumentException {
-        AbstractProviderDispatcher dispatcher = null;
+        AbstractProviderDispatcher dispatcher =
+                providerDispatcherFactory.getFromDestinationProvider(parsedMessage.getCommand());
 
-        try {
-            switch (SupportedProvider.valueOf(command.toUpperCase())) {
-                case FACEBOOK:
-                    dispatcher = null;
-                    break;
-                case IMGUR:
-                    dispatcher = new ImgurDispatcher();
-                    break;
-                case SSH:
-                    dispatcher = null;
-                    break;
-                case TRELLO:
-                    dispatcher = new TrelloDispatcher();
-                    break;
-            }
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("unknown provider");
-        }
+        PipelinedMessage pipelinedMessage = new PipelinedMessage(messaging, parsedMessage);
 
-        if (dispatcher == null)
-            throw new IllegalArgumentException("unknown command led to unknown provider");
-
-        responses = dispatcher.dispatch(arguments);
+        responses = dispatcher.dispatch(pipelinedMessage);
     }
 
     public List<Payload> collectFacebookResponsePayloads() {

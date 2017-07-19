@@ -1,4 +1,4 @@
-package com.springmvc.model.provider.facebook.sendAPI.message.attachment;
+package com.springmvc.model.provider.facebook.shared;
 
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -6,6 +6,8 @@ import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.springmvc.model.provider.facebook.sendAPI.message.attachment.AbstractPayload;
+import com.springmvc.model.provider.facebook.sendAPI.message.attachment.MultimediaPayload;
 import com.springmvc.model.provider.facebook.sendAPI.message.attachment.template.TemplatePayload;
 import com.springmvc.model.provider.facebook.shared.Attachment;
 import com.springmvc.model.provider.facebook.shared.AttachmentType;

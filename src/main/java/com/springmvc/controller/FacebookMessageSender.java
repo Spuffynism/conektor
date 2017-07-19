@@ -61,8 +61,8 @@ public class FacebookMessageSender {
     }
 
     private void send(com.springmvc.model.provider.facebook.sendAPI.Payload payload) throws CannotSendMessageException {
-       /* if (payload.getMessage() == null)
-            payload.setMessage("no message");*/
+       /* if (payload.getCommand() == null)
+            payload.setCommand("no message");*/
 
         if (payload.getRecipient() == null)
             throw new CannotSendMessageException("no recipient");

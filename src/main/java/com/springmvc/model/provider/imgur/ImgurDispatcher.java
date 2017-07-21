@@ -16,7 +16,8 @@ public class ImgurDispatcher extends AbstractProviderDispatcher {
             IllegalArgumentException {
         List<ProviderResponse> responses = new ArrayList<>();
 
-        switch (getFirstAction(pipelinedMessage.getParsedMessage().getArguments(),
+        responses.add(imgurService.upload(pipelinedMessage));
+        /*switch (getFirstAction(pipelinedMessage.getParsedMessage().getArguments(),
                 ImgurAction.class)) {
             case UPLOAD:
                 responses.add(imgurService.upload(pipelinedMessage));
@@ -26,7 +27,7 @@ public class ImgurDispatcher extends AbstractProviderDispatcher {
                 break;
             default:
                 break;
-        }
+        }*/
 
         if (responses.isEmpty())
             throw new IllegalArgumentException("no response from provider");

@@ -9,8 +9,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.springmvc.model.provider.facebook.sendAPI.message.attachment.AbstractPayload;
 import com.springmvc.model.provider.facebook.sendAPI.message.attachment.MultimediaPayload;
 import com.springmvc.model.provider.facebook.sendAPI.message.attachment.template.TemplatePayload;
-import com.springmvc.model.provider.facebook.shared.Attachment;
-import com.springmvc.model.provider.facebook.shared.AttachmentType;
 
 import java.io.IOException;
 
@@ -27,8 +25,18 @@ public class AttachmentDeserializer extends JsonDeserializer<Attachment> {
 
         AbstractPayload payload = codec.treeToValue(attachment.get("payload"), payloadClass);
         Attachment parsedAttachment = new Attachment(type, payload);
-        parsedAttachment.setTitle(attachment.get("title").asText());
-        parsedAttachment.setURL(attachment.get("URL").asText());
+
+        try {
+            parsedAttachment.setTitle(attachment.get("title").asText());
+        } catch (Exception e) {
+            parsedAttachment.setTitle("");
+        }
+
+        try {
+            parsedAttachment.setURL(attachment.get("url").asText());
+        } catch (Exception e) {
+            parsedAttachment.setURL("");
+        }
 
         return parsedAttachment;
     }

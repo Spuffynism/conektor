@@ -5,6 +5,7 @@ import com.springmvc.exception.CannotDispatchException;
 import com.springmvc.exception.CannotSendMessageException;
 import com.springmvc.exception.UnregisteredAccountException;
 import com.springmvc.model.provider.facebook.sendAPI.PayloadFactory;
+import com.springmvc.model.provider.facebook.sendAPI.SendPayload;
 import com.springmvc.model.provider.facebook.webhook.Payload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -55,12 +56,12 @@ public class FacebookMessageSender {
         send(payloadFactory.getPayload(recipientId, message));
     }
 
-    public void send(List<com.springmvc.model.provider.facebook.sendAPI.Payload> payloads) throws CannotSendMessageException {
-        for (com.springmvc.model.provider.facebook.sendAPI.Payload p : payloads)
+    public void send(List<SendPayload> payloads) throws CannotSendMessageException {
+        for (SendPayload p : payloads)
             send(p);
     }
 
-    private void send(com.springmvc.model.provider.facebook.sendAPI.Payload payload) throws CannotSendMessageException {
+    private void send(SendPayload payload) throws CannotSendMessageException {
        /* if (payload.getCommand() == null)
             payload.setCommand("no message");*/
 
@@ -68,7 +69,7 @@ public class FacebookMessageSender {
             throw new CannotSendMessageException("no recipient");
 
         // TODO Check with webhook reference
-        HttpEntity<com.springmvc.model.provider.facebook.sendAPI.Payload> responseEntity = new HttpEntity<>(payload);
+        HttpEntity<SendPayload> responseEntity = new HttpEntity<>(payload);
         UriComponentsBuilder responseBuilder = UriComponentsBuilder.fromHttpUrl(requestURI)
                 .queryParam(ACCESS_TOKEN, pageAccessToken);
         URI responseURI = responseBuilder.build().encode().toUri();

@@ -8,10 +8,10 @@ public class PayloadFactory {
     public PayloadFactory() {
     }
 
-    public Payload getPayload(String senderId, String message) {
+    public SendPayload getPayload(String senderId, String message) {
         Recipient recipient = new Recipient(senderId);
         Message textMessage = new TextMessage(message);
 
-        return new Payload(recipient, textMessage);
+        return new SendPayload(recipient, textMessage);
     }
 }

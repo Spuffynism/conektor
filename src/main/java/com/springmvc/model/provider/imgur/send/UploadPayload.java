@@ -1,11 +1,11 @@
-package com.springmvc.model.provider.imgur;
+package com.springmvc.model.provider.imgur.send;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UploadPayload {
     @JsonProperty("image")
     private String image;
-    @JsonProperty("album")
+    /*@JsonProperty("album")
     private String album;
     @JsonProperty("title")
     private String title;
@@ -14,7 +14,7 @@ public class UploadPayload {
     @JsonProperty("name")
     private String name;
     @JsonProperty("type")
-    private String type;
+    private String type;*/
 
     public UploadPayload(String image) {
         this.image = image;
@@ -28,7 +28,7 @@ public class UploadPayload {
         this.image = image;
     }
 
-    public String getAlbum() {
+   /* public String getAlbum() {
         return album;
     }
 
@@ -66,5 +66,5 @@ public class UploadPayload {
 
     public void setType(String type) {
         this.type = type;
-    }
+    }*/
 }

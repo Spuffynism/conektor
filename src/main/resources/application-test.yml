@@ -5,6 +5,11 @@ facebook:
   app_id: test_app_id
   verify_token: test_facebook_verify_token
   page_access_token: test_facebook_page_access_token
+imgur:
+  client_id: test_client_id
+  access_token: test_access_token
+  refresh_token: test_refresh_token
+  client_secret: test_client_secret
 trello:
   application_key: test_trello_application_key
   oauth_secret: test_trello_oauth_secret

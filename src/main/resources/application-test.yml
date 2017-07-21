@@ -1,15 +1,18 @@
+# All data stored here is test data - none of the tokens, secrets, keys, etc. are real
+# strings of the form [a-f0-9] and [0-9]  start with "0000"
+# strings of the form [a-zA-Z], [a-z0-9] and [a-zA-Z0-9.*] start with "test"
 jwt:
-  secret: test_jwt_secret
+  secret: testQ7iM0DvvuvH(*xXaWWkf69Gn*M9*CgkoOhorjK3Fifm6lUBoHvT4BPSJc"B/hmhXk$Rj&s!JL6L4M"GFPIcVt6IEcU8jE)jH
 facebook:
-  app_secret: test_facebook_app_secret
-  app_id: test_app_id
-  verify_token: test_facebook_verify_token
-  page_access_token: test_facebook_page_access_token
+  app_secret: test6d575854ff8811bc295febcd2f9f
+  app_id: 000020790396537
+  verify_token: testt4eJFGKxNudpePDMLxF9IyBYEixRhGHzUpIFedxHQCtwuB7amWJwui1iEutGHSVAF8H2gPj6aqC2TNLFOBIw4PzmBhFcagPW
+  page_access_token: test99wIaMoP70Xf9cKIbPYm8hmTOMbzsESauvjpMOiHajCTS2j1dIMTK4nBkVMd68pyzDFBBhH8EoAX1cCu5N3pAKB6rdF2nBoZQsf6snyyvOMzI6heN6kfMqt8sXUS9HjKoWSvN5r2yY73q5MKX5hPNKQdcCaB9tEuWaznMYqIM4d8FLT4K0ptj
 imgur:
-  client_id: test_client_id
-  access_token: test_access_token
-  refresh_token: test_refresh_token
-  client_secret: test_client_secret
+  client_id: 00004018642bf6d
+  access_token: 00008e5e73fce1a03dad9e8c81089ca45e891767
+  refresh_token: 0000608f632fbf9fc4f3d484625069d8f5350d48
+  client_secret: 0000e77eed79f9e765d80b884ae238960ad8662b
 trello:
-  application_key: test_trello_application_key
-  oauth_secret: test_trello_oauth_secret
+  application_key: 0000d9b77be1959173134b97f3a733ab
+  oauth_secret: 000021e8e0498cb7dd60055904950c85c659e465595d15c83edb0a84970f4615

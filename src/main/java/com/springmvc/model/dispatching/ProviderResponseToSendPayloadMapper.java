@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-public class ProviderResponseToFacebookMessagePayloadMapper implements BiFunction<ProviderResponse,
+public class ProviderResponseToSendPayloadMapper implements BiFunction<ProviderResponse,
         String, SendPayload> {
     private static final PayloadFactory payloadFactory = new PayloadFactory();
 

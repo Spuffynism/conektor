@@ -8,8 +8,8 @@ import java.util.Map;
 /**
  * Provider's individual dispatcher
  */
-public abstract class AbstractProviderDispatcher {
-    public abstract List<ProviderResponse> dispatch(PipelinedMessage message)
+public abstract class AbstractProviderDispatcher<T> {
+    public abstract List<ProviderResponse> dispatch(T message)
             throws IllegalArgumentException;
 
     protected static <E extends Enum<E>> E getFirstAction(Map<String, String> arguments,

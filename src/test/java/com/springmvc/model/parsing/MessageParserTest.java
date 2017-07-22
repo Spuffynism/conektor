@@ -26,7 +26,8 @@ public class MessageParserTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("a message must be present");
 
-        new MessageParser(null);
+        String nullString = null;
+        new MessageParser(nullString);
     }
 
     @Test

@@ -23,15 +23,23 @@ public class Message {
     public Message() {
     }
 
-    public boolean containsImages() {
-        return getImageURLs().size() > 0;
+    public boolean containsMedia() {
+        return attachments.stream()
+                .anyMatch(x -> AttachmentType.isMultimedia(x.getType()));
     }
 
-    public List<String> getImageURLs() {
+    public boolean contains(AttachmentType attachmentType) {
         return attachments.stream()
-                .filter(a -> a.getType().equals(AttachmentType.IMAGE))
-                .filter(a -> a.getPayload() instanceof MultimediaPayload)
-                .map(a -> (MultimediaPayload)a.getPayload())
+                .anyMatch(x -> x.getType().equals(attachmentType));
+    }
+
+    public List<String> getAttachmentURLs(AttachmentType attachmentType) throws Exception {
+        if (!AttachmentType.isMultimedia(attachmentType))
+            throw new Exception("not a multimedia type - consequently no urls associated");
+
+        return attachments.stream()
+                .filter(a -> a.getType().equals(attachmentType))
+                .map(a -> (MultimediaPayload) a.getPayload())
                 .map(MultimediaPayload::getUrl)
                 .collect(Collectors.toList());
 

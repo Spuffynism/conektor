@@ -4,9 +4,9 @@ import com.springmvc.model.provider.AbstractProviderDispatcher;
 import com.springmvc.model.provider.imgur.ImgurDispatcher;
 import com.springmvc.model.provider.trello.TrelloDispatcher;
 
-public class ProviderDispatcherFactory {
+class ProviderDispatcherFactory {
 
-    public AbstractProviderDispatcher getFromDestinationProvider(String destinationProvider)
+    AbstractProviderDispatcher getFromDestinationProvider(String destinationProvider)
             throws IllegalArgumentException {
         SupportedProvider provider;
 
@@ -19,7 +19,7 @@ public class ProviderDispatcherFactory {
         return getFromDestinationProvider(provider);
     }
 
-    public AbstractProviderDispatcher getFromDestinationProvider(
+    private AbstractProviderDispatcher getFromDestinationProvider(
             SupportedProvider supportedProvider) throws IllegalArgumentException {
         AbstractProviderDispatcher dispatcher = null;
 

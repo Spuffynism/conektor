@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TrelloDispatcher extends AbstractProviderDispatcher {
+public class TrelloDispatcher extends AbstractProviderDispatcher<PipelinedMessage> {
     private static final TrelloService trelloService = new TrelloService();
 
     public List<ProviderResponse> dispatch(PipelinedMessage pipelinedMessage) throws

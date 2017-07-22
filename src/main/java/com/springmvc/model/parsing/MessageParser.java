@@ -1,5 +1,7 @@
 package com.springmvc.model.parsing;
 
+import com.springmvc.model.provider.facebook.webhook.Message;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -13,17 +15,21 @@ public class MessageParser {
     private String command;
     private Map<String, String> arguments;
 
-    public MessageParser(String message) throws IllegalArgumentException {
-        if(message == null || message.isEmpty())
+    MessageParser(String message) throws IllegalArgumentException {
+        if (message == null || message.isEmpty())
             throw new IllegalArgumentException("a message must be present");
 
         this.message = message;
 
-        this.setCommand();
-        this.setArguments();
+        this.setCommand(message);
+        this.setArguments(message);
     }
 
-    private void setCommand() throws IllegalArgumentException {
+    public MessageParser(Message message) {
+        this(message.getText());
+    }
+
+    private void setCommand(String message) throws IllegalArgumentException {
         Matcher matcher = commandPattern.matcher(message);
         String command = parseCommand(matcher);
 
@@ -42,11 +48,11 @@ public class MessageParser {
         return command;
     }
 
-    private void setArguments() throws IllegalArgumentException {
+    private void setArguments(String message) throws IllegalArgumentException {
         Matcher matcher = argumentsPattern.matcher(message);
         Map<String, String> arguments = parseArguments(matcher);
 
-        if (arguments.isEmpty()) //TODO Maybe not throw exception?
+        if (arguments.isEmpty())
             throw new IllegalArgumentException("no arguments");
 
         this.arguments = arguments;

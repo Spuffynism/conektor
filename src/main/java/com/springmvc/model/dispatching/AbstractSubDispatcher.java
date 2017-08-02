@@ -1,14 +1,30 @@
 package com.springmvc.model.dispatching;
 
+import com.springmvc.model.ProviderResponseQueue;
 import com.springmvc.model.provider.ProviderResponse;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
+@Component
 abstract class AbstractSubDispatcher {
-    List<ProviderResponse> responses;
+    private static final Logger logger = Logger.getLogger(AbstractSubDispatcher.class);
 
-    AbstractSubDispatcher(List<ProviderResponse> responses) {
-        this.responses = responses;
+    final ProviderDispatcherFactory providerDispatcherFactory;
+    private final BlockingQueue<ProviderResponse> sharedResponses;
+
+    AbstractSubDispatcher(ProviderDispatcherFactory providerDispatcherFactory,
+                          ProviderResponseQueue sharedResponses) {
+        this.providerDispatcherFactory = providerDispatcherFactory;
+        this.sharedResponses = sharedResponses;
     }
 
+    void queueResponse(ProviderResponse response) {
+        try {
+            sharedResponses.put(response);
+        } catch (InterruptedException e) {
+            logger.error(e);
+        }
+    }
 }

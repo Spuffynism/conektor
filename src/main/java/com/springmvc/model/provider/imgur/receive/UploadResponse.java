@@ -2,7 +2,7 @@ package com.springmvc.model.provider.imgur.receive;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class UploadResponse {
     @JsonProperty("data")
@@ -11,12 +11,11 @@ public class UploadResponse {
     private boolean success;
     @JsonProperty("status")
     private int status;
+    private static AtomicInteger count = new AtomicInteger(0);
 
-    public static String toPrettyMessage(List<UploadResponse> uploadResponses) {
-        StringBuilder prettyMessage = new StringBuilder();
-        for (UploadResponse uploadResponse : uploadResponses)
-            prettyMessage.append(uploadResponse.data.getLink());
-        return prettyMessage.toString();
+    public static String formatLinks(String linkA, String linkB) {
+        linkB = linkB != null ? linkB : "";
+        return String.format("%s\n%s", linkA, linkB);
     }
 
     public Image getData() {

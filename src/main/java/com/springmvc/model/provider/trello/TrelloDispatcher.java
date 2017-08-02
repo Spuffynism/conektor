@@ -1,36 +1,42 @@
 package com.springmvc.model.provider.trello;
 
+import com.springmvc.model.entity.User;
 import com.springmvc.model.provider.AbstractProviderDispatcher;
 import com.springmvc.model.provider.ProviderResponse;
 import com.springmvc.model.provider.facebook.PipelinedMessage;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-
+@Component
 public class TrelloDispatcher extends AbstractProviderDispatcher<PipelinedMessage> {
-    private static final TrelloService trelloService = new TrelloService();
+    private final TrelloService trelloService;
 
-    public List<ProviderResponse> dispatch(PipelinedMessage pipelinedMessage) throws
+    public TrelloDispatcher(TrelloService trelloService) {
+        this.trelloService  = trelloService;
+    }
+
+    public CompletableFuture<ProviderResponse> dispatch(User user, PipelinedMessage pipelinedMessage) throws
             IllegalArgumentException {
-        List<ProviderResponse> responses = new ArrayList<>();
+        ProviderResponse response = null;
 
         switch (getFirstAction(pipelinedMessage.getParsedMessage().getArguments(),
                 TrelloAction.class)) {
             case ADD:
-                responses.add(trelloService.add(pipelinedMessage));
+                response = trelloService.add(pipelinedMessage);
                 break;
             case DELETE:
             case REMOVE:
-                responses.add(trelloService.remove(pipelinedMessage));
+                response = trelloService.remove(pipelinedMessage);
                 break;
             default:
                 break;
         }
 
-        if (responses.isEmpty())
+        if (response == null)
             throw new IllegalArgumentException("no response from provider");
 
-        return responses;
+        return null;
+        //return response;
     }
 }

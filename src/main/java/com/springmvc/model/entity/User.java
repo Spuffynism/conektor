@@ -3,6 +3,7 @@ package com.springmvc.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.springmvc.model.dispatching.SupportedProvider;
 import com.springmvc.security.auth.Permission;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user_usr")
@@ -28,7 +30,40 @@ public class User extends AbstractDatable implements UserDetails {
     @JsonIgnoreProperties("user")
     private Set<Account> accounts;
 
-    public User(){}
+    public User() {
+    }
+
+    @Transient
+    @JsonIgnore
+    public Account getAccount(SupportedProvider provider) {
+        return accounts.stream()
+                .filter(x -> x.getProvider().getName().equals(provider.value()))
+                .collect(Collectors.toList()).get(0);
+    }
+
+    @Transient
+    @JsonIgnore
+    public boolean isAdmin() {
+        return Permission.ADMIN.isContainedIn(permission);
+    }
+
+    @Transient
+    @JsonIgnore
+    public boolean isUser() {
+        return Permission.USER.isContainedIn(permission);
+    }
+
+    public void addPermission(Permission newPermission) {
+        setPermission(newPermission.addTo(permission));
+    }
+
+    public void removePermission(Permission oldPermission) {
+        setPermission(oldPermission.removeFrom(permission));
+    }
+
+    public boolean hasNoPermissions() {
+        return permission == Permission.NONE.value();
+    }
 
     //<editor-fold> Basic getters and setters
 
@@ -43,6 +78,7 @@ public class User extends AbstractDatable implements UserDetails {
         this.id = id;
     }
 
+    @Override
     @Basic
     @Column(name = "usr_username")
     public String getUsername() {
@@ -63,6 +99,7 @@ public class User extends AbstractDatable implements UserDetails {
         this.email = email;
     }
 
+    @Override
     @Basic
     @Column(name = "usr_password")
     public String getPassword() {
@@ -93,8 +130,6 @@ public class User extends AbstractDatable implements UserDetails {
         this.attemptedPasswordChanges = attemptedPasswordChanges;
     }
 
-    //</editor-fold>
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     public Set<Account> getAccounts() {
         return accounts;
@@ -118,29 +153,7 @@ public class User extends AbstractDatable implements UserDetails {
         return dateModified;
     }
 
-    @Transient
-    @JsonIgnore
-    public boolean isAdmin() {
-        return Permission.ADMIN.isContainedIn(permission);
-    }
-
-    @Transient
-    @JsonIgnore
-    public boolean isUser() {
-        return Permission.USER.isContainedIn(permission);
-    }
-
-    public void addPermission(Permission newPermission) {
-        setPermission(newPermission.addTo(permission));
-    }
-
-    public void removePermission(Permission oldPermission) {
-        setPermission(oldPermission.removeFrom(permission));
-    }
-
-    public boolean hasNoPermissions() {
-        return permission == Permission.NONE.value();
-    }
+    //</editor-fold>
 
     //<editor-fold> UserDetails Authorization getters and setters
 

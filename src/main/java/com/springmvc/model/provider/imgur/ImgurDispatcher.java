@@ -1,38 +1,28 @@
 package com.springmvc.model.provider.imgur;
 
+import com.springmvc.model.entity.User;
 import com.springmvc.model.provider.AbstractProviderDispatcher;
 import com.springmvc.model.provider.ProviderResponse;
-import com.springmvc.model.provider.facebook.PipelinedMessage;
+import com.springmvc.model.provider.facebook.webhook.Message;
 import com.springmvc.model.provider.facebook.webhook.Messaging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
+@Component
 public class ImgurDispatcher extends AbstractProviderDispatcher<Messaging> {
-    private static final ImgurService imgurService = new ImgurService();
+    private final ImgurService imgurService;
+
+    @Autowired
+    public ImgurDispatcher(ImgurService imgurService) {
+        this.imgurService = imgurService;
+    }
 
     @Override
-    public List<ProviderResponse> dispatch(Messaging messaging) throws
+    public CompletableFuture<ProviderResponse> dispatch(User user, Messaging messaging) throws
             IllegalArgumentException {
-        List<ProviderResponse> responses = new ArrayList<>();
-
-        responses.add(imgurService.upload(messaging));
-        /*switch (getFirstAction(pipelinedMessage.getParsedMessage().getArguments(),
-                ImgurAction.class)) {
-            case UPLOAD:
-                responses.add(imgurService.upload(pipelinedMessage));
-                break;
-            case DELETE:
-                responses.add(imgurService.delete(pipelinedMessage));
-                break;
-            default:
-                break;
-        }*/
-
-        if (responses.isEmpty())
-            throw new IllegalArgumentException("no response from provider");
-
-        return responses;
+        Message message = messaging.getMessage();
+        return imgurService.upload(message);
     }
 }

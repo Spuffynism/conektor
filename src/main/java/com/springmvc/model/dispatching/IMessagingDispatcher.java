@@ -2,15 +2,16 @@ package com.springmvc.model.dispatching;
 
 import com.springmvc.exception.CannotDispatchException;
 import com.springmvc.model.provider.facebook.webhook.Messaging;
+import com.springmvc.model.entity.User;
 
 import java.util.List;
 
 public interface IMessagingDispatcher {
 
-    default void dispatch(List<Messaging> messagings) throws CannotDispatchException {
+    default void dispatchAndQueue(User user, List<Messaging> messagings) throws CannotDispatchException {
         for (Messaging messaging : messagings)
-            dispatch(messaging);
+            dispatchAndQueue(user, messaging);
     }
 
-    void dispatch(Messaging messaging) throws CannotDispatchException;
+    void dispatchAndQueue(User user, Messaging messaging) throws CannotDispatchException;
 }

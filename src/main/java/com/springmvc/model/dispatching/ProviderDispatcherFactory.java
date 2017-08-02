@@ -3,37 +3,45 @@ package com.springmvc.model.dispatching;
 import com.springmvc.model.provider.AbstractProviderDispatcher;
 import com.springmvc.model.provider.imgur.ImgurDispatcher;
 import com.springmvc.model.provider.trello.TrelloDispatcher;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
+//TODO https://stackoverflow.com/a/39361500/5709703
 class ProviderDispatcherFactory {
+    private final ImgurDispatcher imgurDispatcher;
+    private final TrelloDispatcher trelloDispatcher;
+
+    @Autowired
+    public ProviderDispatcherFactory(ImgurDispatcher imgurDispatcher,
+                                     TrelloDispatcher trelloDispatcher) {
+        this.imgurDispatcher = imgurDispatcher;
+        this.trelloDispatcher = trelloDispatcher;
+    }
 
     AbstractProviderDispatcher getFromDestinationProvider(String destinationProvider)
             throws IllegalArgumentException {
-        SupportedProvider provider;
-
-        try {
-            provider = SupportedProvider.valueOf(destinationProvider.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("unknown provider");
-        }
-
-        return getFromDestinationProvider(provider);
+        SupportedProvider supportedProvider = SupportedProvider.tryGetProvider(destinationProvider);
+        return getFromDestinationProvider(supportedProvider);
     }
 
-    private AbstractProviderDispatcher getFromDestinationProvider(
+    AbstractProviderDispatcher getFromDestinationProvider(
             SupportedProvider supportedProvider) throws IllegalArgumentException {
-        AbstractProviderDispatcher dispatcher = null;
+        AbstractProviderDispatcher dispatcher;
 
         switch (supportedProvider) {
             case FACEBOOK:
                 throw new IllegalArgumentException("unimplemented provider");
             case IMGUR:
-                dispatcher = new ImgurDispatcher();
+                dispatcher = imgurDispatcher;
                 break;
             case SSH:
                 throw new IllegalArgumentException("unimplemented provider");
             case TRELLO:
-                dispatcher = new TrelloDispatcher();
+                dispatcher = trelloDispatcher;
                 break;
+            default:
+                throw new IllegalArgumentException("unimplemented provider");
         }
 
         return dispatcher;

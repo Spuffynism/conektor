@@ -9,7 +9,7 @@ import com.springmvc.model.provider.facebook.sendAPI.recipient.Recipient;
  * TODO: Make MessagePayload and SenderActionPayload
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SendPayload {
+public class SendablePayload {
     // Required
     @JsonProperty("recipient")
     private Recipient recipient;
@@ -23,7 +23,7 @@ public class SendPayload {
     @JsonProperty("notification_type")
     private NotificationType notificationType;
 
-    public SendPayload(Recipient recipient, Message message) {
+    public SendablePayload(Recipient recipient, Message message) {
         this.recipient = recipient;
         this.message = message;
     }

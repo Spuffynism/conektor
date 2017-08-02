@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * This object is defined as a complete payload from
  * https://developers.facebook.com/docs/messenger-platform/webhook-reference/message
- *
+ * <p>
  * TODO Create ReceivedMessaging & PostbackMessaging AND make abstract
  */
 public class Messaging {
@@ -23,6 +23,16 @@ public class Messaging {
     private Postback postback;
 
     public Messaging() {
+    }
+
+    String tryGetRecipientId() {
+        String recipientId = null;
+        Recipient recipient = getRecipient();
+
+        if (recipient != null)
+            recipientId = recipient.getId();
+
+        return recipientId;
     }
 
     public Sender getSender() {

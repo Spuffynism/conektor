@@ -3,6 +3,7 @@ package com.springmvc.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.springmvc.model.dispatching.SupportedProvider;
 
 import javax.persistence.*;
 
@@ -21,6 +22,12 @@ public class Account {
     private int providerId;
     @JsonIgnore
     private Provider provider;
+
+    public Account(){}
+
+    public Account(SupportedProvider provider) {
+
+    }
 
     //<editor-fold> Default getters and setters
     @Id

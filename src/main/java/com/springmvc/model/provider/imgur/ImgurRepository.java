@@ -1,15 +1,16 @@
 package com.springmvc.model.provider.imgur;
 
+import com.springmvc.model.provider.imgur.receive.Image;
 import com.springmvc.model.provider.imgur.receive.UploadResponse;
 import com.springmvc.model.provider.imgur.send.UploadPayload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.web.client.AsyncRestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,10 +19,10 @@ import java.util.Map;
 public class ImgurRepository {
     private static final String IMGUR_API_URI = "https://api.imgur.com/3/";
     private static String accessToken;
-    private RestTemplate restTemplate;
+    private AsyncRestTemplate asyncRestTemplate;
 
     public ImgurRepository() {
-        restTemplate = new RestTemplate();
+        asyncRestTemplate = new AsyncRestTemplate();
     }
 
     @Value("${imgur.access_token}")
@@ -29,34 +30,26 @@ public class ImgurRepository {
         accessToken = token;
     }
 
-    public UploadResponse upload(UploadPayload payload) {
-
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        Map<String, String> map = new HashMap<>();
-        map.put("Content-Type", "application/json");
-        map.put("Authorization", "Bearer " + accessToken);
-
-        headers.setAll(map);
+    ListenableFuture<Image> upload(UploadPayload payload) {
+        MultiValueMap<String, String> headers = getAuthorizationHeaders(accessToken);
 
         HttpEntity<UploadPayload> uploadEntity = new HttpEntity<>(payload, headers);
 
-        ResponseEntity<UploadResponse> responseEntity = null;
-        try {
-            responseEntity = restTemplate.postForEntity(IMGUR_API_URI + "image",
-                    uploadEntity, UploadResponse.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ListenableFuture<ResponseEntity<UploadResponse>> uploadResponse =
+                asyncRestTemplate.postForEntity(IMGUR_API_URI + "image", uploadEntity,
+                        UploadResponse.class);
 
-        UploadResponse uploadResponse = null;
-        try {
-            if (responseEntity == null)
-                throw new NullPointerException();
-            uploadResponse = responseEntity.getBody();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return new ImageAdapter(uploadResponse);
+    }
 
-        return uploadResponse;
+    private MultiValueMap<String, String> getAuthorizationHeaders(String bearerToken) {
+        Map<String, String> map = new HashMap<>();
+        map.put("Content-Type", "application/json");
+        map.put("Authorization", "Bearer " + bearerToken);
+
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.setAll(map);
+
+        return headers;
     }
 }

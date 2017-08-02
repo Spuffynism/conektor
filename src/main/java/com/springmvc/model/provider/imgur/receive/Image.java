@@ -2,6 +2,8 @@ package com.springmvc.model.provider.imgur.receive;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import java.util.concurrent.CompletableFuture;
+
 public class Image {
     @JsonProperty("id")
     private String id;

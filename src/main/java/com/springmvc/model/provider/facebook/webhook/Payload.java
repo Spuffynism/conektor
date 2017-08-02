@@ -28,6 +28,20 @@ public class Payload {
         this.entry = entry;
     }
 
+    public String tryGetRecipientId() {
+        String recipientId = null;
+        Entry firstEntry = tryGetFirstEntry();
+
+        if(firstEntry != null)
+            recipientId = firstEntry.tryGetMessagingRecipientId();
+
+        return recipientId;
+    }
+
+    private Entry tryGetFirstEntry() {
+        return entry == null ? null : entry.get(0);
+    }
+
     public boolean isPage() {
         return object != null && object.equalsIgnoreCase(PAGE_OBJECT);
     }

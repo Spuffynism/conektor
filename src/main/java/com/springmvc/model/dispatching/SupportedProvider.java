@@ -6,27 +6,31 @@ public enum SupportedProvider {
     TRELLO("trello", 2),
     SSH("ssh", 3);
 
-    private String value;
-    private int providerId;
+    private final String value;
+    private final int providerId;
 
     SupportedProvider(String value, int providerId) {
         this.value = value;
         this.providerId = providerId;
     }
 
-    public String getValue() {
-        return value;
+    public static SupportedProvider tryGetProvider(String provider) {
+        SupportedProvider supportedProvider;
+
+        try {
+            supportedProvider = SupportedProvider.valueOf(provider.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("unknown provider");
+        }
+
+        return supportedProvider;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public String value() {
+        return value;
     }
 
     public int getProviderId() {
         return providerId;
-    }
-
-    public void setProviderId(int providerId) {
-        this.providerId = providerId;
     }
 }

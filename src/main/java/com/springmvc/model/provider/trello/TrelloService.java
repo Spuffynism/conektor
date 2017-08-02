@@ -2,10 +2,13 @@ package com.springmvc.model.provider.trello;
 
 import com.springmvc.model.provider.ProviderResponse;
 import com.springmvc.model.provider.facebook.PipelinedMessage;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import javax.xml.ws.ServiceMode;
 import java.util.Map;
 
+@Service
 public class TrelloService {
 
     @NotNull

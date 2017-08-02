@@ -24,7 +24,7 @@ public class Message {
     }
 
     public boolean containsMedia() {
-        return attachments.stream()
+        return attachments != null && attachments.stream()
                 .anyMatch(x -> AttachmentType.isMultimedia(x.getType()));
     }
 
@@ -33,10 +33,7 @@ public class Message {
                 .anyMatch(x -> x.getType().equals(attachmentType));
     }
 
-    public List<String> getAttachmentURLs(AttachmentType attachmentType) throws Exception {
-        if (!AttachmentType.isMultimedia(attachmentType))
-            throw new Exception("not a multimedia type - consequently no urls associated");
-
+    public List<String> getAttachmentURLs(AttachmentType attachmentType) {
         return attachments.stream()
                 .filter(a -> a.getType().equals(attachmentType))
                 .map(a -> (MultimediaPayload) a.getPayload())
@@ -45,7 +42,43 @@ public class Message {
 
     }
 
+    public String getMid() {
+        return mid;
+    }
+
+    public void setMid(String mid) {
+        this.mid = mid;
+    }
+
     public String getText() {
         return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getSeq() {
+        return seq;
+    }
+
+    public void setSeq(String seq) {
+        this.seq = seq;
+    }
+
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
+
+    public QuickReply getQuickReply() {
+        return quickReply;
+    }
+
+    public void setQuickReply(QuickReply quickReply) {
+        this.quickReply = quickReply;
     }
 }

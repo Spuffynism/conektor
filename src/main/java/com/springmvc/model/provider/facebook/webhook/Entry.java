@@ -30,6 +30,20 @@ public class Entry {
         this.messaging = messaging;
     }
 
+    String tryGetMessagingRecipientId() {
+        String recipientId = null;
+        Messaging firstMessaging = tryGetFirstMessaging();
+
+        if (firstMessaging != null)
+            recipientId = firstMessaging.tryGetRecipientId();
+
+        return recipientId;
+    }
+
+    private Messaging tryGetFirstMessaging() {
+        return messaging.get(0);
+    }
+
     public String getPageId() {
         return pageId;
     }

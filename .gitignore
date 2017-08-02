@@ -16,3 +16,8 @@ conf/common_passwords/
 conf/ssl/
 conf/notes.md
 src/main/java/com/springmvc/Nothing.java
+conf/database/dump/
+conf/messenger/config.json
+conf/ngrok/
+src/main/java/com/springmvc/service/provider/
+!/conf/messenger/config.json

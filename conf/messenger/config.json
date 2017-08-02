@@ -1,0 +1,77 @@
+{
+  "requests": {
+    "text_message": {
+      "route": "/facebook/webhook",
+      "body": {
+        "object": "page",
+        "entry": [
+          {
+            "id": "305722109839911",
+            "time": 1501550407033,
+            "messaging": [
+              {
+                "sender": {
+                  "id": "1542196132486930"
+                },
+                "recipient": {
+                  "id": "305722109839911"
+                },
+                "timestamp": 1501550406299,
+                "message": {
+                  "mid": "mid.$cAAFM_jj3asFjzKYym1dm2DiAjR28",
+                  "seq": 299578,
+                  "text": "hello"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "text_messages": {
+      "route": "/facebook/webhook",
+      "body": {
+      }
+    },
+    "photo": {
+      "route": "/facebook/webhook",
+      "body": {
+        "object": "page",
+        "entry": [
+          {
+            "id": "305722109839911",
+            "time": 1501550678116,
+            "messaging": [
+              {
+                "sender": {
+                  "id": "1542196132486930"
+                },
+                "recipient": {
+                  "id": "305722109839911"
+                },
+                "timestamp": 1501550678009,
+                "message": {
+                  "mid": "mid.$cAAFM_jj3asFjzKpX-Vdm2UEKP3A8",
+                  "seq": 299638,
+                  "attachments": [
+                    {
+                      "type": "image",
+                      "payload": {
+                        "url": "https://scontent.xx.fbcdn.net/v/t34.0-12/20562010_1376374475733128_2137314621_n.jpg?_nc_ad=z-m&oh=a9b7d055cf5a5e3cb1a1b0d4b2125b86&oe=59820B06"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "photos": {
+      "route": "/facebook/webhook",
+      "body": {
+      }
+    }
+  }
+}

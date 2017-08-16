@@ -1,5 +1,6 @@
 package com.springmvc.model.provider;
 
+import com.springmvc.model.dispatching.IMessage;
 import com.springmvc.model.entity.User;
 
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Provider's individual dispatcher
  */
-public abstract class AbstractProviderDispatcher<T> {
+public abstract class AbstractProviderDispatcher<T extends IMessage> {
     public abstract CompletableFuture<ProviderResponse> dispatch(User user, T message)
             throws IllegalArgumentException;
 

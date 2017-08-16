@@ -18,12 +18,11 @@ public abstract class AbstractProviderService extends AbstractService<User> {
                 "AND acc_details = :acc_details AND acc_provider_id = :provider_id";
 
         return new QueryExecutor<>(session -> {
-            SQLQuery query = session.createSQLQuery(sql);
-            query.addEntity(User.class);
-            query.setParameter("acc_details", identifier);
-            query.setParameter("provider_id", providerId);
-
-            return (User) query.uniqueResult();
+            return session.createNativeQuery(sql, User.class)
+                    .addEntity(User.class)
+                    .setParameter("acc_details", identifier)
+                    .setParameter("provider_id", providerId)
+                    .uniqueResult();
         }).execute();
     }
 }

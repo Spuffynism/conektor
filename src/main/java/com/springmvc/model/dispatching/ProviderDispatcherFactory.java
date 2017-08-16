@@ -19,13 +19,14 @@ class ProviderDispatcherFactory {
         this.trelloDispatcher = trelloDispatcher;
     }
 
-    AbstractProviderDispatcher getFromDestinationProvider(String destinationProvider)
+    <T extends IMessage> AbstractProviderDispatcher<T> getFromDestinationProvider(String destinationProvider)
             throws IllegalArgumentException {
         SupportedProvider supportedProvider = SupportedProvider.tryGetProvider(destinationProvider);
+
         return getFromDestinationProvider(supportedProvider);
     }
 
-    AbstractProviderDispatcher getFromDestinationProvider(
+    <T extends IMessage> AbstractProviderDispatcher<T> getFromDestinationProvider(
             SupportedProvider supportedProvider) throws IllegalArgumentException {
         AbstractProviderDispatcher dispatcher;
 
@@ -44,6 +45,7 @@ class ProviderDispatcherFactory {
                 throw new IllegalArgumentException("unimplemented provider");
         }
 
-        return dispatcher;
+        //TODO This doesn't assure type safety...
+        return (AbstractProviderDispatcher<T>) dispatcher;
     }
 }

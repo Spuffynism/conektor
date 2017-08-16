@@ -13,21 +13,22 @@ public class TrelloDispatcher extends AbstractProviderDispatcher<PipelinedMessag
     private final TrelloService trelloService;
 
     public TrelloDispatcher(TrelloService trelloService) {
-        this.trelloService  = trelloService;
+        this.trelloService = trelloService;
     }
 
-    public CompletableFuture<ProviderResponse> dispatch(User user, PipelinedMessage pipelinedMessage) throws
-            IllegalArgumentException {
+    public CompletableFuture<ProviderResponse> dispatch(User user,
+                                                        PipelinedMessage pipelinedMessage)
+            throws IllegalArgumentException {
         ProviderResponse response = null;
 
         switch (getFirstAction(pipelinedMessage.getParsedMessage().getArguments(),
                 TrelloAction.class)) {
             case ADD:
-                response = trelloService.add(pipelinedMessage);
+                response = trelloService.add(user, pipelinedMessage);
                 break;
             case DELETE:
             case REMOVE:
-                response = trelloService.remove(pipelinedMessage);
+                response = trelloService.remove(user, pipelinedMessage);
                 break;
             default:
                 break;
@@ -36,7 +37,9 @@ public class TrelloDispatcher extends AbstractProviderDispatcher<PipelinedMessag
         if (response == null)
             throw new IllegalArgumentException("no response from provider");
 
-        return null;
-        //return response;
+        CompletableFuture<ProviderResponse> future = new CompletableFuture<>();
+        future.complete(response);
+
+        return future;
     }
 }

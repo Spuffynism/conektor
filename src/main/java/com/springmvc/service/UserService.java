@@ -9,11 +9,14 @@ import com.springmvc.security.hashing.Argon2Hasher;
 import com.springmvc.security.hashing.IPasswordHasher;
 import com.springmvc.service.database_util.AbstractService;
 import com.springmvc.service.database_util.QueryExecutor;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 @Service
 public class UserService extends AbstractService<User> implements UserDetailsService {
@@ -38,17 +41,25 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
 
     private User getByUsername(String username) {
         return new QueryExecutor<>(session -> {
-            return (User) session.createCriteria(User.class)
-                    .add(Restrictions.eq("username", username))
-                    .uniqueResult();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = builder.createQuery(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.select(root);
+            criteria.where(builder.equal(root.get("username"), username));
+
+            return session.createQuery(criteria).uniqueResult();
         }).execute();
     }
 
     private User getByEmail(String email) {
         return new QueryExecutor<>(session -> {
-            return (User) session.createCriteria(User.class)
-                    .add(Restrictions.eq("email", email))
-                    .uniqueResult();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = builder.createQuery(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.select(root);
+            criteria.where(builder.equal(root.get("email"), email));
+
+            return session.createQuery(criteria).uniqueResult();
         }).execute();
     }
 

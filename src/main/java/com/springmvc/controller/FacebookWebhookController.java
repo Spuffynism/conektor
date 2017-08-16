@@ -3,6 +3,7 @@ package com.springmvc.controller;
 import com.springmvc.exception.CannotDispatchException;
 import com.springmvc.exception.InvalidFacebookVerificationToken;
 import com.springmvc.exception.UnregisteredAccountException;
+import com.springmvc.model.FacebookMessageConsumer;
 import com.springmvc.model.dispatching.ErrorDispatcher;
 import com.springmvc.model.dispatching.MainDispatcher;
 import com.springmvc.model.entity.User;
@@ -31,14 +32,20 @@ public class FacebookWebhookController {
     private final FacebookService facebookService;
     private final ErrorDispatcher errorDispatcher;
     private final MainDispatcher mainDispatcher;
+    private final FacebookMessageConsumer facebookMessageConsumer;
 
     @Autowired
     public FacebookWebhookController(FacebookService facebookService,
                                      ErrorDispatcher errorDispatcher,
-                                     MainDispatcher mainDispatcher) {
+                                     MainDispatcher mainDispatcher,
+                                     FacebookMessageConsumer facebookMessageConsumer) {
         this.facebookService = facebookService;
         this.errorDispatcher = errorDispatcher;
         this.mainDispatcher = mainDispatcher;
+        this.facebookMessageConsumer = facebookMessageConsumer;
+
+        facebookMessageConsumer.startConsuming();
+        new Thread(facebookMessageConsumer).start();
     }
 
     /**

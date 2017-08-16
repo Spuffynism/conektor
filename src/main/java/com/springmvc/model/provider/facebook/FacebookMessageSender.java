@@ -26,7 +26,8 @@ public class FacebookMessageSender {
 
     private static final String ACCESS_TOKEN = "access_token";
     private static String pageAccessToken;
-    private static final String requestURI = "https://graph.facebook.com/v2.9/me/messages";
+    //private static final String requestURI = "https://graph.facebook.com/v2.9/me/messages";
+    private static final String requestURI = "http://localhost:3000";
     private AsyncRestTemplate asyncRestTemplate;
 
     @Autowired
@@ -68,7 +69,7 @@ public class FacebookMessageSender {
     private void logSuccess(Object confirmation) {
         String body = null;
         try {
-            new ObjectMapper().writeValueAsString(confirmation);
+            body = new ObjectMapper().writeValueAsString(confirmation);
         } catch (JsonProcessingException ignored) {
         }
 

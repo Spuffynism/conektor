@@ -2,9 +2,14 @@ package com.springmvc.service.database_util;
 
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.mapping.PersistentClass;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Utilitaire pour obtenir une sessionFactory pour se connecter à la BD. N'est qu'utilisé par
@@ -36,12 +41,20 @@ class HibernateUtil {
      * @return la sessionFactory
      */
     private static SessionFactory createSessionFactory() {
-        Configuration configuration = new Configuration();
-        configuration.configure();
+        StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder()
+                .configure("hibernate.cfg.xml").build();
+        Metadata metadata = new MetadataSources(standardServiceRegistry)
+                .getMetadataBuilder().build();
 
-        ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(
-                configuration.getProperties()).buildServiceRegistry();
+        Collection<PersistentClass> entityBindings = metadata.getEntityBindings();
+        Iterator<PersistentClass> iterator = entityBindings.iterator();
+        while (iterator.hasNext()) {
+            PersistentClass persistentClass = iterator.next();
+            System.out.println(persistentClass.getClassName() +
+                    persistentClass.getMappedClass() + persistentClass.getEntityName() +
+                    persistentClass.getLoaderName());
+        }
 
-        return configuration.buildSessionFactory(serviceRegistry);
+        return metadata.getSessionFactoryBuilder().build();
     }
 }

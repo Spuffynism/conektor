@@ -1,6 +1,7 @@
 package com.springmvc.service.database_util;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * Exécute une fonction QueryFunction

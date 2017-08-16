@@ -45,7 +45,7 @@ public class LoggingRequestInterceptor implements AsyncClientHttpRequestIntercep
         String uriStr = uri.toString();
         String bodyStr = new String(body);
 
-        return String.format("METHOD: %s : %s\n%s", methodStr, uriStr, bodyStr);
+        return String.format("\n%s\n%s\n%s", methodStr, uriStr, bodyStr);
     }
 
     private void logResponseSuccess(ClientHttpResponse response) {

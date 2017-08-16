@@ -24,19 +24,15 @@ public class MediaDispatcher extends AbstractSubDispatcher implements IMessaging
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void dispatchAndQueue(User user, Messaging messaging) throws CannotDispatchException {
         if (messaging.getMessage().contains(AttachmentType.IMAGE)) {
-            AbstractProviderDispatcher dispatcher = providerDispatcherFactory
+            AbstractProviderDispatcher<Messaging> dispatcher = providerDispatcherFactory
                     .getFromDestinationProvider(SupportedProvider.IMGUR);
 
             Consumer<ProviderResponse> acceptAndQueueResponse = this::queueResponse;
 
-            // I think there's no need for thenAcceptAsync here...
-            // actually, since we don't need a return value for this method, it probably would be
-            // fine to use thenAcceptAsync
             dispatcher.dispatch(user, messaging)
-                    .thenAcceptAsync(acceptAndQueueResponse);
+                    .thenAccept(acceptAndQueueResponse);
         }
     }
 }

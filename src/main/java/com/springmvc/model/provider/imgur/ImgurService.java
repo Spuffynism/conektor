@@ -48,11 +48,10 @@ public class ImgurService {
             List<CompletableFuture<Image>> futures) {
         CompletableFuture<List<Image>> allFutures = sequence(futures);
 
-        return allFutures.thenApplyAsync(images -> {
+        return allFutures.thenApply(images -> {
             String links = images.stream()
                     .map(Image::getLink)
                     .reduce("", UploadResponse::formatLinks);
-
 
             return new ProviderResponse(links);
         });
@@ -62,7 +61,7 @@ public class ImgurService {
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(futures.toArray(
                 new CompletableFuture[futures.size()]));
         //TODO Run tests to see if there's diff. between thenApply & thenApplyAsync
-        return allFutures.thenApplyAsync(v ->
+        return allFutures.thenApply(v ->
                 futures.stream()
                         .map(CompletableFuture::join)
                         .collect(Collectors.toList())

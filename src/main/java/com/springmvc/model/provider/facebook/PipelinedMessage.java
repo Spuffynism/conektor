@@ -1,5 +1,6 @@
 package com.springmvc.model.provider.facebook;
 
+import com.springmvc.model.dispatching.IMessage;
 import com.springmvc.model.parsing.ParsedMessage;
 import com.springmvc.model.provider.facebook.webhook.Messaging;
 
@@ -9,7 +10,7 @@ import com.springmvc.model.provider.facebook.webhook.Messaging;
  */
 // TODO Rename to: MetadataPacket, DataPacket, PacketMessage, SelfContainedPacketMessage,
 // TransferPacket, TransferMessage, Transfer?
-public class PipelinedMessage {
+public class PipelinedMessage implements IMessage {
     private Messaging originalMessaging;
     private ParsedMessage parsedMessage;
 

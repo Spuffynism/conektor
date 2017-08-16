@@ -53,7 +53,7 @@ public class MessageParser {
         Map<String, String> arguments = parseArguments(matcher);
 
         if (arguments.isEmpty())
-            throw new IllegalArgumentException("no arguments");
+            throw new IllegalArgumentException("no arguments provided\n. Message was : " + message);
 
         this.arguments = arguments;
     }

@@ -1,9 +1,9 @@
 package xyz.ndlr.model.dispatching;
 
+import org.springframework.stereotype.Component;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.sendAPI.PayloadFactory;
 import xyz.ndlr.model.provider.facebook.sendAPI.SendablePayload;
-import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 

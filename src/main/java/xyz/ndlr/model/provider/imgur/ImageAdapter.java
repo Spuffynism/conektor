@@ -1,10 +1,10 @@
 package xyz.ndlr.model.provider.imgur;
 
-import xyz.ndlr.model.provider.imgur.receive.Image;
-import xyz.ndlr.model.provider.imgur.receive.UploadResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureAdapter;
+import xyz.ndlr.model.provider.imgur.receive.Image;
+import xyz.ndlr.model.provider.imgur.receive.UploadResponse;
 
 import java.util.concurrent.ExecutionException;
 

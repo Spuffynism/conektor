@@ -2,9 +2,6 @@ package xyz.ndlr.model.provider.facebook;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import xyz.ndlr.controller.logging.LoggingRequestInterceptor;
-import xyz.ndlr.exception.CannotSendMessageException;
-import xyz.ndlr.model.provider.facebook.sendAPI.SendablePayload;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import xyz.ndlr.controller.logging.LoggingRequestInterceptor;
+import xyz.ndlr.exception.CannotSendMessageException;
+import xyz.ndlr.model.provider.facebook.sendAPI.SendablePayload;
 
 import java.net.URI;
 

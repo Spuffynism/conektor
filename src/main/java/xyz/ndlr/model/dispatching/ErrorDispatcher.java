@@ -1,5 +1,8 @@
 package xyz.ndlr.model.dispatching;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import xyz.ndlr.exception.CannotDispatchException;
 import xyz.ndlr.exception.UnregisteredAccountException;
 import xyz.ndlr.model.ProviderResponseQueue;
@@ -8,9 +11,6 @@ import xyz.ndlr.model.provider.ProviderResponseError;
 import xyz.ndlr.model.provider.facebook.FacebookService;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 import xyz.ndlr.model.provider.facebook.webhook.Payload;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class ErrorDispatcher extends AbstractSubDispatcher implements IMessagingDispatcher {

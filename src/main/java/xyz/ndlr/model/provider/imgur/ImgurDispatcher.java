@@ -1,12 +1,12 @@
 package xyz.ndlr.model.provider.imgur;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.AbstractProviderDispatcher;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.webhook.Message;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 

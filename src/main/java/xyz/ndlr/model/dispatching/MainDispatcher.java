@@ -1,10 +1,10 @@
 package xyz.ndlr.model.dispatching;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import xyz.ndlr.exception.CannotDispatchException;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class MainDispatcher implements IMessagingDispatcher {

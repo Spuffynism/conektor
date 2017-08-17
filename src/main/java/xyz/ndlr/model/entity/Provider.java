@@ -13,6 +13,8 @@ public class Provider extends AbstractDatable {
     private String name;
     private Set<Account> accounts;
 
+    public Provider(){}
+
     //<editor-fold> Default getters and setters
 
     @Id

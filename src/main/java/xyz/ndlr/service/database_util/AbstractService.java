@@ -1,7 +1,7 @@
 package xyz.ndlr.service.database_util;
 
-import xyz.ndlr.model.entity.AbstractDatable;
 import org.hibernate.Query;
+import xyz.ndlr.model.entity.AbstractDatable;
 
 import java.util.Date;
 import java.util.List;

@@ -1,8 +1,8 @@
 package xyz.ndlr.model.provider.facebook;
 
-import xyz.ndlr.exception.InvalidFacebookVerificationToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import xyz.ndlr.exception.InvalidFacebookVerificationToken;
 
 import java.util.Map;
 

@@ -1,5 +1,7 @@
 package xyz.ndlr.model.provider.imgur;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import xyz.ndlr.model.ListenableFutureAdapter;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
@@ -7,8 +9,6 @@ import xyz.ndlr.model.provider.facebook.webhook.Message;
 import xyz.ndlr.model.provider.imgur.receive.Image;
 import xyz.ndlr.model.provider.imgur.receive.UploadResponse;
 import xyz.ndlr.model.provider.imgur.send.UploadPayload;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

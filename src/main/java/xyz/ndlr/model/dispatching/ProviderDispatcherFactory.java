@@ -1,10 +1,10 @@
 package xyz.ndlr.model.dispatching;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import xyz.ndlr.model.provider.AbstractProviderDispatcher;
 import xyz.ndlr.model.provider.imgur.ImgurDispatcher;
 import xyz.ndlr.model.provider.trello.TrelloDispatcher;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 //TODO https://stackoverflow.com/a/39361500/5709703

@@ -1,12 +1,12 @@
 package xyz.ndlr.model;
 
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 import xyz.ndlr.exception.CannotSendMessageException;
 import xyz.ndlr.model.dispatching.ProviderResponseToSendPayloadAdapter;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.FacebookMessageSender;
 import xyz.ndlr.model.provider.facebook.sendAPI.SendablePayload;
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.BlockingQueue;
 

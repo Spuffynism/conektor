@@ -1,8 +1,5 @@
 package xyz.ndlr.model.provider.imgur;
 
-import xyz.ndlr.model.provider.imgur.receive.Image;
-import xyz.ndlr.model.provider.imgur.receive.UploadResponse;
-import xyz.ndlr.model.provider.imgur.send.UploadPayload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +8,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.AsyncRestTemplate;
+import xyz.ndlr.model.provider.imgur.receive.Image;
+import xyz.ndlr.model.provider.imgur.receive.UploadResponse;
+import xyz.ndlr.model.provider.imgur.send.UploadPayload;
 
 import java.util.HashMap;
 import java.util.Map;

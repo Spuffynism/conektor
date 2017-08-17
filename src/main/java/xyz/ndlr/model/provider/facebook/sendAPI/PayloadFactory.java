@@ -1,12 +1,12 @@
 package xyz.ndlr.model.provider.facebook.sendAPI;
 
+import org.springframework.stereotype.Component;
 import xyz.ndlr.model.dispatching.SupportedProvider;
 import xyz.ndlr.model.entity.Account;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.Message;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.TextMessage;
 import xyz.ndlr.model.provider.facebook.sendAPI.recipient.Recipient;
-import org.springframework.stereotype.Component;
 
 @Component
 public class PayloadFactory {

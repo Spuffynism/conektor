@@ -18,7 +18,6 @@ public abstract class AbstractProviderService extends AbstractService<User> {
 
         return new QueryExecutor<>(session -> {
             return session.createNativeQuery(sql, User.class)
-                    .addEntity(User.class)
                     .setParameter("acc_details", identifier)
                     .setParameter("provider_id", providerId)
                     .uniqueResult();

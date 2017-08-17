@@ -1,9 +1,6 @@
 package xyz.ndlr.security.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import xyz.ndlr.exception.InvalidCredentialsException;
-import xyz.ndlr.exception.UserNotFoundException;
-import xyz.ndlr.security.auth.AccountCredentials;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import xyz.ndlr.exception.InvalidCredentialsException;
+import xyz.ndlr.exception.UserNotFoundException;
+import xyz.ndlr.security.auth.AccountCredentials;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

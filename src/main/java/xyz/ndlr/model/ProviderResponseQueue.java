@@ -1,7 +1,7 @@
 package xyz.ndlr.model;
 
-import xyz.ndlr.model.provider.ProviderResponse;
 import org.springframework.stereotype.Component;
+import xyz.ndlr.model.provider.ProviderResponse;
 
 import java.util.concurrent.LinkedBlockingQueue;
 

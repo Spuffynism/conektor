@@ -1,9 +1,9 @@
 package xyz.ndlr.model.provider.trello;
 
+import org.springframework.stereotype.Service;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.PipelinedMessage;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

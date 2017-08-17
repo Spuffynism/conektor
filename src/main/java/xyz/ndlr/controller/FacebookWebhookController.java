@@ -1,5 +1,10 @@
 package xyz.ndlr.controller;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import xyz.ndlr.exception.CannotDispatchException;
 import xyz.ndlr.exception.InvalidFacebookVerificationToken;
 import xyz.ndlr.exception.UnregisteredAccountException;
@@ -12,11 +17,6 @@ import xyz.ndlr.model.provider.facebook.FacebookService;
 import xyz.ndlr.model.provider.facebook.FacebookVerificationToken;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 import xyz.ndlr.model.provider.facebook.webhook.Payload;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;

@@ -1,8 +1,8 @@
 package xyz.ndlr.model.dispatching;
 
 import xyz.ndlr.exception.CannotDispatchException;
-import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 import xyz.ndlr.model.entity.User;
+import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 
 import java.util.List;
 

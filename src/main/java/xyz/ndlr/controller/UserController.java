@@ -1,14 +1,14 @@
 package xyz.ndlr.controller;
 
-import xyz.ndlr.model.entity.User;
-import xyz.ndlr.service.AuthHolder;
-import xyz.ndlr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import xyz.ndlr.model.entity.User;
+import xyz.ndlr.service.AuthHolder;
+import xyz.ndlr.service.UserService;
 
 import java.util.List;
 

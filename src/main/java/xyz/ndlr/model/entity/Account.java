@@ -3,7 +3,6 @@ package xyz.ndlr.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import xyz.ndlr.model.dispatching.SupportedProvider;
 
 import javax.persistence.*;
 
@@ -23,10 +22,7 @@ public class Account {
     @JsonIgnore
     private Provider provider;
 
-    public Account(){}
-
-    public Account(SupportedProvider provider) {
-
+    public Account() {
     }
 
     //<editor-fold> Default getters and setters

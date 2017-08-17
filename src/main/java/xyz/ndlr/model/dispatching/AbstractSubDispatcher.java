@@ -1,9 +1,9 @@
 package xyz.ndlr.model.dispatching;
 
-import xyz.ndlr.model.ProviderResponseQueue;
-import xyz.ndlr.model.provider.ProviderResponse;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
+import xyz.ndlr.model.ProviderResponseQueue;
+import xyz.ndlr.model.provider.ProviderResponse;
 
 import java.util.concurrent.BlockingQueue;
 

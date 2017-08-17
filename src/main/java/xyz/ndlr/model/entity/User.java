@@ -3,10 +3,10 @@ package xyz.ndlr.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import xyz.ndlr.model.dispatching.SupportedProvider;
-import xyz.ndlr.security.auth.Permission;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import xyz.ndlr.model.dispatching.SupportedProvider;
+import xyz.ndlr.security.auth.Permission;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -30,8 +30,7 @@ public class User extends AbstractDatable implements UserDetails {
     @JsonIgnoreProperties("user")
     private Set<Account> accounts;
 
-    public User() {
-    }
+    public User() { }
 
     @Transient
     @JsonIgnore

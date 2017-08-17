@@ -14,7 +14,7 @@ public enum TrelloAction implements IProviderAction {
     CARDS("cards"),
     SWITCH_TO("switch-to");
 
-    private String value;
+    private final String value;
 
     TrelloAction(String value) {
         this.value = value;

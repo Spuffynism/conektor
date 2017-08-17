@@ -1,5 +1,9 @@
 package xyz.ndlr.service;
 
+import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 import xyz.ndlr.exception.EmailTakenException;
 import xyz.ndlr.exception.InvalidPasswordException;
 import xyz.ndlr.exception.UsernameTakenException;
@@ -9,10 +13,6 @@ import xyz.ndlr.security.hashing.Argon2Hasher;
 import xyz.ndlr.security.hashing.IPasswordHasher;
 import xyz.ndlr.service.database_util.AbstractService;
 import xyz.ndlr.service.database_util.QueryExecutor;
-import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

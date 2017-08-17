@@ -1,9 +1,5 @@
 package xyz.ndlr.security;
 
-import xyz.ndlr.security.auth.jwt.JWTAuthenticationFilter;
-import xyz.ndlr.security.auth.jwt.JWTLoginFilter;
-import xyz.ndlr.security.hashing.Argon2Encoder;
-import xyz.ndlr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +14,10 @@ import org.springframework.security.config.annotation.web.configuration
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import xyz.ndlr.security.auth.jwt.JWTAuthenticationFilter;
+import xyz.ndlr.security.auth.jwt.JWTLoginFilter;
+import xyz.ndlr.security.hashing.Argon2Encoder;
+import xyz.ndlr.service.UserService;
 
 @Configuration
 @EnableWebSecurity

@@ -20,19 +20,16 @@ public abstract class AbstractService<T> {
     }
 
     /**
-     * TODO
      * Get a T by its id
      *
      * @param id the T's id
      * @return the T
      */
-    @SuppressWarnings(value = "unchecked")
     public T get(int id) {
-        return new QueryExecutor<>(session -> (T) session.get(tClass, id)).execute();
+        return new QueryExecutor<>(session -> session.get(tClass, id)).execute();
     }
 
     /**
-     * TODO
      * Gets a T's creation date
      *
      * @param id the T's id

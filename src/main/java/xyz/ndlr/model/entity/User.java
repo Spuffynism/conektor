@@ -37,7 +37,8 @@ public class User extends AbstractDatable implements UserDetails {
     public Account getAccount(SupportedProvider provider) {
         return accounts.stream()
                 .filter(x -> x.getProvider().getName().equals(provider.value()))
-                .collect(Collectors.toList()).get(0);
+                .collect(Collectors.toList())
+                .get(0);
     }
 
     @Transient

@@ -44,6 +44,13 @@ public class FacebookWebhookController {
         this.mainDispatcher = mainDispatcher;
         this.facebookMessageConsumer = facebookMessageConsumer;
 
+        startConsuming();
+    }
+
+    /**
+     *
+     */
+    private void startConsuming() {
         facebookMessageConsumer.startConsuming();
         new Thread(facebookMessageConsumer).start();
     }
@@ -81,8 +88,8 @@ public class FacebookWebhookController {
             try {
                 processPayload(payload);
             } catch (Exception e) {
-                logger.error("An error occured during payload processing. Will now attempt to " +
-                        "tell recipient", e);
+                logger.error("An error occured during payload processing. Will now " +
+                        "attempt to tell recipient", e);
                 errorDispatcher.dispatchIfPossible(payload, e);
             }
         };

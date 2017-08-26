@@ -15,8 +15,8 @@ class HibernateUtil {
     static {
         try {
             sessionFactory = createSessionFactory();
-        } catch (Throwable e) {
-            throw new ExceptionInInitializerError(e);
+        } catch (Exception e) {
+            throw new ExceptionInInitializerError("Is the database service started?\n" + e);
         }
     }
 

@@ -14,7 +14,7 @@ import java.util.concurrent.BlockingQueue;
 public class FacebookMessageConsumer implements Runnable {
     private static final Logger logger = Logger.getLogger(FacebookMessageConsumer.class);
 
-    private final BlockingQueue<ProviderResponse> sharedResponseQueue;
+    private final ProviderResponseQueue sharedResponseQueue;
     private final FacebookMessageSender messageSender;
     private final ProviderResponseToSendPayloadAdapter adapter;
 

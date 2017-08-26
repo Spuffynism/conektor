@@ -19,7 +19,6 @@ public class QueryExecutor<T> {
      */
     public T execute() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-
         return queryFunction.apply(session);
     }
 

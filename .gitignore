@@ -21,3 +21,4 @@ conf/pastaman/requests.json
 conf/ngrok/
 src/main/java/xyz/ndlr/service/provider/
 !/conf/pastaman/requests.json
+/conf/database/db_creation.sql

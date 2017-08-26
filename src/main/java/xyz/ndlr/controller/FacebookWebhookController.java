@@ -48,7 +48,8 @@ public class FacebookWebhookController {
     }
 
     /**
-     *
+     * Starts the message consumer thread
+     * TODO: Maybe move this to a @Configuration class
      */
     private void startConsuming() {
         facebookMessageConsumer.startConsuming();

@@ -12,7 +12,7 @@ abstract class AbstractSubDispatcher {
     private static final Logger logger = Logger.getLogger(AbstractSubDispatcher.class);
 
     final ProviderDispatcherFactory providerDispatcherFactory;
-    private final BlockingQueue<ProviderResponse> sharedResponses;
+    private final ProviderResponseQueue sharedResponses;
 
     AbstractSubDispatcher(ProviderDispatcherFactory providerDispatcherFactory,
                           ProviderResponseQueue sharedResponses) {

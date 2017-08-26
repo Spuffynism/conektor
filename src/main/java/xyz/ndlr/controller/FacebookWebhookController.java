@@ -49,6 +49,7 @@ public class FacebookWebhookController {
 
     /**
      * Starts the message consumer thread
+     * test
      */
     private void startConsuming() {
         facebookMessageConsumer.startConsuming();

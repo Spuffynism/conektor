@@ -7,7 +7,7 @@ src/main/resources/application.yml
 src/main/resources/hibernate.cfg.xml
 
 # sql db config files
-conf/database/**.sql
+conf/database/
 
 # useless big sql files
 conf/common_passwords/
@@ -16,5 +16,4 @@ conf/common_passwords/
 conf/ssl/
 conf/notes.md
 src/main/java/xyz/ndlr/Nothing.java
-conf/database/dump/
 conf/ngrok/

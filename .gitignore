@@ -7,7 +7,7 @@ src/main/resources/application.yml
 src/main/resources/hibernate.cfg.xml
 
 # private sql files
-conf/database/.*.sql
+conf/database/**.sql
 
 # useless big sql files
 conf/common_passwords/
@@ -17,8 +17,4 @@ conf/ssl/
 conf/notes.md
 src/main/java/xyz/ndlr/Nothing.java
 conf/database/dump/
-conf/pastaman/requests.json
 conf/ngrok/
-src/main/java/xyz/ndlr/service/provider/
-!/conf/pastaman/requests.json
-/conf/database/db_creation.sql

@@ -6,13 +6,13 @@ src/main/main.iml
 src/main/resources/application.yml
 src/main/resources/hibernate.cfg.xml
 
-# private sql files
+# sql db config files
 conf/database/**.sql
 
 # useless big sql files
 conf/common_passwords/
 
-# ssl configuration files
+# misc
 conf/ssl/
 conf/notes.md
 src/main/java/xyz/ndlr/Nothing.java

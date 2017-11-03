@@ -37,30 +37,36 @@ public class ErrorDispatcher extends AbstractSubDispatcher implements IMessaging
         queueResponse(error);
     }
 
-    public void dispatchIfPossible(Payload payload, Throwable throwable) {
-        String recipientId = payload.tryGetRecipientId();
+    public void dispatchIfPossible(Payload payload, Exception exception) {
+        String senderId = payload.tryGetSenderId();
 
-        if (recipientId == null) {
-            logger.error("Could not get recipient. Error message won't be sent.");
+        if (senderId == null) {
+            logger.error("Could not get sender. Error message won't be sent.");
             return;
         }
 
-        dispatchThrowableMessage(recipientId, throwable);
+        dispatchExceptionMessage(senderId, exception);
     }
 
-    private void dispatchThrowableMessage(String recipientId, Throwable throwable) {
-        User user = facebookService.getUserByIdentifier(recipientId);
+    private void dispatchExceptionMessage(String senderId, Exception exception) {
+        User user = facebookService.getUserByIdentifier(senderId);
 
-        if (isAllowedThrowable(throwable)) {
-            dispatchAndQueue(user, throwable.getMessage());
+        if (isAllowedException(exception)) {
+            dispatchAndQueue(user, exception.getMessage());
         } else {
             sendGenericMessage(user);
         }
     }
 
-    private static boolean isAllowedThrowable(Throwable throwable) {
-        return throwable instanceof CannotDispatchException ||
-                throwable instanceof UnregisteredAccountException;
+    /**
+     * Indicates if an exception is allowed to be shown to the user.
+     *
+     * @param exception
+     * @return if the exception is allowed to be shown to the user
+     */
+    private static boolean isAllowedException(Exception exception) {
+        return exception instanceof CannotDispatchException ||
+                exception instanceof UnregisteredAccountException;
     }
 
     private void sendGenericMessage(User user) {

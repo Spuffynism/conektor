@@ -24,7 +24,13 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
 
     @Override
     public void dispatchAndQueue(User user, Messaging messaging) throws CannotDispatchException {
-        ParsedMessage parsedMessage = tryGetParsedMessage(messaging);
+        ParsedMessage parsedMessage;
+
+        try {
+            parsedMessage = tryGetParsedMessage(messaging);
+        } catch (IllegalArgumentException e) {
+            throw new CannotDispatchException(e.getMessage());
+        }
 
         PipelinedMessage pipelinedMessage = new PipelinedMessage(messaging, parsedMessage);
         AbstractProviderDispatcher<PipelinedMessage> dispatcher = providerDispatcherFactory
@@ -36,14 +42,9 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
                 .thenAccept(acceptAndQueueResponse);
     }
 
-    private static ParsedMessage tryGetParsedMessage(Messaging messaging) {
-        MessageParser parser;
-
-        try {
-            parser = new MessageParser(messaging.getMessage());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
+    private static ParsedMessage tryGetParsedMessage(Messaging messaging) throws
+            IllegalArgumentException {
+        MessageParser parser = new MessageParser(messaging.getMessage());
 
         return parser.getParsedMessage();
     }

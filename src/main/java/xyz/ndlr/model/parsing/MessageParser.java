@@ -25,7 +25,7 @@ public class MessageParser {
         this.setArguments(message);
     }
 
-    public MessageParser(Message message) {
+    public MessageParser(Message message) throws IllegalArgumentException {
         this(message.getText());
     }
 
@@ -53,7 +53,7 @@ public class MessageParser {
         Map<String, String> arguments = parseArguments(matcher);
 
         if (arguments.isEmpty())
-            throw new IllegalArgumentException("no arguments provided\n. Message was : " + message);
+            throw new IllegalArgumentException("No arguments provided. Message was : " + message);
 
         this.arguments = arguments;
     }

@@ -26,14 +26,13 @@ public class Messaging implements IMessage {
     public Messaging() {
     }
 
-    String tryGetRecipientId() {
-        String recipientId = null;
-        Recipient recipient = getRecipient();
+    String tryGetSenderId() {
+        String senderId = null;
 
-        if (recipient != null)
-            recipientId = recipient.getId();
+        if (sender != null)
+            senderId = sender.getId();
 
-        return recipientId;
+        return senderId;
     }
 
     public Sender getSender() {

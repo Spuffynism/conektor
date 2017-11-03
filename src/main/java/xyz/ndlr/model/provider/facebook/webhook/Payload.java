@@ -28,14 +28,14 @@ public class Payload {
         this.entry = entry;
     }
 
-    public String tryGetRecipientId() {
-        String recipientId = null;
+    public String tryGetSenderId() {
+        String senderId = null;
         Entry firstEntry = tryGetFirstEntry();
 
         if(firstEntry != null)
-            recipientId = firstEntry.tryGetMessagingRecipientId();
+            senderId = firstEntry.tryGetMessagingSenderId();
 
-        return recipientId;
+        return senderId;
     }
 
     private Entry tryGetFirstEntry() {

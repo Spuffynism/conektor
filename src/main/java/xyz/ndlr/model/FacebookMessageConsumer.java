@@ -10,6 +10,9 @@ import xyz.ndlr.model.provider.facebook.sendAPI.SendablePayload;
 
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * Consumes & send messages produced.
+ */
 @Component
 public class FacebookMessageConsumer implements Runnable {
     private static final Logger logger = Logger.getLogger(FacebookMessageConsumer.class);

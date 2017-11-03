@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface IMessagingDispatcher {
 
-    default void dispatchAndQueue(User user, List<Messaging> messagings) throws CannotDispatchException {
+    default void dispatchAndQueue(User user, List<Messaging> messagings) throws
+            CannotDispatchException {
         for (Messaging messaging : messagings)
             dispatchAndQueue(user, messaging);
     }

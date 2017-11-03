@@ -30,14 +30,14 @@ public class Entry {
         this.messaging = messaging;
     }
 
-    String tryGetMessagingRecipientId() {
-        String recipientId = null;
+    String tryGetMessagingSenderId() {
+        String senderId = null;
         Messaging firstMessaging = tryGetFirstMessaging();
 
         if (firstMessaging != null)
-            recipientId = firstMessaging.tryGetRecipientId();
+            senderId = firstMessaging.tryGetSenderId();
 
-        return recipientId;
+        return senderId;
     }
 
     private Messaging tryGetFirstMessaging() {

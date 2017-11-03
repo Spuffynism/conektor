@@ -27,7 +27,6 @@ import java.util.concurrent.Executors;
 @RequestMapping("/facebook/webhook")
 public class FacebookWebhookController {
     private static final Logger logger = Logger.getLogger(FacebookWebhookController.class);
-    private static Executor pool = Executors.newCachedThreadPool();
 
     private final FacebookService facebookService;
     private final ErrorDispatcher errorDispatcher;
@@ -49,7 +48,6 @@ public class FacebookWebhookController {
 
     /**
      * Starts the message consumer thread
-     * test
      */
     private void startConsuming() {
         facebookMessageConsumer.startConsuming();
@@ -85,17 +83,13 @@ public class FacebookWebhookController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> receiveMessage(@RequestBody Payload payload) {
-        Runnable payloadProcessing = () -> {
-            try {
-                processPayload(payload);
-            } catch (Exception e) {
-                logger.error("An error occured during payload processing. Will now " +
-                        "attempt to tell recipient", e);
-                errorDispatcher.dispatchIfPossible(payload, e);
-            }
-        };
-
-        pool.execute(payloadProcessing);
+        try {
+            processPayload(payload);
+        } catch (Exception e) {
+            logger.error("An error occured during payload processing. Will now " +
+                    "attempt to tell recipient.", e);
+            errorDispatcher.dispatchIfPossible(payload, e);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

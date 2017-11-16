@@ -9,6 +9,7 @@ import xyz.ndlr.model.dispatching.SupportedProvider;
 import xyz.ndlr.security.auth.Permission;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,7 @@ public class User extends AbstractDatable implements UserDetails {
 
     @Transient
     @JsonIgnore
+    @Transactional
     public Account getAccount(SupportedProvider provider) {
         return accounts.stream()
                 .filter(x -> x.getProvider().getName().equals(provider.value()))
@@ -130,7 +132,8 @@ public class User extends AbstractDatable implements UserDetails {
         this.attemptedPasswordChanges = attemptedPasswordChanges;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="acc_user_id")
     public Set<Account> getAccounts() {
         return accounts;
     }

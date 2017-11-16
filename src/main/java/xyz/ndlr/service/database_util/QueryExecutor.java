@@ -18,8 +18,22 @@ public class QueryExecutor<T> {
      * @return le résultat T de la QueryFunction
      */
     public T execute() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        return queryFunction.apply(session);
+        Session session = null;
+        T result = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+
+            result = queryFunction.apply(session);
+
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            if (session != null)
+                session.close();
+        }
+
+        return result;
     }
 
     private void setQueryFunction(QueryFunction<T> queryFunction) {

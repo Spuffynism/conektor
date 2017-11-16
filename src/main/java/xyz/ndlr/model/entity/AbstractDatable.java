@@ -4,6 +4,9 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import java.util.Date;
 
+/**
+ * Entities which have a creation and modification date
+ */
 public abstract class AbstractDatable {
     Date dateCreated;
     Date dateModified;

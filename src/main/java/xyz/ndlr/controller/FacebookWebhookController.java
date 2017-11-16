@@ -23,6 +23,9 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+ * Entry-point for all facebook webhook actions.
+ */
 @RestController
 @RequestMapping("/facebook/webhook")
 public class FacebookWebhookController {
@@ -55,7 +58,7 @@ public class FacebookWebhookController {
     }
 
     /**
-     * Entry point Facebook uses to verify OUR webhook authenticity by having us return a
+     * Entry point Facebook used to verify OUR webhook authenticity by having us return a
      * challenge. We also validate the verify_token that they send to verify THEIR authenticity.
      *
      * @param requestParams the params. facebook sends to use to authentify
@@ -75,9 +78,7 @@ public class FacebookWebhookController {
     }
 
     /**
-     * Entry point for messages sent to our Facebook page. Since Facebook wants a 200 OK response
-     * ASAP, we process the payload in an other thread and tell Facebook we successfully received
-     * their message.
+     * Entry point for messages sent to our Facebook page.
      *
      * @param payload the message payload sent by facebook
      */
@@ -95,9 +96,7 @@ public class FacebookWebhookController {
     }
 
     /**
-     * Does various validation on the received facebook payload before attempting to
-     * dispatchAndQueue the
-     * messages.
+     * Validates the received facebook payload before attempting to dispatch and queue the messages.
      *
      * @param payload the message payload sent by facebook
      * @throws UnregisteredAccountException when a user is not registered

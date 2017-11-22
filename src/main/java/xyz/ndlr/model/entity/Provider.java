@@ -37,7 +37,7 @@ public class Provider extends AbstractDatable {
         this.name = name;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "provider", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "provider", cascade = CascadeType.ALL)
     public Set<Account> getAccounts() {
         return accounts;
     }

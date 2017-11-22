@@ -67,7 +67,7 @@ public class Account {
         this.userId = userId;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "acc_user_id", insertable = false, updatable = false)
     public User getUser() {
         return user;
@@ -87,7 +87,7 @@ public class Account {
         this.providerId = providerId;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "acc_provider_id", insertable = false, updatable = false)
     public Provider getProvider() {
         return provider;

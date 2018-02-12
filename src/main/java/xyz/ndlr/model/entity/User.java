@@ -9,7 +9,6 @@ import xyz.ndlr.model.dispatching.SupportedProvider;
 import xyz.ndlr.security.auth.Permission;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -31,11 +30,11 @@ public class User extends AbstractDatable implements UserDetails {
     @JsonIgnoreProperties("user")
     private Set<Account> accounts;
 
-    public User() { }
+    public User() {
+    }
 
     @Transient
     @JsonIgnore
-    @Transactional
     public Account getAccount(SupportedProvider provider) {
         return accounts.stream()
                 .filter(x -> x.getProvider().getName().equals(provider.value()))
@@ -133,7 +132,7 @@ public class User extends AbstractDatable implements UserDetails {
     }
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name="acc_user_id")
+    @JoinColumn(name = "acc_user_id")
     public Set<Account> getAccounts() {
         return accounts;
     }

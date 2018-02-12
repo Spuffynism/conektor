@@ -66,7 +66,7 @@ public class User extends AbstractDatable implements UserDetails {
         return permission == Permission.NONE.value();
     }
 
-    //<editor-fold> Basic getters and setters
+    //<editor-fold> Default getters and setters
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

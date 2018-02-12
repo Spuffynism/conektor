@@ -5,45 +5,44 @@ import xyz.ndlr.service.database_util.QueryExecutor;
 
 import java.math.BigInteger;
 
-public class NewPassword {
+public class PasswordChange {
     public static final int MAX_ALLOWED_PASSWORD_CHANGE_ATTEMPTS = 3;
 
-    private String currentPassword;
     private String newPassword;
     private String newPasswordConfirmation;
+    private String currentPassword;
 
-    public NewPassword() {
+    public PasswordChange(String newPassword) {
+        this.setNewPassword(newPassword);
     }
 
-    public NewPassword(String currentPassword, String newPassword, String newPasswordConfirmation) {
-        this.setCurrentPassword(currentPassword);
-        this.setNewPassword(newPassword);
+    public PasswordChange(String newPassword, String newPasswordConfirmation) {
+        this(newPassword);
         this.setNewPasswordConfirmation(newPasswordConfirmation);
+    }
+
+    public PasswordChange(String newPassword, String newPasswordConfirmation,
+                          String currentPassword) {
+        this(newPassword, newPasswordConfirmation);
+        this.setCurrentPassword(currentPassword);
     }
 
     /**
      * Indique si le mot de passe et la confirmation correspondent et si le nouveau mot de passe
      * correspond aux exigences de la police de mots de passe.
      *
-     * @return si le mot de passe est conforme
+     * @return if the password complies
      */
     public boolean complies() {
-        // Valider que les mots de passe correspondent
-        boolean passwordAndConfirmationAreTheSame = newPassword.equals(newPasswordConfirmation);
-
-        return passwordAndConfirmationAreTheSame && matchesPolicy();
+        return newPassword.equals(newPasswordConfirmation) && matchesPolicy(newPassword);
     }
 
     /**
      * Selon les recommandations du NIST:
      * https://pages.nist.gov/800-63-3/sp800-63b.html
      *
-     * @return si le nouveau mot de passe correspont à notre police de mots de passe
+     * @return if the password matches our password policy
      */
-    private boolean matchesPolicy() {
-        return matchesPolicy(newPassword);
-    }
-
     public static boolean matchesPolicy(String password) {
         if (password.length() < 8) return false;
         if (password.length() > 255) return false;
@@ -52,8 +51,8 @@ public class NewPassword {
     }
 
     /**
-     * Retourne si le mot de passe est un mot de passe commun en le comparant aux mots de passe
-     * de la base de données.
+     * Indicates if the password is a common password by comparing it to a common passwords table
+     * in the database.
      *
      * @return si le mot de passe est commun
      */
@@ -67,14 +66,6 @@ public class NewPassword {
             // Si on a plus que 0 résultat, c'est que le mot de passe est commun
             return ((BigInteger) query.uniqueResult()).longValue() > 0;
         }).execute();
-    }
-
-    public String getCurrentPassword() {
-        return currentPassword;
-    }
-
-    public void setCurrentPassword(String currentPassword) {
-        this.currentPassword = currentPassword;
     }
 
     public String getNewPassword() {
@@ -91,5 +82,13 @@ public class NewPassword {
 
     public void setNewPasswordConfirmation(String newPasswordConfirmation) {
         this.newPasswordConfirmation = newPasswordConfirmation;
+    }
+
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
+
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
     }
 }

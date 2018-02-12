@@ -56,7 +56,8 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Exception> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Exception> createUser(@RequestBody User user,
+                                                UriComponentsBuilder ucBuilder) {
         try {
             userService.tryCreateNewUser(user);
         } catch (Exception e) {

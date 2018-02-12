@@ -8,7 +8,7 @@ import xyz.ndlr.exception.EmailTakenException;
 import xyz.ndlr.exception.InvalidPasswordException;
 import xyz.ndlr.exception.UsernameTakenException;
 import xyz.ndlr.model.entity.User;
-import xyz.ndlr.security.auth.NewPassword;
+import xyz.ndlr.security.auth.PasswordChange;
 import xyz.ndlr.security.hashing.Argon2Hasher;
 import xyz.ndlr.security.hashing.IPasswordHasher;
 import xyz.ndlr.service.database_util.AbstractService;
@@ -71,7 +71,7 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
         if (getByEmail(dirtyUser.getEmail()) != null)
             throw new EmailTakenException("This email is already taken.");
 
-        if (!NewPassword.matchesPolicy(dirtyUser.getPassword()))
+        if (!PasswordChange.matchesPolicy(dirtyUser.getPassword()))
             throw new InvalidPasswordException("This password is invalid.");
 
         User cleanUser = new User();

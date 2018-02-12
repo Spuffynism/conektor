@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.ndlr.exception.InvalidPasswordException;
-import xyz.ndlr.security.auth.NewPassword;
+import xyz.ndlr.security.auth.PasswordChange;
 import xyz.ndlr.service.AuthHolder;
 import xyz.ndlr.service.PasswordChangeService;
 
@@ -27,9 +27,9 @@ public class PasswordChangeController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Exception> changePassword(@RequestBody NewPassword newPassword) {
+    public ResponseEntity<Exception> changePassword(@RequestBody PasswordChange passwordChange) {
         try {
-            passwordChangeService.tryChangePassword(authHolder.getUser(), newPassword);
+            passwordChangeService.tryChangePassword(authHolder.getUser(), passwordChange);
         } catch (InvalidPasswordException e) {
             return new ResponseEntity<>(e, HttpStatus.UNAUTHORIZED);
         }

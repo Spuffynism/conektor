@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import xyz.ndlr.model.dispatching.SupportedProvider;
-import xyz.ndlr.security.auth.Permission;
+import xyz.ndlr.security.auth.Role;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -45,25 +45,25 @@ public class User extends AbstractDatable implements UserDetails {
     @Transient
     @JsonIgnore
     public boolean isAdmin() {
-        return Permission.ADMIN.isContainedIn(permission);
+        return Role.ADMIN.isContainedIn(permission);
     }
 
     @Transient
     @JsonIgnore
     public boolean isUser() {
-        return Permission.USER.isContainedIn(permission);
+        return Role.USER.isContainedIn(permission);
     }
 
-    public void addPermission(Permission newPermission) {
-        setPermission(newPermission.addTo(permission));
+    public void addPermission(Role newRole) {
+        setPermission(newRole.addTo(permission));
     }
 
-    public void removePermission(Permission oldPermission) {
-        setPermission(oldPermission.removeFrom(permission));
+    public void removePermission(Role oldRole) {
+        setPermission(oldRole.removeFrom(permission));
     }
 
     public boolean hasNoPermissions() {
-        return permission == Permission.NONE.value();
+        return permission == Role.NONE.value();
     }
 
     //<editor-fold> Default getters and setters
@@ -119,6 +119,10 @@ public class User extends AbstractDatable implements UserDetails {
 
     public void setPermission(int permission) {
         this.permission = permission;
+    }
+
+    public void setPermission(Role role) {
+        this.permission = role.value();
     }
 
     @Basic

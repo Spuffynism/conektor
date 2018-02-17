@@ -1,14 +1,14 @@
 package xyz.ndlr.security.auth;
 
-public enum Permission {
-    NONE (0b0, "No permissions"),
+public enum Role {
+    NONE (0b0, "No roles"),
     USER (0b1, "Basic user role - can only manipulate ones belongings"),
     ADMIN (0b10, "Basic admin role - can do everything");
 
     private final int value;
     private final String description;
 
-    Permission(int value, String description) {
+    Role(int value, String description) {
         this.value = value;
         this.description = description;
     }

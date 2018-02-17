@@ -47,7 +47,7 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
             criteria.select(root);
             criteria.where(builder.equal(root.get("username"), username));
 
-            return session.createQuery(criteria).uniqueResult();
+            return session.createQuery(criteria).getSingleResult();
         }).execute();
     }
 

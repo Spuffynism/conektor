@@ -4,6 +4,11 @@ public class AccountCredentials {
     private String identifier;
     private String password;
 
+    public AccountCredentials(String identifier, String password) {
+        this.identifier = identifier;
+        this.password = password;
+    }
+
     public String getIdentifier() {
         return identifier;
     }

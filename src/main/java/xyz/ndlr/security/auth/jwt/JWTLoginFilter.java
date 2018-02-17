@@ -33,13 +33,15 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
             throws AuthenticationException, IOException, ServletException {
-        AccountCredentials creds;
+        AccountCredentials credentials;
         Authentication authentication = null;
 
         try {
-            creds = new ObjectMapper()
+            credentials = new ObjectMapper()
                     .readValue(httpServletRequest.getInputStream(), AccountCredentials.class);
-            authentication = authenticateUser(creds.getIdentifier(), creds.getPassword());
+
+            authentication = authenticateUser(credentials.getIdentifier(),
+                    credentials.getPassword());
         } catch (Exception e) {
             // We don't tell if it was an invalidCredentialsException or a UserNotFoundException.
             // We only say there was an error.
@@ -51,9 +53,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private Authentication authenticateUser(String identifier, String password)
             throws InvalidCredentialsException, UserNotFoundException {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken
-                (identifier, password,
-                Collections.emptyList());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                identifier, password, Collections.emptyList());
 
         return getAuthenticationManager().authenticate(authToken);
     }

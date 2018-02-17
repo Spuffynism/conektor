@@ -17,3 +17,4 @@ conf/ssl/
 conf/notes.md
 src/main/java/xyz/ndlr/Nothing.java
 conf/ngrok/
+/src/main/java/xyz/ndlr/Miscellanious.java

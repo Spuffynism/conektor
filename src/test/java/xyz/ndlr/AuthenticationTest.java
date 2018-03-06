@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import xyz.ndlr.security.auth.AccountCredentials;
 
+import javax.servlet.Filter;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -41,12 +42,16 @@ public class AuthenticationTest {
     @Autowired
     private WebApplicationContext context;
 
+    @Autowired
+    private Filter springSecurityFilterChain;
+
     private MockMvc mockMvc;
 
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
+                .addFilters(springSecurityFilterChain)
                 .build();
     }
 

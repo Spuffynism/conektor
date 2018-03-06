@@ -11,7 +11,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import xyz.ndlr.exception.InvalidCredentialsException;
 import xyz.ndlr.exception.UserNotFoundException;
-import xyz.ndlr.model.FacebookMessageConsumer;
 import xyz.ndlr.security.auth.AccountCredentials;
 
 import javax.servlet.FilterChain;
@@ -47,7 +46,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
                     credentials.getPassword());
         } catch (Exception e) {
             logger.error(e);
-            // We don't tell if it was an invalidCredentialsException or a UserNotFoundException.
+            // We don't tell if it was an InvalidCredentialsException or a UserNotFoundException.
             // We only say there was an error.
             httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         }

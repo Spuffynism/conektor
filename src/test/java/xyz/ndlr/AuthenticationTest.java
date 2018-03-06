@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,12 +32,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class AuthenticationTest {
 
-    private static final String TEST_USER_USERNAME = "user";
-    private static final String TEST_USER_PASSOWRD = "user";
+    private static final String VALID_USER_USERNAME = "user";
+    private static final String VALID_USER_PASSOWRD = "user";
+    private static final String INVALID_USER_PASSOWRD = "invalid";
 
     private static final String LOGIN_PATH = "/auth/login";
 
-    private HttpMessageConverter mappingJackson2HttpMessageConverter;
+    private HttpMessageConverter<Object> mappingJackson2HttpMessageConverter;
 
     @Autowired
     private WebApplicationContext context;
@@ -56,7 +57,7 @@ public class AuthenticationTest {
     }
 
     @Autowired
-    void setConverters(HttpMessageConverter<?>[] converters) {
+    void setConverters(HttpMessageConverter<Object>[] converters) {
         this.mappingJackson2HttpMessageConverter = Arrays.stream(converters)
                 .filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter)
                 .findAny()
@@ -67,40 +68,64 @@ public class AuthenticationTest {
     }
 
     @Test
-    public void loginWithValidCredentialsReturnsToken() throws Exception {
+    public void loginWithValidCredentialsReturnsValidToken() throws Exception {
+        AccountCredentials validCredentials = new AccountCredentials(VALID_USER_USERNAME,
+                VALID_USER_PASSOWRD);
+
         mockMvc.perform(post(LOGIN_PATH)
-                .content(json(new AccountCredentials(TEST_USER_USERNAME, TEST_USER_PASSOWRD)))
+                .content(json(validCredentials))
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept("application/json;charset=UTF-8"))
-                .andDo(print())
+                .accept("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("token")))
-                .andExpect(content().contentType("application/json;charset=UTF-8"));
+                .andExpect(content().contentType("application/json"));
+        //TODO Check that jwt token is valid
     }
 
     @Test
-    public void loginWithNoIdentifierFieldIsUnauthorized() {
+    public void loginWithNoIdentifierFieldIsUnauthorized() throws Exception {
+        String noIdentifier = String.format("{\"password\":\"%s\"}", VALID_USER_PASSOWRD);
 
+        loginIsUnauthorizedAndBodyIsEmpty(noIdentifier);
     }
 
     @Test
-    public void loginWithEmptyIdentifierIsUnauthorized() {
+    public void loginWithEmptyIdentifierIsUnauthorized() throws Exception {
+        AccountCredentials emptyIdentifier =
+                new AccountCredentials("", VALID_USER_PASSOWRD);
 
+        loginIsUnauthorizedAndBodyIsEmpty(json(emptyIdentifier));
     }
 
     @Test
-    public void loginWithNoPasswordFieldIsUnauthorized() {
+    public void loginWithNoPasswordFieldIsUnauthorized() throws Exception {
+        String noPassword = String.format("{\"identifier\":\"%s\"}", VALID_USER_USERNAME);
 
+        loginIsUnauthorizedAndBodyIsEmpty(noPassword);
     }
 
     @Test
-    public void loginWithEmptyPasswordIsUnauthorized() {
+    public void loginWithEmptyPasswordIsUnauthorized() throws Exception {
+        AccountCredentials emptyPassword = new AccountCredentials(VALID_USER_USERNAME, "");
 
+        loginIsUnauthorizedAndBodyIsEmpty(json(emptyPassword));
     }
 
     @Test
-    public void loginWithInvalidPasswordIsUnauthorized() {
+    public void loginWithInvalidPasswordIsUnauthorized() throws Exception {
+        AccountCredentials invalidPassword = new AccountCredentials(VALID_USER_USERNAME,
+                INVALID_USER_PASSOWRD);
 
+        loginIsUnauthorizedAndBodyIsEmpty(json(invalidPassword));
+    }
+
+    private void loginIsUnauthorizedAndBodyIsEmpty(String content) throws Exception {
+        mockMvc.perform(post(LOGIN_PATH)
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept("application/json"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string(isEmptyString()));
     }
 
     private String json(Object o) throws IOException {

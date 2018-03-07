@@ -9,10 +9,7 @@ import xyz.ndlr.model.dispatching.SupportedProvider;
 import xyz.ndlr.security.auth.Role;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -24,13 +21,17 @@ public class User extends AbstractDatable implements UserDetails {
     @JsonIgnore
     private String password;
     @JsonIgnore
-    private int permission;
+    private int role;
     @JsonIgnore
     private int attemptedPasswordChanges;
     @JsonIgnoreProperties("user")
     private Set<Account> accounts;
+    @JsonIgnore
+    private List<GrantedAuthority> grantedAuthorities;
 
     public User() {
+        // needed because we use the UserDetails class but not its grantedAuthoritites property.
+        grantedAuthorities = Collections.emptyList();
     }
 
     @Transient
@@ -45,25 +46,25 @@ public class User extends AbstractDatable implements UserDetails {
     @Transient
     @JsonIgnore
     public boolean isAdmin() {
-        return Role.ADMIN.isContainedIn(permission);
+        return Role.ADMIN.isContainedIn(role);
     }
 
     @Transient
     @JsonIgnore
     public boolean isUser() {
-        return Role.USER.isContainedIn(permission);
+        return Role.USER.isContainedIn(role);
     }
 
-    public void addPermission(Role newRole) {
-        setPermission(newRole.addTo(permission));
+    public void addRole(Role newRole) {
+        setRole(newRole.addTo(role));
     }
 
-    public void removePermission(Role oldRole) {
-        setPermission(oldRole.removeFrom(permission));
+    public void removeRole(Role oldRole) {
+        setRole(oldRole.removeFrom(role));
     }
 
-    public boolean hasNoPermissions() {
-        return permission == Role.NONE.value();
+    public boolean hasNoRole() {
+        return role == Role.NONE.value();
     }
 
     //<editor-fold> Default getters and setters
@@ -113,16 +114,16 @@ public class User extends AbstractDatable implements UserDetails {
 
     @Basic
     @Column(name = "usr_permission")
-    public int getPermission() {
-        return permission;
+    public int getRole() {
+        return role;
     }
 
-    public void setPermission(int permission) {
-        this.permission = permission;
+    public void setRole(int role) {
+        this.role = role;
     }
 
-    public void setPermission(Role role) {
-        this.permission = role.value();
+    public void setRole(Role role) {
+        this.role = role.value();
     }
 
     @Basic
@@ -167,12 +168,11 @@ public class User extends AbstractDatable implements UserDetails {
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return grantedAuthorities;
     }
 
     @JsonProperty
-    public void setAuthorities(List<? extends GrantedAuthority> grantedAuthorities) {
-    }
+    public void setAuthorities(List<? extends GrantedAuthority> grantedAuthorities) { }
 
     @JsonIgnore
     @Override

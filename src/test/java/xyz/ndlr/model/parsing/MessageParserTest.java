@@ -15,7 +15,7 @@ public class MessageParserTest {
     private String emptyArgs = "trello";
 
     @Test
-    public void testAppNameIsProperlyParsed() {
+    public void appNameIsProperlyParsed() {
         MessageParser trelloParser = new MessageParser(trelloMessage);
         assertThat(trelloParser.getCommand()).isEqualTo("trello");
 
@@ -24,7 +24,7 @@ public class MessageParserTest {
     }
 
     @Test
-    public void testThrowsExceptionWhenMessageNull() throws IllegalArgumentException {
+    public void throwsExceptionWhenMessageNull() throws IllegalArgumentException {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("a message must be present");
 
@@ -33,7 +33,7 @@ public class MessageParserTest {
     }
 
     @Test
-    public void testThrowsExceptionWhenMessageEmpty() throws IllegalArgumentException {
+    public void throwsExceptionWhenMessageEmpty() throws IllegalArgumentException {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("a message must be present");
 
@@ -41,7 +41,7 @@ public class MessageParserTest {
     }
 
     @Test
-    public void testThrowsExceptionWhenAppNameNotPresent() {
+    public void throwsExceptionWhenAppNameNotPresent() {
         String emptyAppName = "-add cardX -list listX";
 
         thrown.expect(IllegalArgumentException.class);
@@ -51,7 +51,7 @@ public class MessageParserTest {
     }
 
     @Test
-    public void testArgumentsAreProperlyParsed() {
+    public void argumentsAreProperlyParsed() {
         MessageParser parser = new MessageParser(trelloMessage);
         assertThat(parser.getArguments().size()).isEqualTo(2);
 
@@ -60,7 +60,7 @@ public class MessageParserTest {
     }
 
     @Test
-    public void testArgumentsInDoubleQuotesAreProperlyParsed() {
+    public void argumentsInDoubleQuotesAreProperlyParsed() {
         MessageParser parser = new MessageParser(twitterMessage);
         assertThat(parser.getArguments().size()).isEqualTo(1);
 

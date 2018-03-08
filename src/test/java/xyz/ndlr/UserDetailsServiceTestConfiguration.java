@@ -11,8 +11,19 @@ import xyz.ndlr.security.auth.Role;
 import java.util.Arrays;
 
 @TestConfiguration
-public class SpringSecurityWebAuxTestConfig {
+public class UserDetailsServiceTestConfiguration {
 
+    /**
+     * Usage:
+     * <code>
+     *     @WithUserDetails("username")
+     *     public void testMethod() {
+     *         mockMvc.perform(get("/users/))
+     *              .andExpect(status().isOk());
+     *     }
+     * </code>
+     * @return UserDetailsService
+     */
     @Bean
     @Primary
     public UserDetailsService userDetailsService() {

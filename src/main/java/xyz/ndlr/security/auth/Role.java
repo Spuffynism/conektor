@@ -1,9 +1,9 @@
 package xyz.ndlr.security.auth;
 
 public enum Role {
-    NONE (0b0, "No roles"),
-    USER (0b1, "Basic user role - can only manipulate ones belongings"),
-    ADMIN (0b10, "Basic admin role - can do everything");
+    NONE (0x0, "No roles"),
+    USER (0x1, "Basic user role - can only manipulate ones belongings"),
+    ADMIN (0x2, "Basic admin role - can do everything");
 
     private final int value;
     private final String description;

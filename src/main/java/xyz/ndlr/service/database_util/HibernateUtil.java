@@ -1,6 +1,7 @@
 package xyz.ndlr.service.database_util;
 
 
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -12,6 +13,8 @@ import org.hibernate.cfg.Configuration;
  * Hibernate utility used to get a database session. Is only used by QueryExecutor.
  */
 class HibernateUtil {
+    private static final Logger logger = Logger.getLogger(HibernateUtil.class);
+
     private static StandardServiceRegistry registry;
     private static SessionFactory sessionFactory;
 
@@ -37,7 +40,7 @@ class HibernateUtil {
                 Metadata metadata = sources.getMetadataBuilder().build();
                 sessionFactory = metadata.getSessionFactoryBuilder().build();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Has MySQL been started (hint: try `start mysqld`)?", e);
                 shutdown();
             }
         }

@@ -78,7 +78,7 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<User> deleteUser(@PathVariable("id") int id) {
-        if (!authHolder.isMe(id) && !authHolder.getUser().isAdmin())
+        if (!authHolder.getUser().isAdmin())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         if (!userService.exists(id))

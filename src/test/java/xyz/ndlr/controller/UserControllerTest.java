@@ -17,7 +17,7 @@ import xyz.ndlr.Application;
 import xyz.ndlr.UserDetailsServiceTestConfiguration;
 
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -40,19 +40,23 @@ public class UserControllerTest {
 
     @Test
     @WithUserDetails("admin")
+    public void controllerProducesJsonUTF8() throws Exception {
+        mockMvc.perform(get("/users"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+    }
+
+    @Test
+    @WithUserDetails("admin")
     public void whenAdminGetAllUsersReturnsAllUsers() throws Exception {
-        mockMvc.perform(get("/users")
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string(containsString("id")));
     }
 
     @Test
     @WithUserDetails("user")
     public void whenNotAdminGetAllUsersIsUnauthorized() throws Exception {
-        mockMvc.perform(get("/users")
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/users"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string(isEmptyString()));
     }
@@ -91,9 +95,66 @@ public class UserControllerTest {
 
     private void getById(int id, ResultMatcher expectedStatus, ResultMatcher expectedContent)
             throws Exception {
-        mockMvc.perform(get("/users/" + id)
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/users/" + id))
                 .andExpect(expectedStatus)
                 .andExpect(expectedContent);
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    public void whenAdminGetMeReturnsMe() throws Exception {
+        int myId = 1;
+        mockMvc.perform(get("/users/me"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", is(myId)));
+    }
+
+    @Test
+    @WithUserDetails("user")
+    public void whenUserGetMeReturnsMe() throws Exception {
+        int myId = 2;
+        mockMvc.perform(get("/users/me"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", is(myId)));
+    }
+
+    @Test
+    @WithUserDetails("user")
+    //TODO
+    public void createUserReturnsUser() throws Exception {
+    }
+
+    @Test
+    @WithUserDetails("user")
+    public void updateUserIsNotImplemented() throws Exception {
+        int id = 1;
+        mockMvc.perform(put("/users/" + id))
+                .andExpect(status().isNotImplemented())
+                .andExpect(content().string(isEmptyString()));
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    //TODO
+    public void whenAdminDeleteUserDeletesUser() throws Exception {
+
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    public void whenUserDoesNotExistDeleteUserIsNotFound() throws Exception {
+        int nonExistingId = Integer.MAX_VALUE;
+        mockMvc.perform(delete("/users/" + nonExistingId))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(isEmptyString()));
+    }
+
+    @Test
+    @WithUserDetails("user")
+    public void whenNotAdminDeleteUserIsUnauthorized() throws Exception {
+        int myId = 1;
+        mockMvc.perform(delete("/users/" + myId))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string(isEmptyString()));
     }
 }

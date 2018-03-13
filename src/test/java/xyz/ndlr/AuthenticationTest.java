@@ -65,7 +65,8 @@ public class AuthenticationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("token")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-        //TODO Check that jwt token is valid by exploding it in header.payload.signature
+        throw new Exception("TODO Check that jwt token is valid by exploding it in header.payload" +
+                ".signature");
     }
 
     @Test

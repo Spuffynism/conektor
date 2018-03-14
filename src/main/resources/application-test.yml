@@ -6,7 +6,7 @@ jwt:
 facebook:
   app_secret: test6d575854ff8811bc295febcd2f9f
   app_id: 000020790396537
-  verify_token: testt4eJFGKxNudpePDMLxF9IyBYEixRhGHzUpIFedxHQCtwuB7amWJwui1iEutGHSVAF8H2gPj6aqC2TNLFOBIw4PzmBhFcagPW
+  verify_token: test_verify_token
   page_access_token: test99wIaMoP70Xf9cKIbPYm8hmTOMbzsESauvjpMOiHajCTS2j1dIMTK4nBkVMd68pyzDFBBhH8EoAX1cCu5N3pAKB6rdF2nBoZQsf6snyyvOMzI6heN6kfMqt8sXUS9HjKoWSvN5r2yY73q5MKX5hPNKQdcCaB9tEuWaznMYqIM4d8FLT4K0ptj
 imgur:
   client_id: 00004018642bf6d

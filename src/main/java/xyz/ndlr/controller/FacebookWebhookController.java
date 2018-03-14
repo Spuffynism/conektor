@@ -20,8 +20,6 @@ import xyz.ndlr.model.provider.facebook.webhook.Payload;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * Entry-point for all facebook webhook actions.
@@ -58,7 +56,7 @@ public class FacebookWebhookController {
     }
 
     /**
-     * Entry point Facebook used to verify OUR webhook authenticity by having us return a
+     * Entry point Facebook uses to verify OUR webhook's authenticity by having us return a
      * challenge. We also validate the verify_token that they send to verify THEIR authenticity.
      *
      * @param requestParams the params. facebook sends to use to authentify

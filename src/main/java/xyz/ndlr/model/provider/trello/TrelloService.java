@@ -1,17 +1,31 @@
 package xyz.ndlr.model.provider.trello;
 
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import xyz.ndlr.model.dispatching.mapping.ActionMapping;
+import xyz.ndlr.model.dispatching.mapping.ProviderMapping;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.PipelinedMessage;
 
-import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@Service
+@ProviderMapping("trello")
 public class TrelloService {
+    private TrelloTestRepository trelloTestRepository;
 
-    @NotNull
+    @Autowired
+    TrelloService(TrelloTestRepository trelloTestRepository) {
+        this.trelloTestRepository = trelloTestRepository;
+    }
+
+    @ActionMapping("test")
+    public ProviderResponse test(User user, PipelinedMessage pipelinedMessage) {
+        System.out.println("I have beeen called!!!!!!!!!!!!!!!!!!!!");
+        trelloTestRepository.print();
+        return new ProviderResponse(user, null);
+    }
+
+    @ActionMapping("add")
     public ProviderResponse add(User user, PipelinedMessage pipelinedMessage) {
         String message = "You sent a message to Trello. The arguments were:\n";
         Map<String, String> arguments = pipelinedMessage.getParsedMessage().getArguments();
@@ -22,23 +36,28 @@ public class TrelloService {
         return new ProviderResponse(user, message);
     }
 
-    @NotNull
+    @ActionMapping({"remove", "delete"})
     public ProviderResponse remove(User user, PipelinedMessage pipelinedMessage) {
-        return new ProviderResponse("no response");
+        return null;
     }
 
-    @NotNull
-    public ProviderResponse getBoards(PipelinedMessage pipelinedMessage) {
-        return new ProviderResponse("no response");
+    @ActionMapping("boards")
+    public ProviderResponse getBoards(User user, PipelinedMessage pipelinedMessage) {
+        return null;
     }
 
-    @NotNull
-    public ProviderResponse getListsFromBoard(PipelinedMessage pipelinedMessage) {
-        return new ProviderResponse("no response");
+    @ActionMapping("lists-from-board")
+    public ProviderResponse getListsFromBoard(User user, PipelinedMessage pipelinedMessage) {
+        return null;
     }
 
-    @NotNull
-    public ProviderResponse getCards(PipelinedMessage pipelinedMessage) {
-        return new ProviderResponse("no response");
+    @ActionMapping("cards")
+    public ProviderResponse getCards(User user, PipelinedMessage pipelinedMessage) {
+        return null;
+    }
+
+    @ActionMapping("switch-to")
+    public ProviderResponse switchTo(User user, PipelinedMessage pipelinedMessage) {
+        return null;
     }
 }

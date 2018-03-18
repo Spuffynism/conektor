@@ -4,22 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.ndlr.exception.CannotDispatchException;
 import xyz.ndlr.model.ProviderResponseQueue;
+import xyz.ndlr.model.dispatching.mapping.ProviderActionRepository;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.parsing.MessageParser;
 import xyz.ndlr.model.parsing.ParsedMessage;
-import xyz.ndlr.model.provider.AbstractProviderDispatcher;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.PipelinedMessage;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 
-import java.util.function.Consumer;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 
 @Component
 public class TextDispatcher extends AbstractSubDispatcher implements IMessagingDispatcher {
     @Autowired
-    public TextDispatcher(ProviderDispatcherFactory providerDispatcherFactory,
+    public TextDispatcher(ProviderActionRepository providerActionRepository,
                           ProviderResponseQueue sharedResponses) {
-        super(providerDispatcherFactory, sharedResponses);
+        super(providerActionRepository, sharedResponses);
     }
 
     @Override
@@ -33,13 +35,17 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
         }
 
         PipelinedMessage pipelinedMessage = new PipelinedMessage(messaging, parsedMessage);
-        AbstractProviderDispatcher<PipelinedMessage> dispatcher = providerDispatcherFactory
-                .getFromDestinationProvider(parsedMessage.getCommand());
 
-        Consumer<ProviderResponse> acceptAndQueueResponse = this::queueResponse;
+        for (Map.Entry<String, String> entry : parsedMessage.getArguments().entrySet()) {
+            BiFunction<User, PipelinedMessage, ProviderResponse> action =
+                    providerActionRepository.getAction(parsedMessage.getCommand(), entry.getKey());
 
-        dispatcher.dispatch(user, pipelinedMessage)
-                .thenAccept(acceptAndQueueResponse);
+            ProviderResponse response = action.apply(user, pipelinedMessage);
+            CompletableFuture<ProviderResponse> future = new CompletableFuture<>();
+            future.complete(response);
+
+            future.thenAccept(this::queueResponse);
+        }
     }
 
     private static ParsedMessage tryGetParsedMessage(Messaging messaging) throws

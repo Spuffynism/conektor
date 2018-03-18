@@ -1,5 +1,6 @@
 package xyz.ndlr.model.provider.trello;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.AbstractProviderDispatcher;
@@ -12,6 +13,7 @@ import java.util.concurrent.CompletableFuture;
 public class TrelloDispatcher extends AbstractProviderDispatcher<PipelinedMessage> {
     private final TrelloService trelloService;
 
+    @Autowired
     public TrelloDispatcher(TrelloService trelloService) {
         this.trelloService = trelloService;
     }
@@ -21,8 +23,9 @@ public class TrelloDispatcher extends AbstractProviderDispatcher<PipelinedMessag
             throws IllegalArgumentException {
         ProviderResponse response = null;
 
-        switch (getFirstAction(pipelinedMessage.getParsedMessage().getArguments(),
-                TrelloAction.class)) {
+        /*TrelloAction action = getFirstAction(pipelinedMessage.getParsedMessage().getArguments(),
+                TrelloAction.class);
+        switch (action) {
             case ADD:
                 response = trelloService.add(user, pipelinedMessage);
                 break;
@@ -32,7 +35,7 @@ public class TrelloDispatcher extends AbstractProviderDispatcher<PipelinedMessag
                 break;
             default:
                 break;
-        }
+        }*/
 
         if (response == null)
             throw new IllegalArgumentException("no response from provider");

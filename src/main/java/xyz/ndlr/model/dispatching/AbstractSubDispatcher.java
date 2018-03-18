@@ -3,20 +3,19 @@ package xyz.ndlr.model.dispatching;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import xyz.ndlr.model.ProviderResponseQueue;
+import xyz.ndlr.model.dispatching.mapping.ProviderActionRepository;
 import xyz.ndlr.model.provider.ProviderResponse;
-
-import java.util.concurrent.BlockingQueue;
 
 @Component
 abstract class AbstractSubDispatcher {
     private static final Logger logger = Logger.getLogger(AbstractSubDispatcher.class);
 
-    final ProviderDispatcherFactory providerDispatcherFactory;
+    final ProviderActionRepository providerActionRepository;
     private final ProviderResponseQueue sharedResponses;
 
-    AbstractSubDispatcher(ProviderDispatcherFactory providerDispatcherFactory,
+    AbstractSubDispatcher(ProviderActionRepository providerActionRepository,
                           ProviderResponseQueue sharedResponses) {
-        this.providerDispatcherFactory = providerDispatcherFactory;
+        this.providerActionRepository = providerActionRepository;
         this.sharedResponses = sharedResponses;
     }
 

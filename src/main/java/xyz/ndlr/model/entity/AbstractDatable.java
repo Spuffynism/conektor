@@ -13,7 +13,7 @@ public abstract class AbstractDatable {
 
     /**
      * Needs to be overridden because the name of the database column referring to the creation date
-     * must be specified with a hibernate @Column annotation.
+     * must be specified with a hibernate @Column mapping.
      *
      * @return the creation date
      */
@@ -27,7 +27,7 @@ public abstract class AbstractDatable {
 
     /**
      * Needs to be overridden because the name of the database column referring to the last
-     * modification date must be specified with a hibernate @Column annotation.
+     * modification date must be specified with a hibernate @Column mapping.
      *
      * @return the creation date
      */

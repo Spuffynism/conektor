@@ -7,6 +7,9 @@ public enum SupportedProvider {
     SSH("ssh", 3);
 
     private final String value;
+    /**
+     * id used in the database
+     */
     private final int providerId;
 
     SupportedProvider(String value, int providerId) {

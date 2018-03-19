@@ -54,7 +54,9 @@ public class ActionMappingMethodCallback implements ReflectionUtils.MethodCallba
                 try {
                     return (ProviderResponse) method.invoke(bean, user, pipelinedMessage);
                 } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
+                    // Because there is no use in printing the InvocationTargetException's stack
+                    // trace, we print the cause's stack trace.
+                    e.getCause().printStackTrace();
                 }
                 return null;
             });

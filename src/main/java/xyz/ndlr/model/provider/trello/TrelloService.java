@@ -20,8 +20,6 @@ public class TrelloService {
 
     @ActionMapping("test")
     public ProviderResponse test(User user, PipelinedMessage pipelinedMessage) {
-        System.out.println("I have beeen called!!!!!!!!!!!!!!!!!!!!");
-        trelloTestRepository.print();
         return new ProviderResponse(user, null);
     }
 

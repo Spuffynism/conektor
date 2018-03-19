@@ -3,31 +3,20 @@ package xyz.ndlr.model.dispatching.mapping;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.springframework.stereotype.Component;
-import xyz.ndlr.model.entity.User;
-import xyz.ndlr.model.provider.ProviderResponse;
-import xyz.ndlr.model.provider.facebook.PipelinedMessage;
-
-import java.util.function.BiFunction;
 
 @Component
 public class ProviderActionRepository {
-    private Table<String, String, BiFunction<User, PipelinedMessage, ProviderResponse>> actions;
+    private Table<String, String, Action> actions;
 
     public ProviderActionRepository() {
         actions = HashBasedTable.create();
     }
 
-    public void register(String provider, String action,
-                         BiFunction<User, PipelinedMessage, ProviderResponse> method) {
-        actions.put(provider, action, method);
+    public void register(String provider, String actionName, Action action) {
+        actions.put(provider, actionName, action);
     }
 
-    public void deregister(String provider, String action) {
-        actions.remove(provider, action);
-    }
-
-    public BiFunction<User, PipelinedMessage, ProviderResponse> getAction(String provider,
-                                                                          String action) {
-        return actions.get(provider, action);
+    public Action get(String provider, String actionName) {
+        return actions.get(provider, actionName);
     }
 }

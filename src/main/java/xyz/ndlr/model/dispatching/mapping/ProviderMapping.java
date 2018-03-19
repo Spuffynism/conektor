@@ -6,10 +6,16 @@ import org.springframework.stereotype.Service;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Represents a provider mapping.
+ *
+ * Even though services with this annotation won't be injected in any other classes, Spring still
+ * needs to discover them. Thus, the @Service annotation is needed.
+ */
 @Service
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ProviderMapping {
 
     @AliasFor(annotation = Service.class)
-    String value() default "";
+    String value();
 }

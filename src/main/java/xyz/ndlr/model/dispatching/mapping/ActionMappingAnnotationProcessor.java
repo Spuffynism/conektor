@@ -3,7 +3,6 @@ package xyz.ndlr.model.dispatching.mapping;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
@@ -11,13 +10,9 @@ import org.springframework.util.ReflectionUtils;
 public class ActionMappingAnnotationProcessor implements BeanPostProcessor {
 
     private ProviderActionRepository providerActionRepository;
-    private ConfigurableListableBeanFactory configurableListableBeanFactory;
 
     @Autowired
-    public ActionMappingAnnotationProcessor(ConfigurableListableBeanFactory
-                                                    configurableListableBeanFactory,
-                                            ProviderActionRepository providerActionRepository) {
-        this.configurableListableBeanFactory = configurableListableBeanFactory;
+    public ActionMappingAnnotationProcessor(ProviderActionRepository providerActionRepository) {
         this.providerActionRepository = providerActionRepository;
     }
 

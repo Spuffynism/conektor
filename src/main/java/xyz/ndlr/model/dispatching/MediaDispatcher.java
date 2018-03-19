@@ -30,6 +30,12 @@ public class MediaDispatcher extends AbstractSubDispatcher implements IMessaging
 
             dispatcher.dispatch(user, messaging)
                     .thenAccept(acceptAndQueueResponse);*/
+
+            // old code from imgurdispatcher
+            /*
+            Message message = messaging.getMessage();
+        return imgurService.upload(message);
+             */
         }
     }
 }

@@ -22,8 +22,9 @@ public class ActionMappingAnnotationProcessor implements BeanPostProcessor {
         Class<?> managedBeanClass = bean.getClass();
         ReflectionUtils.MethodCallback methodCallback =
                 new ActionMappingMethodCallback(providerActionRepository, bean);
+        ReflectionUtils.MethodFilter methodFilter = new ActionMappingMethodFilter();
 
-        ReflectionUtils.doWithMethods(managedBeanClass, methodCallback);
+        ReflectionUtils.doWithMethods(managedBeanClass, methodCallback, methodFilter);
 
         return bean;
     }

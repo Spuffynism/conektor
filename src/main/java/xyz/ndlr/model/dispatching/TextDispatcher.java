@@ -40,11 +40,14 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
             Action action = providerActionRepository.get(parsedMessage.getCommand(),
                     entry.getKey());
 
-            ProviderResponse response = action.apply(user, pipelinedMessage);
-            CompletableFuture<ProviderResponse> future = new CompletableFuture<>();
-            future.complete(response);
+            if (action == null) {
+                throw new CannotDispatchException("invalid action");
+            }
 
-            future.thenAccept(this::queueResponse);
+            ProviderResponse response = action.apply(user, pipelinedMessage);
+
+            CompletableFuture.completedFuture(response)
+                    .thenAccept(this::queueResponse);
         }
     }
 

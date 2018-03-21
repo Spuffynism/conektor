@@ -10,13 +10,9 @@ public class ProviderResponse {
     private int tripTime;
     private String message;
 
-    public ProviderResponse(String message) {
-        this.message = message;
-    }
-
     public ProviderResponse(User user, String message) {
-        this(message);
         this.user = user;
+        this.message = message;
     }
 
     public User getUser() {

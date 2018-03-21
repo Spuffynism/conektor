@@ -27,7 +27,7 @@ public class ImgurService {
     }
 
     //@ActionMapping("upload")
-    CompletableFuture<ProviderResponse> upload(Message message) {
+    CompletableFuture<ProviderResponse> upload(User user, Message message) {
         // get urls that'll be uploaded to Imgur
         List<String> urls = message.getAttachmentURLs(AttachmentType.IMAGE);
 
@@ -38,7 +38,7 @@ public class ImgurService {
                 .map(ListenableFutureAdapter::toCompletableFuture)
                 .collect(Collectors.toList());
 
-        return convertToProviderResponseFuture(responses);
+        return convertToProviderResponseFuture(user, responses);
     }
 
     /**
@@ -47,7 +47,7 @@ public class ImgurService {
      * @param futures - the futures in allFutures
      * @return a ProviderResponse future - for consumation by ImgurDispatcher
      */
-    private CompletableFuture<ProviderResponse> convertToProviderResponseFuture(
+    private CompletableFuture<ProviderResponse> convertToProviderResponseFuture(User user,
             List<CompletableFuture<Image>> futures) {
         CompletableFuture<List<Image>> allFutures = sequence(futures);
 
@@ -56,7 +56,7 @@ public class ImgurService {
                     .map(Image::getLink)
                     .reduce("", UploadResponse::formatLinks);
 
-            return new ProviderResponse(links);
+            return new ProviderResponse(user, links);
         });
     }
 
@@ -71,12 +71,8 @@ public class ImgurService {
         );
     }
 
-    @ActionMapping({"remove","delete"})
+    @ActionMapping({"remove", "delete"})
     public ProviderResponse delete(User user, PipelinedMessage pipelinedMessage) {
-        return new ProviderResponse("not implemented");
+        return new ProviderResponse(user, "not implemented");
     }
-
-    /*public ProviderResponse delete(Message message) {
-        return new ProviderResponse("not implemented");
-    }*/
 }

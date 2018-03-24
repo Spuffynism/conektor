@@ -2,6 +2,7 @@ package xyz.ndlr.model.provider.facebook.webhook;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,28 +19,28 @@ public class Payload {
      * Array containing event data
      */
     @JsonProperty("entry")
-    private List<Entry> entry;
+    private List<Entry> entries;
 
     public Payload() {
     }
 
-    public Payload(String object, List<Entry> entry) {
+    public Payload(String object, Entry entry) {
         this.object = object;
-        this.entry = entry;
+        this.entries = Collections.singletonList(entry);
     }
 
     public String tryGetSenderId() {
         String senderId = null;
         Entry firstEntry = tryGetFirstEntry();
 
-        if(firstEntry != null)
+        if (firstEntry != null)
             senderId = firstEntry.tryGetMessagingSenderId();
 
         return senderId;
     }
 
     private Entry tryGetFirstEntry() {
-        return entry == null ? null : entry.get(0);
+        return entries == null ? null : entries.get(0);
     }
 
     public boolean isPage() {
@@ -54,11 +55,11 @@ public class Payload {
         this.object = object;
     }
 
-    public List<Entry> getEntry() {
-        return entry;
+    public List<Entry> getEntries() {
+        return entries;
     }
 
-    public void setEntry(List<Entry> entry) {
-        this.entry = entry;
+    public void setEntries(List<Entry> entries) {
+        this.entries = entries;
     }
 }

@@ -50,14 +50,17 @@ public class MessageParser {
 
     private void setArguments(String message) throws IllegalArgumentException {
         Matcher matcher = argumentsPattern.matcher(message);
-        Map<String, String> arguments = parseArguments(matcher);
 
-        if (arguments.isEmpty())
-            throw new IllegalArgumentException("No arguments provided. Message was : " + message);
-
-        this.arguments = arguments;
+        this.arguments = parseArguments(matcher);
     }
 
+    /**
+     * From a matcher, return pairings of arguments and their values.
+     *
+     * @param matcher
+     * @return a map of arguments and their values
+     * @throws StringIndexOutOfBoundsException
+     */
     private Map<String, String> parseArguments(Matcher matcher)
             throws StringIndexOutOfBoundsException {
         Map<String, String> arguments = new HashMap<>();
@@ -65,7 +68,7 @@ public class MessageParser {
         String argument, value;
         while (matcher.find()) {
             argument = matcher.group(1);
-            value = deserializeArgumentValue(matcher.group(2));
+            value = removeNestingQuotes(matcher.group(2));
 
             arguments.put(argument, value);
         }
@@ -74,22 +77,21 @@ public class MessageParser {
     }
 
     /**
-     * TODO Maybe add other deserializing steps?
+     * Removes nesting quotes around a string.
      *
-     * @param argumentValue the argument's value to deserialize
-     * @return the cleansed argument value
+     * @param value that which will be cleansed
+     * @return the cleansed value
      * @throws StringIndexOutOfBoundsException when the argument's too small
      */
-    private String deserializeArgumentValue(String argumentValue)
+    private String removeNestingQuotes(String value)
             throws StringIndexOutOfBoundsException {
-        // Strips out nesting double quotes
-        if (argumentValue.startsWith("\"") && argumentValue.endsWith("\""))
-            argumentValue = trimStartAndEndChar(argumentValue);
+        boolean nestedByQuotes = (value.startsWith("\"") && value.endsWith("\""))
+                || (value.startsWith("'") && value.endsWith("'"));
+        if (nestedByQuotes) {
+            value = trimStartAndEndChar(value);
+        }
 
-        if (argumentValue.startsWith("'") && argumentValue.endsWith("'"))
-            argumentValue = trimStartAndEndChar(argumentValue);
-
-        return argumentValue;
+        return value;
     }
 
     private String trimStartAndEndChar(String value) {

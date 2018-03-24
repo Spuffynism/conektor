@@ -8,13 +8,14 @@ import org.springframework.stereotype.Component;
  * Holds all provider actions.
  */
 @Component
-public class ProviderActionRepository {
+public class ActionRepository {
+    private static final String DEFAULT_ACTION_KEY = "";
     /**
      * All available provider actions
      */
     private final Table<String, String, Action> actions;
 
-    public ProviderActionRepository() {
+    public ActionRepository() {
         actions = HashBasedTable.create();
     }
 
@@ -31,5 +32,9 @@ public class ProviderActionRepository {
 
     public Action get(String provider, String actionName) {
         return actions.get(provider, actionName);
+    }
+
+    public Action getDefault(String provider) {
+        return actions.get(provider, DEFAULT_ACTION_KEY);
     }
 }

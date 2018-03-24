@@ -16,23 +16,19 @@ public class Entry {
     @JsonProperty("time")
     private long time;
     /**
-     * Array containing objects related to messaging
+     * Array containing objects related to messagings.
+     * Will always contain only one object.
+     * see: https://developers.facebook.com/docs/messenger-platform/reference/webhook-events/#entry
      */
     @JsonProperty("messaging")
-    private List<Messaging> messaging;
+    private List<Messaging> messagings;
 
     public Entry() {
     }
 
-    public Entry(String pageId, int time, List<Messaging> messaging) {
-        this.pageId = pageId;
-        this.time = time;
-        this.messaging = messaging;
-    }
-
     String tryGetMessagingSenderId() {
         String senderId = null;
-        Messaging firstMessaging = tryGetFirstMessaging();
+        Messaging firstMessaging = getMessaging();
 
         if (firstMessaging != null)
             senderId = firstMessaging.tryGetSenderId();
@@ -40,8 +36,13 @@ public class Entry {
         return senderId;
     }
 
-    private Messaging tryGetFirstMessaging() {
-        return messaging.get(0);
+    /**
+     * messagings will always only contain one messaging.
+     * see: https://developers.facebook.com/docs/messenger-platform/reference/webhook-events/#entry
+     * @return the only entry in the list
+     */
+    public Messaging getMessaging() {
+        return messagings.get(0);
     }
 
     public String getPageId() {
@@ -60,11 +61,11 @@ public class Entry {
         this.time = time;
     }
 
-    public List<Messaging> getMessaging() {
-        return messaging;
+    public List<Messaging> getMessagings() {
+        return messagings;
     }
 
-    public void setMessaging(List<Messaging> messaging) {
-        this.messaging = messaging;
+    public void setMessagings(List<Messaging> messagings) {
+        this.messagings = messagings;
     }
 }

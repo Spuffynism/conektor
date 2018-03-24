@@ -9,11 +9,11 @@ import org.springframework.util.ReflectionUtils;
 @Component
 public class ActionMappingAnnotationProcessor implements BeanPostProcessor {
 
-    private ProviderActionRepository providerActionRepository;
+    private ActionRepository actionRepository;
 
     @Autowired
-    public ActionMappingAnnotationProcessor(ProviderActionRepository providerActionRepository) {
-        this.providerActionRepository = providerActionRepository;
+    public ActionMappingAnnotationProcessor(ActionRepository actionRepository) {
+        this.actionRepository = actionRepository;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class ActionMappingAnnotationProcessor implements BeanPostProcessor {
             BeansException {
         Class<?> managedBeanClass = bean.getClass();
         ReflectionUtils.MethodCallback methodCallback =
-                new ActionMappingMethodCallback(providerActionRepository, bean);
+                new ActionMappingMethodCallback(actionRepository, bean);
         ReflectionUtils.MethodFilter methodFilter = new ActionMappingMethodFilter();
 
         ReflectionUtils.doWithMethods(managedBeanClass, methodCallback, methodFilter);

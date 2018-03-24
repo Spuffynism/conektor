@@ -10,11 +10,11 @@ import java.lang.reflect.Method;
 public class ActionMappingMethodCallback implements ReflectionUtils.MethodCallback {
     private static final Logger logger = Logger.getLogger(ActionMappingMethodCallback.class);
 
-    private ProviderActionRepository providerActionRepository;
+    private ActionRepository actionRepository;
     private Object bean;
 
-    ActionMappingMethodCallback(ProviderActionRepository providerActionRepository, Object bean) {
-        this.providerActionRepository = providerActionRepository;
+    ActionMappingMethodCallback(ActionRepository actionRepository, Object bean) {
+        this.actionRepository = actionRepository;
         this.bean = bean;
     }
 
@@ -29,14 +29,9 @@ public class ActionMappingMethodCallback implements ReflectionUtils.MethodCallba
         ActionMapping actionMapping = method.getAnnotation(ActionMapping.class);
         String[] actions = actionMapping.value();
 
-        String mappingMessage = String.format("Mapping provider '%s' (with mapping [%s]) action " +
-                        "'%s' to [%s]",
-                methodDeclaringClass.getSimpleName(), providerMapping.value(), method.getName(),
-                String.join(", ", actions));
-
         // register actions
         for (String action : actions) {
-            providerActionRepository.register(provider, action, (user, pipelinedMessage) -> {
+            actionRepository.register(provider, action, (user, pipelinedMessage) -> {
                 try {
                     return (ProviderResponse) method.invoke(bean, user, pipelinedMessage);
                 } catch (IllegalAccessException | InvocationTargetException e) {
@@ -46,6 +41,24 @@ public class ActionMappingMethodCallback implements ReflectionUtils.MethodCallba
                 }
                 return null;
             });
+        }
+
+        logMappingMessage(methodDeclaringClass.getSimpleName(), provider, method.getName(),
+                actions);
+    }
+
+    private void logMappingMessage(String methodDeclaringClass, String provider, String methodName,
+                                   String[] actions) {
+        String mappingMessage = "";
+        boolean isDefaultAction = actions[0].equals("");
+        if (isDefaultAction) {
+            mappingMessage = String.format("Mapped provider '%s' (with mapping [%s]) default " +
+                    "action.", methodDeclaringClass, provider);
+        } else {
+            mappingMessage = String.format("Mapped provider '%s' (with mapping [%s]) " +
+                            "action '%s' to [%s]",
+                    methodDeclaringClass, provider, methodName,
+                    String.join(", ", actions));
         }
 
         logger.info(mappingMessage);

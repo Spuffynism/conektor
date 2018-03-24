@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import xyz.ndlr.exception.CannotDispatchException;
 import xyz.ndlr.exception.UnregisteredAccountException;
 import xyz.ndlr.model.ProviderResponseQueue;
-import xyz.ndlr.model.dispatching.mapping.ProviderActionRepository;
+import xyz.ndlr.model.dispatching.mapping.ActionRepository;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.ProviderResponseError;
 import xyz.ndlr.model.provider.facebook.FacebookService;
@@ -20,10 +20,10 @@ public class ErrorDispatcher extends AbstractSubDispatcher implements IMessaging
     private final FacebookService facebookService;
 
     @Autowired
-    ErrorDispatcher(ProviderActionRepository providerActionRepository,
+    ErrorDispatcher(ActionRepository actionRepository,
                     ProviderResponseQueue sharedResponses,
                     FacebookService facebookService) {
-        super(providerActionRepository, sharedResponses);
+        super(actionRepository, sharedResponses);
         this.facebookService = facebookService;
     }
 

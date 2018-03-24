@@ -6,16 +6,19 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import xyz.ndlr.controller.logging.LoggingRequestInterceptor;
 import xyz.ndlr.exception.CannotSendMessageException;
 import xyz.ndlr.model.provider.facebook.sendAPI.SendablePayload;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Sends messages to facebook
@@ -26,6 +29,7 @@ public class FacebookMessageSender {
 
     private static final String ACCESS_TOKEN = "access_token";
     private static String pageAccessToken;
+    //TODO Move this to config file
     //private static final String requestURI = "https://graph.facebook.com/v2.9/me/messages";
     private static final String requestURI = "http://localhost:3000";
     private AsyncRestTemplate asyncRestTemplate;
@@ -37,13 +41,7 @@ public class FacebookMessageSender {
     }
 
     private void initRestTemplate() {
-        // set headers
-        /*HttpHeaders headers = new HttpHeaders();
-        List<MediaType> acceptedHeaders = new ArrayList<>();
-        acceptedHeaders.add(MediaType.APPLICATION_JSON);
-        headers.setAccept(acceptedHeaders);*/
-
-        asyncRestTemplate.getInterceptors().add(new LoggingRequestInterceptor());
+        asyncRestTemplate.getInterceptors().add(new RequestLoggerInterceptor());
     }
 
     @Value("${facebook.page_access_token}")
@@ -55,7 +53,12 @@ public class FacebookMessageSender {
         if (payload.getRecipient() == null)
             throw new CannotSendMessageException("no recipient");
 
-        HttpEntity<SendablePayload> responseEntity = new HttpEntity<>(payload);
+        HttpHeaders headers = new HttpHeaders();
+        List<MediaType> acceptedHeaders = Collections.singletonList(MediaType
+                .APPLICATION_JSON_UTF8);
+        headers.setAccept(acceptedHeaders);
+
+        HttpEntity<SendablePayload> responseEntity = new HttpEntity<>(payload, headers);
         UriComponentsBuilder responseBuilder = UriComponentsBuilder.fromHttpUrl(requestURI)
                 .queryParam(ACCESS_TOKEN, pageAccessToken);
         URI responseURI = responseBuilder.build().encode().toUri();

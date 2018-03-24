@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.ndlr.exception.CannotDispatchException;
 import xyz.ndlr.model.ProviderResponseQueue;
-import xyz.ndlr.model.dispatching.mapping.ProviderActionRepository;
+import xyz.ndlr.model.dispatching.mapping.ActionRepository;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
@@ -15,9 +15,9 @@ public class MediaDispatcher extends AbstractSubDispatcher implements IMessaging
     private static final Logger logger = Logger.getLogger(MediaDispatcher.class);
 
     @Autowired
-    MediaDispatcher(ProviderActionRepository providerActionRepository,
+    MediaDispatcher(ActionRepository actionRepository,
                     ProviderResponseQueue sharedResponses) {
-        super(providerActionRepository, sharedResponses);
+        super(actionRepository, sharedResponses);
     }
 
     @Override

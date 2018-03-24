@@ -27,10 +27,12 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
         boolean hasAppropriateAnnotation =
                 method.getDeclaringClass().isAnnotationPresent(ProviderMapping.class);
         if (!hasAppropriateAnnotation) {
-            String errorMessage = "A method with @ActionMapping must reside in a class with " +
-                    "@ProviderMapping. %s does not";
-            logger.error(String.format(errorMessage,
-                    method.getDeclaringClass().getName()));
+            String errorMessage = String.format("A method with @%s must reside in a " +
+                            "class with @%s. %s does not",
+                    ActionMapping.class.getSimpleName(),
+                    ProviderMapping.class.getSimpleName(),
+                    method.getDeclaringClass().getName());
+            logger.error(errorMessage);
         }
 
         return hasAppropriateAnnotation;
@@ -45,9 +47,11 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
     private boolean hasAppropriateReturnType(Method method) {
         boolean hasAppropriateReturnType = RETURN_TYPE.isAssignableFrom(method.getReturnType());
         if (!hasAppropriateReturnType) {
-            String errorMessage = String.format("A method with @ActionMapping must have a %s " +
-                            "return type",
-                    RETURN_TYPE.getName());
+            String errorMessage = String.format("A method with @%s must have a %s " +
+                            "return type. %s",
+                    ActionMapping.class.getSimpleName(),
+                    RETURN_TYPE.getName(),
+                    doesNotMessage(method));
             logger.error(errorMessage);
         }
 
@@ -57,11 +61,13 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
     private boolean hasAppropriateParameterCount(Method method) {
         boolean hasAppropriateParameterCount = method.getParameterCount() == PARAMETER_COUNT;
         if (!hasAppropriateParameterCount) {
-            String errorMessage = String.format("A method with @ActionMapping must take %d " +
-                            "parameters: %s and %s",
+            String errorMessage = String.format("A method with @%s must take %d " +
+                            "parameters: %s and %s. %s",
+                    ActionMapping.class.getSimpleName(),
                     PARAMETER_COUNT,
                     FIRST_PARAMETER_TYPE.getName(),
-                    SECOND_PARAMETER_TYPE.getName());
+                    SECOND_PARAMETER_TYPE.getName(),
+                    doesNotMessage(method));
             logger.error(errorMessage);
         }
 
@@ -74,19 +80,31 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
         boolean hasAppropriateFirstParameter =
                 FIRST_PARAMETER_TYPE.isAssignableFrom(parameterTypes[0]);
         if (!hasAppropriateFirstParameter) {
-            String errorMessage = String.format("A method with @ActionMapping must have a %s as " +
-                    "its first parameter", FIRST_PARAMETER_TYPE.getName());
+            String errorMessage = String.format("A method with @%s must have a %s as " +
+                            "its first parameter. %s",
+                    ActionMapping.class.getSimpleName(),
+                    FIRST_PARAMETER_TYPE.getName(),
+                    doesNotMessage(method));
             logger.error(errorMessage);
         }
 
         boolean hasAppropriateSecondParameter =
                 SECOND_PARAMETER_TYPE.isAssignableFrom(parameterTypes[1]);
         if (!hasAppropriateSecondParameter) {
-            String errorMessage = String.format("A method with @ActionMapping must have a %s as " +
-                    "its second parameter", SECOND_PARAMETER_TYPE.getName());
+            String errorMessage = String.format("A method with @%s must have a %s as " +
+                            "its second parameter. %s",
+                    ActionMapping.class.getSimpleName(),
+                    SECOND_PARAMETER_TYPE.getName(),
+                    doesNotMessage(method));
             logger.error(errorMessage);
         }
 
         return hasAppropriateFirstParameter && hasAppropriateSecondParameter;
+    }
+
+    private String doesNotMessage(Method method) {
+        return String.format("%s.%s does not.",
+                method.getDeclaringClass().getName(),
+                method.getName());
     }
 }

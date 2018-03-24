@@ -8,10 +8,8 @@ import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.FacebookMessageSender;
 import xyz.ndlr.model.provider.facebook.sendAPI.SendablePayload;
 
-import java.util.concurrent.BlockingQueue;
-
 /**
- * Consumes & send messages produced.
+ * Consumes & sends messages produced.
  */
 @Component
 public class FacebookMessageConsumer implements Runnable {

@@ -1,4 +1,4 @@
-package xyz.ndlr.controller.logging;
+package xyz.ndlr.model.provider.facebook;
 
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpMethod;
@@ -17,8 +17,8 @@ import java.net.URI;
 /**
  * Logs restTemplate requests
  */
-public class LoggingRequestInterceptor implements AsyncClientHttpRequestInterceptor {
-    private static final Logger logger = Logger.getLogger(LoggingRequestInterceptor.class);
+public class RequestLoggerInterceptor implements AsyncClientHttpRequestInterceptor {
+    private static final Logger logger = Logger.getLogger(RequestLoggerInterceptor.class);
 
     @Override
     public ListenableFuture<ClientHttpResponse> intercept(HttpRequest httpRequest, byte[] body,

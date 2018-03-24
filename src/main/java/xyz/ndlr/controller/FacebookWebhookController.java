@@ -23,6 +23,7 @@ import java.util.Map;
 
 /**
  * Entry-point for all facebook webhook actions.
+ * Receives messages which can be verification requests or relayed user messages.
  */
 @RestController
 @RequestMapping("/facebook/webhook")
@@ -106,27 +107,34 @@ public class FacebookWebhookController {
         if (payload == null || !payload.isPage())
             throw new IllegalArgumentException("unsupported payload");
 
-        FacebookMessageFacade messageFacade = FacebookMessageFacade.fromPayload(payload);
+        List<FacebookMessageFacade> messageFacades =
+                FacebookMessageFacade.Builder.fromPayload(payload);
 
+        for (FacebookMessageFacade messageFacade : messageFacades)
+            dispatchMessageFacade(messageFacade);
+    }
+
+    private void dispatchMessageFacade(FacebookMessageFacade messageFacade)
+            throws UnregisteredAccountException, CannotDispatchException {
         String senderId = messageFacade.getSender().getId();
         if (!facebookService.userIsRegistered(senderId))
             throw new UnregisteredAccountException("unrecognized facebook account - are you " +
                     "registered?");
 
-        dispatch(senderId, messageFacade.getMessagings());
+        dispatch(senderId, messageFacade.getMessaging());
     }
 
     /**
      * Creates a dispatcher which will query the appropriate third parties and then send their
      * responses to the facebook user.
      *
-     * @param senderId   the user which sent and which will receive the messages
-     * @param messagings messagings sent by the user
+     * @param senderId  the user which sent and which will receive the messages
+     * @param messaging messaging sent by the user
      * @throws CannotDispatchException when an error occurs during the message dispatching process
      */
-    private void dispatch(String senderId, List<Messaging> messagings)
+    private void dispatch(String senderId, Messaging messaging)
             throws CannotDispatchException {
         User user = facebookService.getUserByIdentifier(senderId);
-        mainDispatcher.dispatchAndQueue(user, messagings);
+        mainDispatcher.dispatchAndQueue(user, messaging);
     }
 }

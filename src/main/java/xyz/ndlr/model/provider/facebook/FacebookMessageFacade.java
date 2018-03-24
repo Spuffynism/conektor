@@ -1,36 +1,54 @@
 package xyz.ndlr.model.provider.facebook;
 
+import xyz.ndlr.model.provider.facebook.webhook.Entry;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 import xyz.ndlr.model.provider.facebook.webhook.Payload;
 import xyz.ndlr.model.provider.facebook.webhook.Sender;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FacebookMessageFacade {
-    private Payload payload;
+    private Entry entry;
 
-    private FacebookMessageFacade(Payload payload) {
-        this.payload = payload;
-    }
-
-    public static FacebookMessageFacade fromPayload(Payload payload) throws
-            IllegalArgumentException {
-        FacebookMessageFacade messageFacade = new FacebookMessageFacade(payload);
-
-        if (messageFacade.getSender() == null || messageFacade.getSender().getId() == null)
-            throw new IllegalArgumentException("no sender");
-
-        if (messageFacade.getMessagings() == null || messageFacade.getMessagings().get(0) == null)
-            throw new IllegalArgumentException("no message");
-
-        return messageFacade;
+    private FacebookMessageFacade(Entry entry) {
+        this.entry = entry;
     }
 
     public Sender getSender() {
-        return payload.getEntry().get(0).getMessaging().get(0).getSender();
+        return getMessaging().getSender();
     }
 
-    public List<Messaging> getMessagings() {
-        return payload.getEntry().get(0).getMessaging();
+    public Messaging getMessaging() {
+        return entry.getMessaging();
+    }
+
+    public static class Builder {
+        public static List<FacebookMessageFacade> fromPayload(Payload payload) throws
+                IllegalArgumentException {
+            List<FacebookMessageFacade> messageFacades = withIndividualEntries(payload);
+
+            for (FacebookMessageFacade messageFacade : messageFacades) {
+                if (messageFacade.getSender() == null || messageFacade.getSender().getId() == null)
+                    throw new IllegalArgumentException("no sender");
+
+                if (messageFacade.getMessaging() == null)
+                    throw new IllegalArgumentException("no message");
+            }
+
+            return messageFacades;
+        }
+
+        /**
+         * Builds FacebookMessageFacades which contain a singular entry each.
+         *
+         * @param payload the facebook entry which contains a list of entries
+         * @return message facades with one entry each
+         */
+        private static List<FacebookMessageFacade> withIndividualEntries(Payload payload) {
+            return payload.getEntries().stream()
+                    .map(FacebookMessageFacade::new)
+                    .collect(Collectors.toList());
+        }
     }
 }

@@ -1,41 +1,33 @@
 package xyz.ndlr.model.dispatching;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xyz.ndlr.exception.CannotDispatchException;
 import xyz.ndlr.model.ProviderResponseQueue;
 import xyz.ndlr.model.dispatching.mapping.ActionRepository;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
+import xyz.ndlr.model.provider.facebook.webhook.Message;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
+import xyz.ndlr.model.provider.imgur.ImgurService;
 
 @Component
 public class MediaDispatcher extends AbstractSubDispatcher implements IMessagingDispatcher {
-    private static final Logger logger = Logger.getLogger(MediaDispatcher.class);
+    private ImgurService imgurService;
 
     @Autowired
     MediaDispatcher(ActionRepository actionRepository,
-                    ProviderResponseQueue sharedResponses) {
+                    ProviderResponseQueue sharedResponses,
+                    ImgurService imgurService) {
         super(actionRepository, sharedResponses);
+        this.imgurService = imgurService;
     }
 
     @Override
-    public void dispatchAndQueue(User user, Messaging messaging) throws CannotDispatchException {
-        if (messaging.getMessage().contains(AttachmentType.IMAGE)) {
-            /*AbstractProviderDispatcher<Messaging> dispatcher = providerDispatcherFactory
-                    .getFromDestinationProvider(SupportedProvider.IMGUR.value());
-
-            Consumer<ProviderResponse> acceptAndQueueResponse = this::queueResponse;
-
-            dispatcher.dispatch(user, messaging)
-                    .thenAccept(acceptAndQueueResponse);*/
-
-            // old code from imgurdispatcher
-            /*
-            Message message = messaging.getMessage();
-        return imgurService.upload(message);
-             */
+    public void dispatchAndQueue(User user, Messaging messaging) {
+        Message message = messaging.getMessage();
+        if (message.contains(AttachmentType.IMAGE)) {
+            imgurService.upload(user, message)
+                    .thenAccept(this::queueResponse);
         }
     }
 }

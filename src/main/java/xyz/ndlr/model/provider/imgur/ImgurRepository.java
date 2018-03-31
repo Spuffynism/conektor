@@ -19,7 +19,6 @@ import java.util.Map;
 public class ImgurRepository {
     private static final String IMGUR_API_URI = "https://api.imgur.com/3/";
     private static String accessToken;
-    //TODO: Replace with https://docs.spring.io/spring-framework/docs/5.0.x/spring-framework-reference/web-reactive.html#webflux-client
     private AsyncRestTemplate asyncRestTemplate;
 
     public ImgurRepository() {
@@ -43,7 +42,7 @@ public class ImgurRepository {
         return new ImageAdapter(uploadResponse);
     }
 
-    private MultiValueMap<String, String> getAuthorizationHeaders(String bearerToken) {
+    private static MultiValueMap<String, String> getAuthorizationHeaders(String bearerToken) {
         Map<String, String> map = new HashMap<>();
         map.put("Content-Type", "application/json");
         map.put("Authorization", "Bearer " + bearerToken);

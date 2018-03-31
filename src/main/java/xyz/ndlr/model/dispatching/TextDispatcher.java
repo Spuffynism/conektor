@@ -41,27 +41,13 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
         if (arguments.isEmpty()) {
             Action action = actionRepository.getDefault(parsedMessage.getCommand());
 
-            if (action == null) {
-                throw new CannotDispatchException("invalid action");
-            }
-
-            ProviderResponse response = action.apply(user, pipelinedMessage);
-
-            CompletableFuture.completedFuture(response)
-                    .thenAccept(this::queueResponse);
+            apply(action, user, pipelinedMessage);
         } else {
             for (Map.Entry<String, String> entry : arguments.entrySet()) {
                 Action action = actionRepository.get(parsedMessage.getCommand(),
                         entry.getKey());
 
-                if (action == null) {
-                    throw new CannotDispatchException("invalid action");
-                }
-
-                ProviderResponse response = action.apply(user, pipelinedMessage);
-
-                CompletableFuture.completedFuture(response)
-                        .thenAccept(this::queueResponse);
+                apply(action, user, pipelinedMessage);
             }
         }
     }
@@ -71,5 +57,16 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
         MessageParser parser = new MessageParser(messaging.getMessage());
 
         return parser.getParsedMessage();
+    }
+
+    private void apply(Action action, User user, PipelinedMessage pipelinedMessage) throws
+            CannotDispatchException {
+        if (action == null)
+            throw new CannotDispatchException("invalid action");
+
+        ProviderResponse response = action.apply(user, pipelinedMessage);
+
+        CompletableFuture.completedFuture(response)
+                .thenAccept(this::queueResponse);
     }
 }

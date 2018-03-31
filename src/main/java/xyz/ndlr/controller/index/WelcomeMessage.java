@@ -6,7 +6,7 @@ public class WelcomeMessage {
     private long timestamp;
     private String message;
 
-    public WelcomeMessage(String message) {
+    WelcomeMessage(String message) {
         this.timestamp = new Date().getTime();
         this.message = message;
     }

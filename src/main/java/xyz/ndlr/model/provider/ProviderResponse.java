@@ -15,6 +15,10 @@ public class ProviderResponse {
         this.message = message;
     }
 
+    public static ProviderResponse notImplemented(User user) {
+        return new ProviderResponse(user, "Hello!");
+    }
+
     public User getUser() {
         return user;
     }

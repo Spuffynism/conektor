@@ -6,8 +6,6 @@ import org.springframework.util.concurrent.ListenableFutureAdapter;
 import xyz.ndlr.model.provider.imgur.receive.Image;
 import xyz.ndlr.model.provider.imgur.receive.UploadResponse;
 
-import java.util.concurrent.ExecutionException;
-
 public class ImageAdapter extends ListenableFutureAdapter<Image,
         ResponseEntity<UploadResponse>> {
     ImageAdapter(ListenableFuture<ResponseEntity<UploadResponse>> adaptee) {
@@ -15,8 +13,7 @@ public class ImageAdapter extends ListenableFutureAdapter<Image,
     }
 
     @Override
-    protected Image adapt(ResponseEntity<UploadResponse> uploadResponseResponseEntity)
-            throws ExecutionException {
+    protected Image adapt(ResponseEntity<UploadResponse> uploadResponseResponseEntity) {
         Image image = null;
 
         if (uploadResponseResponseEntity.hasBody())

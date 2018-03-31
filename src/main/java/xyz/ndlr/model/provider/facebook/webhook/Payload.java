@@ -2,7 +2,6 @@ package xyz.ndlr.model.provider.facebook.webhook;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,11 +21,6 @@ public class Payload {
     private List<Entry> entries;
 
     public Payload() {
-    }
-
-    public Payload(String object, Entry entry) {
-        this.object = object;
-        this.entries = Collections.singletonList(entry);
     }
 
     public String tryGetSenderId() {

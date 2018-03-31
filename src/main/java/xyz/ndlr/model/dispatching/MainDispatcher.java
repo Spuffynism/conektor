@@ -24,6 +24,7 @@ public class MainDispatcher implements IMessagingDispatcher {
             throw new CannotDispatchException("user cannot be null - a message needs a " +
                     "destination");
 
+        // TODO Check if is quick reply
         if (messaging.getMessage().containsMedia()) {
             mediaDispatcher.dispatchAndQueue(user, messaging);
         } else {

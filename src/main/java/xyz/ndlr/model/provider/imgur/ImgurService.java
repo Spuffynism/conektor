@@ -26,9 +26,33 @@ public class ImgurService {
         this.imgurRepository = imgurRepository;
     }
 
-    //@ActionMapping("upload")
-    CompletableFuture<ProviderResponse> upload(User user, Message message) {
-        // get urls that'll be uploaded to Imgur
+    /**
+     * Usage:
+     * `$ imgur upload http://example.com/image.png`
+     *
+     * @param user
+     * @param pipelinedMessage
+     * @return
+     */
+    @ActionMapping("upload")
+    public ProviderResponse upload(User user, PipelinedMessage pipelinedMessage) {
+        return ProviderResponse.notImplemented(user);
+    }
+
+    @ActionMapping({"remove", "delete"})
+    public ProviderResponse delete(User user, PipelinedMessage pipelinedMessage) {
+        return ProviderResponse.notImplemented(user);
+    }
+
+    /**
+     * Usage: send a picture to the facebook bot
+     *
+     * @param user
+     * @param message
+     * @return
+     */
+    public CompletableFuture<ProviderResponse> upload(User user, Message message) {
+        // get urls of images that will be uploaded to Imgur
         List<String> urls = message.getAttachmentURLs(AttachmentType.IMAGE);
 
         // collect upload futures
@@ -48,9 +72,10 @@ public class ImgurService {
      * @return a ProviderResponse future - for consumation by ImgurDispatcher
      */
     private CompletableFuture<ProviderResponse> convertToProviderResponseFuture(User user,
-            List<CompletableFuture<Image>> futures) {
+                                                                                List<CompletableFuture<Image>> futures) {
         CompletableFuture<List<Image>> allFutures = sequence(futures);
 
+        // we get the uploaded images' links and join them as one string
         return allFutures.thenApply(images -> {
             String links = images.stream()
                     .map(Image::getLink)
@@ -63,16 +88,10 @@ public class ImgurService {
     private static <T> CompletableFuture<List<T>> sequence(List<CompletableFuture<T>> futures) {
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(futures.toArray(
                 new CompletableFuture[futures.size()]));
-        //TODO Run tests to see if what's the difference between thenApply & thenApplyAsync
         return allFutures.thenApply(v ->
                 futures.stream()
                         .map(CompletableFuture::join)
                         .collect(Collectors.toList())
         );
-    }
-
-    @ActionMapping({"remove", "delete"})
-    public ProviderResponse delete(User user, PipelinedMessage pipelinedMessage) {
-        return new ProviderResponse(user, "not implemented");
     }
 }

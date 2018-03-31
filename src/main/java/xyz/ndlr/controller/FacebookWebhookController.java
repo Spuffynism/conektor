@@ -63,7 +63,7 @@ public class FacebookWebhookController {
      * @param requestParams the params. facebook sends to use to authentify
      * @return a confirmation response
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity<String> subscribe(@RequestParam Map<String, String> requestParams) {
         FacebookVerificationToken token = new FacebookVerificationToken(requestParams);
 
@@ -81,7 +81,7 @@ public class FacebookWebhookController {
      *
      * @param payload the message payload sent by facebook
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<String> receiveMessage(@RequestBody Payload payload) {
         try {
             processPayload(payload);

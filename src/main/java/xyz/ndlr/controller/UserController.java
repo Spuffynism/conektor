@@ -3,7 +3,6 @@ package xyz.ndlr.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -13,21 +12,19 @@ import xyz.ndlr.service.UserService;
 
 import java.util.List;
 
-
 @RestController
-@RequestMapping(value="/users", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-public class UserController {
+@RequestMapping("/users")
+public class UserController extends DefaultController {
 
     private final UserService userService;
-    private final AuthHolder authHolder;
 
     @Autowired
-    public UserController(UserService userService, AuthHolder authHolder) {
+    public UserController(AuthHolder authHolder, UserService userService) {
+        super(authHolder);
         this.userService = userService;
-        this.authHolder = authHolder;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         if (!authHolder.getUser().isAdmin())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -39,8 +36,8 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+    @GetMapping(Route.ID)
+    public ResponseEntity<User> getUser(@PathVariable(Route.Attribute.ID) int id) {
         if (!authHolder.isMe(id) && !authHolder.getUser().isAdmin())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
@@ -51,12 +48,12 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/me", method = RequestMethod.GET)
+    @GetMapping(Route.ME)
     public ResponseEntity<User> getMe() {
         return new ResponseEntity<>(authHolder.getUser(), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<Exception> createUser(@RequestBody User user,
                                                 UriComponentsBuilder ucBuilder) {
         try {
@@ -71,13 +68,13 @@ public class UserController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<User> updateUser(@PathVariable("id") int id) {
+    @PutMapping(Route.ID)
+    public ResponseEntity<User> updateUser(@PathVariable(Route.Attribute.ID) int id) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<User> deleteUser(@PathVariable("id") int id) {
+    @DeleteMapping(Route.ID)
+    public ResponseEntity<User> deleteUser(@PathVariable(Route.Attribute.ID) int id) {
         if (!authHolder.getUser().isAdmin())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 

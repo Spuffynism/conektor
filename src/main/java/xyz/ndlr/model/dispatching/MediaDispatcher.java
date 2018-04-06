@@ -26,6 +26,7 @@ public class MediaDispatcher extends AbstractSubDispatcher implements IMessaging
     public void dispatchAndQueue(User user, Messaging messaging) {
         Message message = messaging.getMessage();
         if (message.contains(AttachmentType.IMAGE)) {
+
             imgurService.upload(user, message)
                     .thenAccept(this::queueResponse);
         }

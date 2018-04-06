@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AbstractButton {
     // required
     @JsonProperty("type")
-    private ButtonType buttonType;
+    private ButtonType type;
 
-    public AbstractButton(ButtonType buttonType) {
-        this.buttonType = buttonType;
+    AbstractButton(ButtonType type) {
+        this.type = type;
     }
 
-    public ButtonType getButtonType() {
-        return buttonType;
+    public ButtonType getType() {
+        return type;
     }
 
-    public void setButtonType(ButtonType buttonType) {
-        this.buttonType = buttonType;
+    public void setType(ButtonType type) {
+        this.type = type;
     }
 }

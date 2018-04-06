@@ -1,7 +1,6 @@
 package xyz.ndlr.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -10,12 +9,10 @@ import javax.persistence.*;
 @Table(name = "account_acc")
 public class Account {
     private int id;
-    @JsonProperty("details")
-    private String details;
     private String token;
     @JsonProperty("user_id")
     private int userId;
-    @JsonIgnoreProperties("accounts")
+    @JsonIgnore
     private User user;
     @JsonProperty("provider_id")
     private int providerId;
@@ -25,7 +22,6 @@ public class Account {
     public Account() {
     }
 
-    //<editor-fold> Default getters and setters
     @Id
     @Column(name = "acc_id")
     public int getId() {
@@ -34,16 +30,6 @@ public class Account {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Basic
-    @Column(name = "acc_details")
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String jsonDetails) {
-        this.details = jsonDetails;
     }
 
     @Basic
@@ -66,7 +52,7 @@ public class Account {
         this.userId = userId;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "acc_user_id", insertable = false, updatable = false)
     public User getUser() {
         return user;
@@ -86,7 +72,7 @@ public class Account {
         this.providerId = providerId;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "acc_provider_id", insertable = false, updatable = false)
     public Provider getProvider() {
         return provider;
@@ -95,6 +81,4 @@ public class Account {
     public void setProvider(Provider provider) {
         this.provider = provider;
     }
-
-    //</editor-fold>
 }

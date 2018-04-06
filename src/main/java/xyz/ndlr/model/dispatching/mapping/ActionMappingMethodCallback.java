@@ -1,6 +1,7 @@
 package xyz.ndlr.model.dispatching.mapping;
 
 import org.apache.log4j.Logger;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 import xyz.ndlr.model.provider.ProviderResponse;
 
@@ -26,7 +27,7 @@ public class ActionMappingMethodCallback implements ReflectionUtils.MethodCallba
         String provider = providerMapping.value();
 
         // action mapping
-        ActionMapping actionMapping = method.getAnnotation(ActionMapping.class);
+        ActionMapping actionMapping = AnnotationUtils.findAnnotation(method, ActionMapping.class);
         String[] actions = actionMapping.value();
 
         // register actions

@@ -50,7 +50,7 @@ public class ErrorDispatcher extends AbstractSubDispatcher implements IMessaging
     }
 
     private void dispatchExceptionMessage(String senderId, Exception exception) {
-        User user = facebookService.getUserByIdentifier(senderId);
+        User user = facebookService.getUserByPSID(senderId);
 
         if (isAllowedException(exception)) {
             dispatchAndQueue(user, exception.getMessage());

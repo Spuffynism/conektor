@@ -1,6 +1,7 @@
 package xyz.ndlr.model.dispatching.mapping;
 
 import org.apache.log4j.Logger;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.ProviderResponse;
@@ -18,7 +19,7 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
 
     @Override
     public boolean matches(Method method) {
-        return method.isAnnotationPresent(ActionMapping.class)
+        return AnnotationUtils.findAnnotation(method, ActionMapping.class) != null
                 && classIsValid(method)
                 && methodSignatureIsValid(method);
     }
@@ -42,20 +43,6 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
         return hasAppropriateParameterCount(method)
                 && hasAppropriateParameters(method)
                 && hasAppropriateReturnType(method);
-    }
-
-    private boolean hasAppropriateReturnType(Method method) {
-        boolean hasAppropriateReturnType = RETURN_TYPE.isAssignableFrom(method.getReturnType());
-        if (!hasAppropriateReturnType) {
-            String errorMessage = String.format("A method with @%s must have a %s " +
-                            "return type. %s",
-                    ActionMapping.class.getSimpleName(),
-                    RETURN_TYPE.getName(),
-                    doesNotMessage(method));
-            logger.error(errorMessage);
-        }
-
-        return hasAppropriateReturnType;
     }
 
     private boolean hasAppropriateParameterCount(Method method) {
@@ -100,6 +87,20 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
         }
 
         return hasAppropriateFirstParameter && hasAppropriateSecondParameter;
+    }
+
+    private boolean hasAppropriateReturnType(Method method) {
+        boolean hasAppropriateReturnType = RETURN_TYPE.isAssignableFrom(method.getReturnType());
+        if (!hasAppropriateReturnType) {
+            String errorMessage = String.format("A method with @%s must have a %s " +
+                            "return type. %s",
+                    ActionMapping.class.getSimpleName(),
+                    RETURN_TYPE.getName(),
+                    doesNotMessage(method));
+            logger.error(errorMessage);
+        }
+
+        return hasAppropriateReturnType;
     }
 
     private String doesNotMessage(Method method) {

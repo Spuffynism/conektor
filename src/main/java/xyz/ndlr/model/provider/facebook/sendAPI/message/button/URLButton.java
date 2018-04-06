@@ -23,6 +23,6 @@ public class URLButton extends AbstractButton {
     private String webviewShareButton;
 
     public URLButton() {
-        super(ButtonType.WEB_URL);
+        super(ButtonType.URL);
     }
 }

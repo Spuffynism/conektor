@@ -12,6 +12,8 @@ public enum TemplateType {
     GENERIC,
     @JsonProperty("list")
     LIST,
+    @JsonProperty("media")
+    MEDIA,
     @JsonProperty("open_graph")
     OPEN_GRAPH,
     @JsonProperty("receipt")

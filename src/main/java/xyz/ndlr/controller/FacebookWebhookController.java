@@ -134,7 +134,7 @@ public class FacebookWebhookController {
      */
     private void dispatch(String senderId, Messaging messaging)
             throws CannotDispatchException {
-        User user = facebookService.getUserByIdentifier(senderId);
+        User user = facebookService.getUserByPSID(senderId);
         mainDispatcher.dispatchAndQueue(user, messaging);
     }
 }

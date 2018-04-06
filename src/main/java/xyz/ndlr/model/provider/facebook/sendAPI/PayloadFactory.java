@@ -1,10 +1,8 @@
 package xyz.ndlr.model.provider.facebook.sendAPI;
 
 import org.springframework.stereotype.Component;
-import xyz.ndlr.exception.UserNotFoundException;
 import xyz.ndlr.model.dispatching.SupportedProvider;
 import xyz.ndlr.model.entity.Account;
-import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.Message;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.TextMessage;
@@ -23,6 +21,6 @@ public class PayloadFactory {
     public SendablePayload getPayload(ProviderResponse response, SupportedProvider supportedProvider) {
         Account userProviderAccount = response.getUser().getAccount(supportedProvider);
 
-        return getPayload(userProviderAccount.getDetails(), response.getMessage());
+        return getPayload(userProviderAccount.getToken(), response.getMessage());
     }
 }

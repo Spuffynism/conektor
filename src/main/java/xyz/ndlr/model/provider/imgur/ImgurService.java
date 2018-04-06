@@ -5,6 +5,7 @@ import xyz.ndlr.model.ListenableFutureAdapter;
 import xyz.ndlr.model.dispatching.mapping.ActionMapping;
 import xyz.ndlr.model.dispatching.mapping.ProviderMapping;
 import xyz.ndlr.model.entity.User;
+import xyz.ndlr.model.provider.ImageService;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.PipelinedMessage;
 import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
@@ -18,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @ProviderMapping("imgur")
-public class ImgurService {
+public class ImgurService implements ImageService {
     private final ImgurRepository imgurRepository;
 
     @Autowired
@@ -34,12 +35,12 @@ public class ImgurService {
      * @param pipelinedMessage
      * @return
      */
-    @ActionMapping("upload")
+    @Override
     public ProviderResponse upload(User user, PipelinedMessage pipelinedMessage) {
         return ProviderResponse.notImplemented(user);
     }
 
-    @ActionMapping({"remove", "delete"})
+    @ActionMapping({"d", "-d", "delete", "--delete"})
     public ProviderResponse delete(User user, PipelinedMessage pipelinedMessage) {
         return ProviderResponse.notImplemented(user);
     }

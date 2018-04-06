@@ -5,11 +5,8 @@ import xyz.ndlr.model.parsing.ParsedMessage;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 
 /**
- * Message contents that are send down the dispatching pipeline to end up in individual providers'
- * hands
+ * Dispatched down the pipeline to providers
  */
-// TODO Rename to: MetadataPacket, DataPacket, PacketMessage, SelfContainedPacketMessage,
-// TransferPacket, TransferMessage, Transfer?
 public class PipelinedMessage implements IMessage {
     private Messaging originalMessaging;
     private ParsedMessage parsedMessage;

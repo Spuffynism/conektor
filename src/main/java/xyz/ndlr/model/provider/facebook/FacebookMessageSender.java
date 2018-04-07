@@ -1,5 +1,6 @@
 package xyz.ndlr.model.provider.facebook;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
@@ -82,5 +83,28 @@ public class FacebookMessageSender {
     private void logFailure(Throwable throwable) {
         logger.error("Everything has gone wrong (even telling the user an " +
                 "error occured)!", throwable);
+    }
+
+    /**
+     * TODO: Implement enum for error code + error handling with appropriate messages
+     * @see
+     * <a href="https://developers.facebook.com/docs/messenger-platform/reference/send-api/error-codes"/>
+     */
+    private class ErrorResponse {
+        @JsonProperty("error")
+        private Error error;
+
+        private class Error {
+            @JsonProperty("message")
+            String message;
+            @JsonProperty("type")
+            String type;
+            @JsonProperty("code")
+            int code;
+            @JsonProperty("error_subcode")
+            int subCode;
+            @JsonProperty("fbtrace_id")
+            String facebookTraceID;
+        }
     }
 }

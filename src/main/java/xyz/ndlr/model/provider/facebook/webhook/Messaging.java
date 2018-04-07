@@ -1,7 +1,6 @@
 package xyz.ndlr.model.provider.facebook.webhook;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import xyz.ndlr.model.dispatching.IMessage;
 
 /**
  * This object is defined as a complete payload from
@@ -9,7 +8,7 @@ import xyz.ndlr.model.dispatching.IMessage;
  * <p>
  * TODO Create ReceivedMessaging & PostbackMessaging AND make abstract
  */
-public class Messaging implements IMessage {
+public class Messaging {
     @JsonProperty("sender")
     private Sender sender;
     @JsonProperty("recipient")

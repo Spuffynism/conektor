@@ -11,21 +11,27 @@ public class MainDispatcher implements IMessagingDispatcher {
 
     private final MediaDispatcher mediaDispatcher;
     private final TextDispatcher textDispatcher;
+    private final QuickReplyDispatcher quickReplyDispatcher;
 
     @Autowired
-    public MainDispatcher(MediaDispatcher mediaDispatcher, TextDispatcher textDispatcher) {
+    public MainDispatcher(MediaDispatcher mediaDispatcher,
+                          TextDispatcher textDispatcher,
+                          QuickReplyDispatcher quickReplyDispatcher) {
         this.mediaDispatcher = mediaDispatcher;
         this.textDispatcher = textDispatcher;
+        this.quickReplyDispatcher = quickReplyDispatcher;
     }
 
     @Override
     public void dispatchAndQueue(User user, Messaging messaging) throws CannotDispatchException {
-        if (user == null)
+        if (user == null) {
             throw new CannotDispatchException("user cannot be null - a message needs a " +
                     "destination");
+        }
 
-        // TODO Check if is quick reply
-        if (messaging.getMessage().containsMedia()) {
+        if (messaging.getMessage().isQuickReply()) {
+            quickReplyDispatcher.dispatchAndQueue(user, messaging);
+        } else if (messaging.getMessage().containsMedia()) {
             mediaDispatcher.dispatchAndQueue(user, messaging);
         } else {
             textDispatcher.dispatchAndQueue(user, messaging);

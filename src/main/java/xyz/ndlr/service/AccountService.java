@@ -16,13 +16,13 @@ public class AccountService extends AbstractService<Account> {
         super(Account.class);
     }
 
-    public Account getByDetails(String details, int providerId) {
+    public Account getByToken(String token, int providerId) {
         return new QueryExecutor<>(session -> {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
             Root<Account> root = criteria.from(Account.class);
             criteria.select(root);
-            criteria.where(builder.equal(root.get("details"), details));
+            criteria.where(builder.equal(root.get("token"), token));
             criteria.where(builder.equal(root.get("providerId"), providerId));
 
             return session.createQuery(criteria).uniqueResult();
@@ -47,7 +47,7 @@ public class AccountService extends AbstractService<Account> {
         }).execute();
     }
 
-    public boolean existsByDetails(String details, int providerId) {
-        return new QueryExecutor<>(session -> getByDetails(details, providerId) != null).execute();
+    public boolean existsByToken(String token, int providerId) {
+        return new QueryExecutor<>(session -> getByToken(token, providerId) != null).execute();
     }
 }

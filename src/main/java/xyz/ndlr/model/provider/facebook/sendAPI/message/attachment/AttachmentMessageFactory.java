@@ -1,7 +1,5 @@
-package xyz.ndlr.model.provider.facebook.sendAPI.message;
+package xyz.ndlr.model.provider.facebook.sendAPI.message.attachment;
 
-import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.AbstractPayload;
-import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.MultimediaPayload;
 import xyz.ndlr.model.provider.facebook.shared.Attachment;
 import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
 

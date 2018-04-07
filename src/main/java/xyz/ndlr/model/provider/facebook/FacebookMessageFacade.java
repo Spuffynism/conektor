@@ -23,32 +23,30 @@ public class FacebookMessageFacade {
         return entry.getMessaging();
     }
 
-    public static class Builder {
-        public static List<FacebookMessageFacade> fromPayload(Payload payload) throws
-                IllegalArgumentException {
-            List<FacebookMessageFacade> messageFacades = withIndividualEntries(payload);
+    public static List<FacebookMessageFacade> fromPayload(Payload payload) throws
+            IllegalArgumentException {
+        List<FacebookMessageFacade> messageFacades = withIndividualEntries(payload);
 
-            for (FacebookMessageFacade messageFacade : messageFacades) {
-                if (messageFacade.getSender() == null || messageFacade.getSender().getId() == null)
-                    throw new IllegalArgumentException("no sender");
+        for (FacebookMessageFacade messageFacade : messageFacades) {
+            if (messageFacade.getSender() == null || messageFacade.getSender().getId() == null)
+                throw new IllegalArgumentException("no sender");
 
-                if (messageFacade.getMessaging() == null)
-                    throw new IllegalArgumentException("no message");
-            }
-
-            return messageFacades;
+            if (messageFacade.getMessaging() == null)
+                throw new IllegalArgumentException("no message");
         }
 
-        /**
-         * Builds FacebookMessageFacades which contain a singular entry each.
-         *
-         * @param payload the facebook entry which contains a list of entries
-         * @return message facades with one entry each
-         */
-        private static List<FacebookMessageFacade> withIndividualEntries(Payload payload) {
-            return payload.getEntries().stream()
-                    .map(FacebookMessageFacade::new)
-                    .collect(Collectors.toList());
-        }
+        return messageFacades;
+    }
+
+    /**
+     * Builds FacebookMessageFacades which each contain a singular entry.
+     *
+     * @param payload the facebook entry which contains a list of entries
+     * @return message facades with one entry each
+     */
+    private static List<FacebookMessageFacade> withIndividualEntries(Payload payload) {
+        return payload.getEntries().stream()
+                .map(FacebookMessageFacade::new)
+                .collect(Collectors.toList());
     }
 }

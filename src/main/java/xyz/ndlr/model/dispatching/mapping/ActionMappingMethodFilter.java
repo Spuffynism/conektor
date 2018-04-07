@@ -8,6 +8,7 @@ import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.PipelinedMessage;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
     private static final Logger logger = Logger.getLogger(ActionMappingMethodFilter.class);
@@ -19,7 +20,8 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
 
     @Override
     public boolean matches(Method method) {
-        return AnnotationUtils.findAnnotation(method, ActionMapping.class) != null
+        boolean isMapping = AnnotationUtils.findAnnotation(method, ActionMapping.class) != null;
+        return isMapping
                 && classIsValid(method)
                 && methodSignatureIsValid(method);
     }
@@ -36,7 +38,12 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
             logger.error(errorMessage);
         }
 
-        return hasAppropriateAnnotation;
+        return hasAppropriateAnnotation &&
+                isNotInterfaceNorAbstractClass(method.getDeclaringClass());
+    }
+
+    private boolean isNotInterfaceNorAbstractClass(Class<?> clazz) {
+        return !clazz.isInterface() && !Modifier.isAbstract(clazz.getModifiers());
     }
 
     private boolean methodSignatureIsValid(Method method) throws IllegalArgumentException {

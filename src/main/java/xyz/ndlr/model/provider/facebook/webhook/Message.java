@@ -42,6 +42,10 @@ public class Message {
 
     }
 
+    public boolean isQuickReply() {
+        return quickReply != null;
+    }
+
     public String getMid() {
         return mid;
     }

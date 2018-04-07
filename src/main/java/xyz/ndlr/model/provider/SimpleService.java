@@ -11,7 +11,7 @@ import java.util.function.BiFunction;
  */
 public interface SimpleService extends BiFunction<User, PipelinedMessage, ProviderResponse> {
 
-    @ActionMapping.Default
+    @ActionMapping(ActionMapping.DEFAULT_ACTION)
     @Override
     ProviderResponse apply(User user, PipelinedMessage pipelinedMessage);
 }

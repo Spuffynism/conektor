@@ -2,30 +2,39 @@ package xyz.ndlr.model.provider.facebook.sendAPI;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import xyz.ndlr.model.provider.facebook.sendAPI.message.Message;
 import xyz.ndlr.model.provider.facebook.sendAPI.recipient.Recipient;
 
 /**
- * TODO: Make MessagePayload and SenderActionPayload
+ * Payload that is sent to the facebook Send API.
+ *
+ * @see <a href="https://developers.facebook.com/docs/messenger-platform/reference/send-api/"/>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SendablePayload {
-    // Required
+public abstract class SendablePayload {
+    /**
+     * This messaging type might change in the future. But for now, the bot only produces
+     * messagings of the DEFAULT type.
+     */
+    @JsonProperty("messaging_type")
+    private MessagingType messagingType = MessagingType.DEFAULT;
+    /**
+     * Recipient of the payload (usually the user that sent the message to the facebook bot).
+     */
     @JsonProperty("recipient")
     private Recipient recipient;
-    // message OR senderAction
-    @JsonProperty("message")
-    private Message message;
-    // message OR senderAction
-    @JsonProperty("sender_action")
-    private SenderAction senderAction;
-    // Optional
     @JsonProperty("notification_type")
-    private NotificationType notificationType;
+    private NotificationType notificationType = NotificationType.DEFAULT;
 
-    public SendablePayload(Recipient recipient, Message message) {
+    public SendablePayload(Recipient recipient) {
         this.recipient = recipient;
-        this.message = message;
+    }
+
+    public MessagingType getMessagingType() {
+        return messagingType;
+    }
+
+    public void setMessagingType(MessagingType messagingType) {
+        this.messagingType = messagingType;
     }
 
     public Recipient getRecipient() {
@@ -34,22 +43,6 @@ public class SendablePayload {
 
     public void setRecipient(Recipient recipient) {
         this.recipient = recipient;
-    }
-
-    public Message getMessage() {
-        return message;
-    }
-
-    public void setMessage(Message message) {
-        this.message = message;
-    }
-
-    public SenderAction getSenderAction() {
-        return senderAction;
-    }
-
-    public void setSenderAction(SenderAction senderAction) {
-        this.senderAction = senderAction;
     }
 
     public NotificationType getNotificationType() {

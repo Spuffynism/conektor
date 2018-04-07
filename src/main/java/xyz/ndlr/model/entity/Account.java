@@ -72,7 +72,7 @@ public class Account {
         this.providerId = providerId;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "acc_provider_id", insertable = false, updatable = false)
     public Provider getProvider() {
         return provider;

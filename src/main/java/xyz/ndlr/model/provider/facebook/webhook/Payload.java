@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * Primary payload send by Facebook when a user sends a message
+ * Primary payload sent by Facebook when a user sends a message
  */
 public class Payload {
     private static final String PAGE_OBJECT = "page";

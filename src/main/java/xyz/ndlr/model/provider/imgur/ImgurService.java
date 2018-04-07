@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-@ProviderMapping("imgur")
-public class ImgurService implements ImageService {
+@ProviderMapping(value = "imgur", humanName = "Imgur")
+public class ImgurService extends ImageService {
     private final ImgurRepository imgurRepository;
 
     @Autowired
@@ -36,7 +36,7 @@ public class ImgurService implements ImageService {
      * @return
      */
     @Override
-    public ProviderResponse upload(User user, PipelinedMessage pipelinedMessage) {
+    public ProviderResponse process(User user, PipelinedMessage pipelinedMessage) {
         return ProviderResponse.notImplemented(user);
     }
 
@@ -56,7 +56,7 @@ public class ImgurService implements ImageService {
         // get urls of images that will be uploaded to Imgur
         List<String> urls = message.getAttachmentURLs(AttachmentType.IMAGE);
 
-        // collect upload futures
+        // collect process futures
         List<CompletableFuture<Image>> responses = urls.stream()
                 .map(UploadPayload::new)
                 .map(imgurRepository::upload)

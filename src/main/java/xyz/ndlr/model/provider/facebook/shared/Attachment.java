@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.AbstractPayload;
 
 /**
- * TODO Make it possible to upload files to Facebook
+ * TODO Make it possible to process files to Facebook
  * https://developers.facebook.com/docs/messenger-platform/send-api-reference/image-attachment
  */
 public class Attachment {

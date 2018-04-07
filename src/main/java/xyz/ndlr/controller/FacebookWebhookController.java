@@ -107,8 +107,7 @@ public class FacebookWebhookController {
         if (payload == null || !payload.isPage())
             throw new IllegalArgumentException("unsupported payload");
 
-        List<FacebookMessageFacade> messageFacades =
-                FacebookMessageFacade.Builder.fromPayload(payload);
+        List<FacebookMessageFacade> messageFacades = FacebookMessageFacade.fromPayload(payload);
 
         for (FacebookMessageFacade messageFacade : messageFacades)
             dispatchMessageFacade(messageFacade);

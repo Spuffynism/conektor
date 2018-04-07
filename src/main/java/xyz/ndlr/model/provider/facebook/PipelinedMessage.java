@@ -1,13 +1,12 @@
 package xyz.ndlr.model.provider.facebook;
 
-import xyz.ndlr.model.dispatching.IMessage;
 import xyz.ndlr.model.parsing.ParsedMessage;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 
 /**
  * Dispatched down the pipeline to providers
  */
-public class PipelinedMessage implements IMessage {
+public class PipelinedMessage {
     private Messaging originalMessaging;
     private ParsedMessage parsedMessage;
 

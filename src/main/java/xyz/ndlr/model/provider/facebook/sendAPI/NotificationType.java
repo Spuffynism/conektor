@@ -18,4 +18,6 @@ public enum NotificationType {
      */
     @JsonProperty("NO_PUSH")
     NO_PUSH;
+
+    public static final NotificationType DEFAULT = REGULAR;
 }

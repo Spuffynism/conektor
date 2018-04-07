@@ -21,37 +21,47 @@ public class ActionMappingMethodCallback implements ReflectionUtils.MethodCallba
 
     @Override
     public void doWith(Method method) throws IllegalArgumentException {
-        // provider mapping
         Class<?> methodDeclaringClass = method.getDeclaringClass();
         ProviderMapping providerMapping = methodDeclaringClass.getAnnotation(ProviderMapping.class);
         String provider = providerMapping.value();
 
-        // action mapping
         ActionMapping actionMapping = AnnotationUtils.findAnnotation(method, ActionMapping.class);
         String[] actions = actionMapping.value();
 
-        // register actions
         for (String action : actions) {
-            actionRepository.register(provider, action, (user, pipelinedMessage) -> {
-                try {
-                    return (ProviderResponse) method.invoke(bean, user, pipelinedMessage);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    // Because there is no use in printing the InvocationTargetException's stack
-                    // trace, we print the cause's stack trace.
-                    e.getCause().printStackTrace();
-                }
-                return null;
-            });
+            registerAction(method, provider, action);
+            registerHumanName(providerMapping);
         }
 
         logMappingMessage(methodDeclaringClass.getSimpleName(), provider, method.getName(),
                 actions);
     }
 
+    private void registerAction(Method method, String provider, String action) {
+        actionRepository.register(provider, action, (user, pipelinedMessage) -> {
+            try {
+                return (ProviderResponse) method.invoke(bean, user, pipelinedMessage);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                // Because there is no use in printing the InvocationTargetException's stack
+                // trace, we print the cause's stack trace.
+                e.getCause().printStackTrace();
+            }
+            return null;
+        });
+    }
+
+    private void registerHumanName(ProviderMapping providerMapping) {
+        String humanName = providerMapping.humanName();
+        boolean useFallbackname = "".equals(humanName);
+
+        actionRepository.registerHumanName(providerMapping.value(),
+                useFallbackname ? providerMapping.value() : humanName);
+    }
+
     private void logMappingMessage(String methodDeclaringClass, String provider, String methodName,
                                    String[] actions) {
-        String mappingMessage = "";
-        boolean isDefaultAction = actions[0].equals("");
+        String mappingMessage;
+        boolean isDefaultAction = actions[0].equals(ActionMapping.DEFAULT_ACTION);
         if (isDefaultAction) {
             mappingMessage = String.format("Mapped provider '%s' (with mapping [%s]) default " +
                     "action.", methodDeclaringClass, provider);

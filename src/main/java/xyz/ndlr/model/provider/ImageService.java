@@ -7,7 +7,7 @@ import xyz.ndlr.model.provider.facebook.PipelinedMessage;
 /**
  * Image uploading services
  */
-public interface ImageService {
+public abstract class ImageService {
 
     /**
      * Usage:
@@ -18,5 +18,5 @@ public interface ImageService {
      * @return
      */
     @ActionMapping({"u", "-u", "upload", "--upload"})
-    public ProviderResponse upload(User user, PipelinedMessage pipelinedMessage);
+    public abstract ProviderResponse process(User user, PipelinedMessage pipelinedMessage);
 }

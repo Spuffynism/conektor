@@ -4,19 +4,28 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Holds all provider actions.
  */
 @Component
 public class ActionRepository {
-    private static final String DEFAULT_ACTION_KEY = "";
     /**
-     * All available provider actions
+     * All available provider actions.
+     * Is populated during the application bootstrapping process.
      */
     private final Table<String, String, Action> actions;
 
+    /**
+     *
+     */
+    private final Map<String, String> providerHumanNames;
+
     public ActionRepository() {
         actions = HashBasedTable.create();
+        providerHumanNames = new HashMap<>();
     }
 
     /**
@@ -35,6 +44,18 @@ public class ActionRepository {
     }
 
     public Action getDefault(String provider) {
-        return actions.get(provider, DEFAULT_ACTION_KEY);
+        return actions.get(provider, ActionMapping.DEFAULT_ACTION);
+    }
+
+    public void registerHumanName(String provider, String providerHumanName) {
+        providerHumanNames.put(provider, providerHumanName);
+    }
+
+    public String getProviderHumanName(String provider) {
+        return providerHumanNames.get(provider);
+    }
+
+    public Map<String, String> getProviderHumanNames() {
+        return providerHumanNames;
     }
 }

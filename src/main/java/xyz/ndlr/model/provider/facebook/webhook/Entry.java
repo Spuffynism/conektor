@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Entry {
     /**
-     * Page ID of page
+     * ID of page
      */
     @JsonProperty("id")
     private String pageId;

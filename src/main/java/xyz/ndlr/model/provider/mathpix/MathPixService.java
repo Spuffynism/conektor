@@ -5,12 +5,19 @@ import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.ImageService;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.PipelinedMessage;
+import xyz.ndlr.model.provider.mathpix.request.Request;
 
 /**
  * @see <a href="mathpix">https://docs.mathpix.com/</a>
  */
-@ProviderMapping("mathpix")
-public class MathPixService implements ImageService {
+@ProviderMapping(value = "mathpix", humanName = "MathPix")
+public class MathPixService extends ImageService {
+
+    private final MathPix mathPix;
+
+    public MathPixService(MathPix mathPix) {
+        this.mathPix = mathPix;
+    }
 
     /**
      * Usage:
@@ -21,7 +28,13 @@ public class MathPixService implements ImageService {
      * @return
      */
     @Override
-    public ProviderResponse upload(User user, PipelinedMessage pipelinedMessage) {
-        return ProviderResponse.notImplemented(user);
+    public ProviderResponse process(User user, PipelinedMessage pipelinedMessage) {
+        String url = pipelinedMessage.getOriginalMessaging().getMessage()
+                .getAttachments().get(0).getURL();
+        Request request = new Request(url);
+
+        DetectionResult detectionResult = mathPix.process(request);
+
+        return new ProviderResponse(user, detectionResult.getLatex());
     }
 }

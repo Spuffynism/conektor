@@ -18,4 +18,9 @@ public @interface ProviderMapping {
 
     @AliasFor(annotation = Service.class)
     String value();
+
+    /**
+     * Used for quick-reply titles when the user is asked what we should do with an image they sent.
+     */
+    String humanName() default "";
 }

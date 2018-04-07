@@ -21,18 +21,27 @@ public class ImgurRepository {
     private static String accessToken;
     private AsyncRestTemplate asyncRestTemplate;
 
+    private static final MultiValueMap<String, String> headers;
+
+    static {
+        Map<String, String> map = new HashMap<>();
+        map.put("Content-Type", "application/json");
+        map.put("Authorization", "Bearer " + accessToken);
+
+        headers = new LinkedMultiValueMap<>();
+        headers.setAll(map);
+    }
+
     public ImgurRepository() {
         asyncRestTemplate = new AsyncRestTemplate();
     }
 
     @Value("${imgur.access_token}")
-    private void setAccessToken(String token) {
-        accessToken = token;
+    private void setAccessToken(String accessToken) {
+        ImgurRepository.accessToken = accessToken;
     }
 
     ListenableFuture<Image> upload(UploadPayload payload) {
-        MultiValueMap<String, String> headers = getAuthorizationHeaders(accessToken);
-
         HttpEntity<UploadPayload> uploadEntity = new HttpEntity<>(payload, headers);
 
         ListenableFuture<ResponseEntity<UploadResponse>> uploadResponse =
@@ -40,16 +49,5 @@ public class ImgurRepository {
                         UploadResponse.class);
 
         return new ImageAdapter(uploadResponse);
-    }
-
-    private static MultiValueMap<String, String> getAuthorizationHeaders(String bearerToken) {
-        Map<String, String> map = new HashMap<>();
-        map.put("Content-Type", "application/json");
-        map.put("Authorization", "Bearer " + bearerToken);
-
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.setAll(map);
-
-        return headers;
     }
 }

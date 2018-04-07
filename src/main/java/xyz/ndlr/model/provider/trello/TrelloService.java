@@ -6,6 +6,7 @@ import xyz.ndlr.model.dispatching.mapping.ProviderMapping;
 import xyz.ndlr.model.entity.User;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.PipelinedMessage;
+import xyz.ndlr.model.provider.facebook.sendAPI.message.TextMessage;
 
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class TrelloService {
 
     @ActionMapping("test")
     public ProviderResponse test(User user, PipelinedMessage pipelinedMessage) {
-        return new ProviderResponse(user, null);
+        return new ProviderResponse(user, new TextMessage(null));
     }
 
     @ActionMapping("add")

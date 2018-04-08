@@ -23,7 +23,7 @@ public class Message {
 
     public boolean containsMedia() {
         return attachments != null && attachments.stream()
-                .anyMatch(x -> AttachmentType.isMultimedia(x.getType()));
+                .anyMatch(x -> x.getType().isMultimedia());
     }
 
     public boolean contains(AttachmentType attachmentType) {

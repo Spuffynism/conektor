@@ -28,7 +28,7 @@ public class MathPixService extends ImageService {
      * @return
      */
     @Override
-    public ProviderResponse process(User user, PipelinedMessage pipelinedMessage) {
+    public ProviderResponse upload(User user, PipelinedMessage pipelinedMessage) {
         String url = pipelinedMessage.getOriginalMessaging().getMessage()
                 .getAttachments().get(0).getURL();
         Request request = new Request(url);

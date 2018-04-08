@@ -18,5 +18,5 @@ public abstract class ImageService {
      * @return
      */
     @ActionMapping({"u", "-u", "upload", "--upload"})
-    public abstract ProviderResponse process(User user, PipelinedMessage pipelinedMessage);
+    public abstract ProviderResponse upload(User user, PipelinedMessage pipelinedMessage);
 }

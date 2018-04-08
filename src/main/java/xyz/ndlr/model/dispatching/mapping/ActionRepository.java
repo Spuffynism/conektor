@@ -14,7 +14,7 @@ import java.util.Map;
 public class ActionRepository {
     /**
      * All available provider actions.
-     * Is populated during the application bootstrapping process.
+     * Is populated during the application bootstrapping step.
      */
     private final Table<String, String, Action> actions;
 

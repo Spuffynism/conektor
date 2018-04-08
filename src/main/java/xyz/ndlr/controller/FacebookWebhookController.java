@@ -129,7 +129,7 @@ public class FacebookWebhookController {
      *
      * @param senderId  the user which sent and which will receive the messages
      * @param messaging messaging sent by the user
-     * @throws CannotDispatchException when an error occurs during the message dispatching process
+     * @throws CannotDispatchException when an error occurs during the message dispatching upload
      */
     private void dispatch(String senderId, Messaging messaging)
             throws CannotDispatchException {

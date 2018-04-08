@@ -54,7 +54,7 @@ public class AttachmentDeserializer extends JsonDeserializer<Attachment> {
 
     private static Class<? extends AbstractPayload> tryGetPayloadClass(AttachmentType type) {
         Class<? extends AbstractPayload> payloadClass;
-        if (AttachmentType.isMultimedia(type)) {
+        if (type.isMultimedia()) {
             payloadClass = MultimediaPayload.class;
         } else if (type == AttachmentType.TEMPLATE) {
             payloadClass = TemplatePayload.class;

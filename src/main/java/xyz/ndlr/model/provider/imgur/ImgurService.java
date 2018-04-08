@@ -36,7 +36,7 @@ public class ImgurService extends ImageService {
      * @return
      */
     @Override
-    public ProviderResponse process(User user, PipelinedMessage pipelinedMessage) {
+    public ProviderResponse upload(User user, PipelinedMessage pipelinedMessage) {
         return ProviderResponse.notImplemented(user);
     }
 
@@ -56,7 +56,7 @@ public class ImgurService extends ImageService {
         // get urls of images that will be uploaded to Imgur
         List<String> urls = message.getAttachmentURLs(AttachmentType.IMAGE);
 
-        // collect process futures
+        // collect upload futures
         List<CompletableFuture<Image>> responses = urls.stream()
                 .map(UploadPayload::new)
                 .map(imgurRepository::upload)

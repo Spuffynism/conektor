@@ -21,10 +21,10 @@ public enum AttachmentType {
     @JsonProperty("video")
     VIDEO;
 
-    private static final List<AttachmentType> MULTIMEDIA_TYPES =
+    public static final List<AttachmentType> MULTIMEDIA_TYPES =
             Arrays.asList(AUDIO, FILE, IMAGE, VIDEO);
 
-    public static boolean isMultimedia(AttachmentType type) {
-        return MULTIMEDIA_TYPES.contains(type);
+    public boolean isMultimedia() {
+        return MULTIMEDIA_TYPES.contains(this);
     }
 }

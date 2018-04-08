@@ -17,6 +17,8 @@ public class Message {
     private String seq;
     @JsonProperty("attachments")
     private List<Attachment> attachments;
+    @JsonProperty("quick_reply")
+    private QuickReply quickReply;
 
     public Message() {
     }
@@ -74,5 +76,13 @@ public class Message {
 
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
+    }
+
+    public QuickReply getQuickReply() {
+        return quickReply;
+    }
+
+    public void setQuickReply(QuickReply quickReply) {
+        this.quickReply = quickReply;
     }
 }

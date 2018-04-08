@@ -4,18 +4,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.AbstractPayload;
 
 /**
- * TODO Make it possible to process files to Facebook
  * https://developers.facebook.com/docs/messenger-platform/send-api-reference/image-attachment
  */
 public class Attachment {
-    // required
     @JsonProperty("type")
     private AttachmentType type;
-    // null if AttachmentType is FALLBACK
+    /**
+     * null when link scraping has been done and {@link Attachment#type} is
+     * {@link AttachmentType#FALLBACK}.
+     */
     @JsonProperty("payload")
     private AbstractPayload payload;
+    /**
+     * Present when link scraping has been done and {@link Attachment#type} is
+     * {@link AttachmentType#FALLBACK}.
+     */
     @JsonProperty("title")
     private String title;
+    /**
+     * Present when link scraping has been done and {@link Attachment#type} is
+     * {@link AttachmentType#FALLBACK}.
+     */
     @JsonProperty("URL")
     private String URL;
 

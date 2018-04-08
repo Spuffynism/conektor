@@ -30,9 +30,7 @@ public class FacebookMessageSender {
 
     private static final String ACCESS_TOKEN = "access_token";
     private static String pageAccessToken;
-    //TODO Move this to config file
-    //private static final String requestURI = "https://graph.facebook.com/v2.9/me/messages";
-    private static final String requestURI = "http://localhost:3000";
+    private static String requestURI;
     private AsyncRestTemplate asyncRestTemplate;
 
     @Autowired
@@ -48,6 +46,11 @@ public class FacebookMessageSender {
     @Value("${facebook.page_access_token}")
     private void setPageAccessToken(String token) {
         pageAccessToken = token;
+    }
+
+    @Value("${facebook.message_sender_request_uri}")
+    private void setRequestURI(String requestURI) {
+        FacebookMessageSender.requestURI = requestURI;
     }
 
     public void send(SendablePayload payload) throws CannotSendMessageException {
@@ -87,6 +90,7 @@ public class FacebookMessageSender {
 
     /**
      * TODO: Implement enum for error code + error handling with appropriate messages
+     *
      * @see
      * <a href="https://developers.facebook.com/docs/messenger-platform/reference/send-api/error-codes"/>
      */

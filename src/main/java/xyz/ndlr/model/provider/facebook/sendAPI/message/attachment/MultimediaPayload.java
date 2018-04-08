@@ -1,19 +1,20 @@
 package xyz.ndlr.model.provider.facebook.sendAPI.message.attachment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
 
 /**
- * when AttachmentType is AUDIO, FILE, IMAGE or VIDEO payload
+ * A payload which has a multimedia AttachmentType.
+ * {@link AttachmentType#isMultimedia()}
  */
 public class MultimediaPayload extends AbstractPayload {
-    // required
     @JsonProperty("url")
     private String url;
-    // optionnal
     @JsonProperty("is_reusable")
     private boolean reusable;
 
-    public MultimediaPayload(){}
+    public MultimediaPayload() {
+    }
 
     public MultimediaPayload(String url) {
         this.url = url;

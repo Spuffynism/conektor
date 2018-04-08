@@ -17,8 +17,6 @@ public class Message {
     private String seq;
     @JsonProperty("attachments")
     private List<Attachment> attachments;
-    @JsonProperty("quick_reply")
-    private QuickReply quickReply;
 
     public Message() {
     }
@@ -42,8 +40,8 @@ public class Message {
 
     }
 
-    public boolean isQuickReply() {
-        return quickReply != null;
+    public String getTextWithoutFirstWord() {
+        return text.split(" ", 2)[1];
     }
 
     public String getMid() {
@@ -76,13 +74,5 @@ public class Message {
 
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
-    }
-
-    public QuickReply getQuickReply() {
-        return quickReply;
-    }
-
-    public void setQuickReply(QuickReply quickReply) {
-        this.quickReply = quickReply;
     }
 }

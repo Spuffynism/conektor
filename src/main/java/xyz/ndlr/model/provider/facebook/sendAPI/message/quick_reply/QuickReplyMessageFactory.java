@@ -11,6 +11,13 @@ import java.util.Map;
 public class QuickReplyMessageFactory {
     private static final String DEFAULT_IMAGE_PROVIDER_ACTION = "upload";
 
+    /**
+     * Takes an image url and generates image upload payloads for provided providers.
+     *
+     * @param imageUrl            image url that will be in the payload
+     * @param providerToHumanName provider name to provider human name mapping
+     * @return a text message with generated quick replies
+     */
     public TextMessage generateForProviders(String imageUrl,
                                             Map<String, String> providerToHumanName) {
         List<QuickReply> quickReplies = new ArrayList<>();

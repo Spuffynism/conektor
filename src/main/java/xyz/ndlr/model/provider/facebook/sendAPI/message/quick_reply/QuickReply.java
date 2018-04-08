@@ -1,5 +1,6 @@
 package xyz.ndlr.model.provider.facebook.sendAPI.message.quick_reply;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Max;
@@ -19,6 +20,7 @@ public class QuickReply {
      * <p>
      * May be set to an empty string if image_url is set.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("payload")
     @Max(1000)
     public String payload;
@@ -28,6 +30,7 @@ public class QuickReply {
      * <p>
      * Required if title is an empty string.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("image_url")
     public String imageUrl;
 

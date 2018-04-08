@@ -11,15 +11,12 @@ public class MainDispatcher implements IMessagingDispatcher {
 
     private final MediaDispatcher mediaDispatcher;
     private final TextDispatcher textDispatcher;
-    private final QuickReplyDispatcher quickReplyDispatcher;
 
     @Autowired
     public MainDispatcher(MediaDispatcher mediaDispatcher,
-                          TextDispatcher textDispatcher,
-                          QuickReplyDispatcher quickReplyDispatcher) {
+                          TextDispatcher textDispatcher) {
         this.mediaDispatcher = mediaDispatcher;
         this.textDispatcher = textDispatcher;
-        this.quickReplyDispatcher = quickReplyDispatcher;
     }
 
     @Override
@@ -29,9 +26,7 @@ public class MainDispatcher implements IMessagingDispatcher {
                     "destination");
         }
 
-        if (messaging.getMessage().isQuickReply()) {
-            quickReplyDispatcher.dispatchAndQueue(user, messaging);
-        } else if (messaging.getMessage().containsMedia()) {
+        if (messaging.getMessage().containsMedia()) {
             mediaDispatcher.dispatchAndQueue(user, messaging);
         } else {
             textDispatcher.dispatchAndQueue(user, messaging);

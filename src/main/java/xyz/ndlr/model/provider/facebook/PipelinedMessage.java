@@ -30,4 +30,8 @@ public class PipelinedMessage {
     public void setParsedMessage(ParsedMessage parsedMessage) {
         this.parsedMessage = parsedMessage;
     }
+
+    public String getTextWithoutFirstWord() {
+        return originalMessaging.getMessage().getTextWithoutFirstWord();
+    }
 }

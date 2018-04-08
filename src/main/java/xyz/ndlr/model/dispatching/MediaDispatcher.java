@@ -35,11 +35,6 @@ public class MediaDispatcher extends AbstractSubDispatcher implements IMessaging
     @Override
     public void dispatchAndQueue(User user, Messaging messaging) {
         Message message = messaging.getMessage();
-        /*if (message.contains(AttachmentType.IMAGE)) {
-
-            imgurService.upload(user, message)
-                    .thenAccept(this::queueResponse);
-        }*/
 
         //TODO Populate & Use ActionRepository instead
         Map<String, String> providerHumanNames = new HashMap<>();

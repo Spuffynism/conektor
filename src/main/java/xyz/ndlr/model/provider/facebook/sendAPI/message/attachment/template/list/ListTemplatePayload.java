@@ -3,7 +3,7 @@ package xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.lis
 import com.fasterxml.jackson.annotation.JsonProperty;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.TemplatePayload;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.TemplateType;
-import xyz.ndlr.model.provider.facebook.sendAPI.message.button.AbstractButton;
+import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.button.AbstractButton;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

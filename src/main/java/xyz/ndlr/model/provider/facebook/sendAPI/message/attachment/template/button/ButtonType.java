@@ -1,4 +1,4 @@
-package xyz.ndlr.model.provider.facebook.sendAPI.message.button;
+package xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.button;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

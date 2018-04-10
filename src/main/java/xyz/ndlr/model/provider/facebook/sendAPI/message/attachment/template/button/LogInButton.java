@@ -1,4 +1,4 @@
-package xyz.ndlr.model.provider.facebook.sendAPI.message.button;
+package xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.button;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +15,7 @@ public class LogInButton extends AbstractButton {
         super(ButtonType.LOG_IN);
     }
 
+    //TODO Check if value is actually injected
     @Value("${facebook.auth.log_in_url}")
     public void setUrl(String url) {
         LogInButton.url = url;

@@ -1,4 +1,4 @@
-package xyz.ndlr.model.provider.facebook.sendAPI.message.button;
+package xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.button;
 
 /**
  * https://developers.facebook.com/docs/messenger-platform/reference/buttons/logout

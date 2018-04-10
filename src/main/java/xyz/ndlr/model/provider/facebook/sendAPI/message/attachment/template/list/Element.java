@@ -1,8 +1,8 @@
 package xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.list;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import xyz.ndlr.model.provider.facebook.sendAPI.message.button.AbstractButton;
-import xyz.ndlr.model.provider.facebook.sendAPI.message.button.URLButton;
+import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.button.AbstractButton;
+import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.button.URLButton;
 
 import javax.validation.constraints.Max;
 import java.util.List;

@@ -1,9 +1,11 @@
-package xyz.ndlr.model.provider.facebook.sendAPI.message.button;
+package xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.template.button;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * https://developers.facebook.com/docs/messenger-platform/send-messages/buttons
+ */
 public class AbstractButton {
-    // required
     @JsonProperty("type")
     private ButtonType type;
 

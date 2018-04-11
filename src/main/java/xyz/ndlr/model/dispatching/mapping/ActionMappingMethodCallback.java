@@ -25,12 +25,13 @@ public class ActionMappingMethodCallback implements ReflectionUtils.MethodCallba
         ProviderMapping providerMapping = methodDeclaringClass.getAnnotation(ProviderMapping.class);
         String provider = providerMapping.value();
 
+        registerProviderHumanName(providerMapping);
+
         ActionMapping actionMapping = AnnotationUtils.findAnnotation(method, ActionMapping.class);
         String[] actions = actionMapping.value();
 
         for (String action : actions) {
             registerAction(method, provider, action);
-            registerHumanName(providerMapping);
         }
 
         logMappingMessage(methodDeclaringClass.getSimpleName(), provider, method.getName(),
@@ -50,9 +51,9 @@ public class ActionMappingMethodCallback implements ReflectionUtils.MethodCallba
         });
     }
 
-    private void registerHumanName(ProviderMapping providerMapping) {
+    private void registerProviderHumanName(ProviderMapping providerMapping) {
         String humanName = providerMapping.humanName();
-        boolean useFallbackname = "".equals(humanName);
+        boolean useFallbackname = ProviderMapping.DEFAULT_HUMAN_NAME.equals(humanName);
 
         actionRepository.registerHumanName(providerMapping.value(),
                 useFallbackname ? providerMapping.value() : humanName);

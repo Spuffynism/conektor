@@ -4,6 +4,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,18 +15,25 @@ import java.util.Map;
 public class ActionRepository {
     /**
      * All available provider actions.
-     * Is populated during the application bootstrapping step.
+     * Is populated during the application bootstrapping step by
+     * {@link ActionMappingMethodCallback}.
      */
     private final Table<String, String, Action> actions;
 
     /**
-     *
+     * Mapping of provider names to their human names
      */
     private final Map<String, String> providerHumanNames;
+
+    /**
+     * Mapping of image provider names to their human names;
+     */
+    private final Map<String, String> imageProviderHumanNames;
 
     public ActionRepository() {
         actions = HashBasedTable.create();
         providerHumanNames = new HashMap<>();
+        imageProviderHumanNames = new HashMap<>();
     }
 
     /**
@@ -35,7 +43,7 @@ public class ActionRepository {
      * @param actionName name of the action
      * @param action     the registered action
      */
-    public void register(String provider, String actionName, Action action) {
+    void register(String provider, String actionName, Action action) {
         actions.put(provider, actionName, action);
     }
 
@@ -47,15 +55,25 @@ public class ActionRepository {
         return actions.get(provider, ActionMapping.DEFAULT_ACTION);
     }
 
-    public void registerHumanName(String provider, String providerHumanName) {
+    void registerHumanName(String provider, String providerHumanName) {
         providerHumanNames.put(provider, providerHumanName);
     }
 
-    public String getProviderHumanName(String provider) {
-        return providerHumanNames.get(provider);
+    /**
+     * @return an immutable provider human names mapping
+     */
+    public Map<String, String> getProviderHumanNames() {
+        return Collections.unmodifiableMap(providerHumanNames);
     }
 
-    public Map<String, String> getProviderHumanNames() {
-        return providerHumanNames;
+    void registerImageProviderHumanName(String provider, String providerHumanName) {
+        imageProviderHumanNames.put(provider, providerHumanName);
+    }
+
+    /**
+     * @return an immutable image provider human names mapping
+     */
+    public Map<String, String> getImageProviderHumanNames() {
+        return Collections.unmodifiableMap(imageProviderHumanNames);
     }
 }

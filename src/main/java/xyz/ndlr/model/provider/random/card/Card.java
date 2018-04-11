@@ -26,6 +26,6 @@ public class Card {
     }
 
     public String toHuman() {
-        return String.format("%s of %s", value, suit);
+        return String.format("%s of %s", value.name().toLowerCase(), suit.name().toLowerCase());
     }
 }

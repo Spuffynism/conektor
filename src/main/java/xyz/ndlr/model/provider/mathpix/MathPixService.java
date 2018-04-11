@@ -29,8 +29,7 @@ public class MathPixService extends ImageService {
      */
     @Override
     public ProviderResponse upload(User user, PipelinedMessage pipelinedMessage) {
-        String url = pipelinedMessage.getOriginalMessaging().getMessage()
-                .getAttachments().get(0).getURL();
+        String url = pipelinedMessage.getParsedMessage().getArguments().get("u");
         Request request = new Request(url);
 
         DetectionResult detectionResult = mathPix.process(request);

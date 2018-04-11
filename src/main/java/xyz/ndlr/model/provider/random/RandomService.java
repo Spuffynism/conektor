@@ -25,9 +25,10 @@ public class RandomService {
 
         String result;
         if (action.matches("^(roll).*(dice|die)$")) {
-            result = "" + getRandomDieRoll();
+            result = String.format("You rolled a dice and got... %d!", getRandomDieRoll());
         } else if (action.matches("^(pick|choose).*(card)$")) {
-            result = getRandomCard().toHuman();
+            result = String.format("You picked a random card and got... %s!",
+                    getRandomCard().toHuman());
         } else {
             result = "I don't understand what you asked for.";
         }

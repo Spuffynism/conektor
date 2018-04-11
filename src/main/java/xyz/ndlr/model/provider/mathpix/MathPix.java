@@ -9,25 +9,20 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import xyz.ndlr.model.provider.mathpix.request.Request;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 
 @Repository
 public class MathPix {
-    private static final String MATHPIX_API_URI = "https://api.mathpix.com/v3/latex";
-    private static String appId;
-    private static String appKey;
+    private static final String MATHPIX_API_URI = "https://api.mathpix.com/v3/latex/";
+    private static final String APP_ID_HEADER = "app_id";
+    private static final String APP_KEY_HEADER = "app_key";
+
     private RestTemplate restTemplate;
     private static final MultiValueMap<String, String> headers;
 
     static {
-        Map<String, String> map = new HashMap<>();
-        map.put("Content-Type", "application/json");
-        map.put("app_id", appId);
-        map.put("app_key", appKey);
-
         headers = new LinkedMultiValueMap<>();
-        headers.setAll(map);
+        headers.put("Content-Type", Collections.singletonList("application/json"));
     }
 
     public MathPix() {
@@ -36,12 +31,12 @@ public class MathPix {
 
     @Value("${mathpix.app_id}")
     private void setAppId(String appId) {
-        MathPix.appId = appId;
+        headers.put(APP_ID_HEADER, Collections.singletonList(appId));
     }
 
     @Value("${mathpix.app_key}")
     private void setAppKey(String appKey) {
-        MathPix.appKey = appKey;
+        headers.put(APP_KEY_HEADER, Collections.singletonList(appKey));
     }
 
     public DetectionResult process(Request request) {

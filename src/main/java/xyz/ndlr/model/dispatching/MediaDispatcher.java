@@ -9,8 +9,8 @@ import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.TextMessage;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.quick_reply.QuickReplyMessageFactory;
 import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
-import xyz.ndlr.model.provider.facebook.webhook.Message;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
+import xyz.ndlr.model.provider.facebook.webhook.event.Message;
 
 import java.util.List;
 

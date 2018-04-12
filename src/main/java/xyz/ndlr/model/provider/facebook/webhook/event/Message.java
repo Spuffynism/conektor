@@ -1,4 +1,4 @@
-package xyz.ndlr.model.provider.facebook.webhook;
+package xyz.ndlr.model.provider.facebook.webhook.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.MultimediaPayload;
@@ -8,6 +8,9 @@ import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * https://developers.facebook.com/docs/messenger-platform/reference/webhook-events/messages
+ */
 public class Message {
     @JsonProperty("mid")
     private String mid;
@@ -19,9 +22,6 @@ public class Message {
     private List<Attachment> attachments;
     @JsonProperty("quick_reply")
     private QuickReply quickReply;
-
-    public Message() {
-    }
 
     public boolean containsMedia() {
         return attachments != null && attachments.stream()
@@ -42,47 +42,27 @@ public class Message {
 
     }
 
-    public String getTextWithoutFirstWord() {
-        return text.split(" ", 2)[1];
-    }
-
     public String getMid() {
         return mid;
-    }
-
-    public void setMid(String mid) {
-        this.mid = mid;
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public String getSeq() {
         return seq;
-    }
-
-    public void setSeq(String seq) {
-        this.seq = seq;
     }
 
     public List<Attachment> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(List<Attachment> attachments) {
-        this.attachments = attachments;
-    }
-
     public QuickReply getQuickReply() {
         return quickReply;
     }
 
-    public void setQuickReply(QuickReply quickReply) {
-        this.quickReply = quickReply;
+    public String getTextWithoutFirstWord() {
+        return text.split(" ", 2)[1];
     }
 }

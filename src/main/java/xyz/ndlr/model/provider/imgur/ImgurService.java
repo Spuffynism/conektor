@@ -9,7 +9,7 @@ import xyz.ndlr.model.provider.ImageService;
 import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.PipelinedMessage;
 import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
-import xyz.ndlr.model.provider.facebook.webhook.Message;
+import xyz.ndlr.model.provider.facebook.webhook.event.Message;
 import xyz.ndlr.model.provider.imgur.receive.Image;
 import xyz.ndlr.model.provider.imgur.receive.UploadResponse;
 import xyz.ndlr.model.provider.imgur.send.UploadPayload;

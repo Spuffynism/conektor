@@ -1,12 +1,15 @@
 package xyz.ndlr.model.provider.facebook.webhook;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import xyz.ndlr.model.provider.facebook.webhook.event.AccountLinking;
+import xyz.ndlr.model.provider.facebook.webhook.event.Message;
+import xyz.ndlr.model.provider.facebook.webhook.event.Postback;
 
 /**
  * This object is defined as a complete payload from
  * https://developers.facebook.com/docs/messenger-platform/webhook-reference/message
  * <p>
- * TODO Create ReceivedMessaging & PostbackMessaging AND make abstract
+ * TODO Create ReceivedMessaging, PostbackMessaging & AccountLinkingMessaging AND make abstract
  */
 public class Messaging {
     @JsonProperty("sender")
@@ -15,12 +18,14 @@ public class Messaging {
     private Recipient recipient;
     @JsonProperty("timestamp")
     private long timestamp;
-    // message OR postback
+    // message OR postback OR accountLinking
     @JsonProperty("message")
     private Message message;
-    // message OR postback
+    // message OR postback OR accountLinking
     @JsonProperty("postback")
     private Postback postback;
+    @JsonProperty("account_linking")
+    private AccountLinking accountLinking;
 
     public Messaging() {
     }

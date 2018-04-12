@@ -1,4 +1,4 @@
-package xyz.ndlr.model.provider.facebook.webhook;
+package xyz.ndlr.model.provider.facebook.webhook.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

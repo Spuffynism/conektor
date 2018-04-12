@@ -3,14 +3,6 @@ package xyz.ndlr.model.provider.imgur;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import xyz.ndlr.model.provider.facebook.sendAPI.message.attachment.MultimediaPayload;
-import xyz.ndlr.model.provider.facebook.shared.Attachment;
-import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
-import xyz.ndlr.model.provider.facebook.webhook.Message;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ImgurServiceTest {
     private ImgurService imgurService;

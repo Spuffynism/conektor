@@ -2,7 +2,7 @@ package xyz.ndlr.model.parsing;
 
 import xyz.ndlr.model.provider.facebook.webhook.Message;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +13,7 @@ public class MessageParser {
             Pattern.compile("-([a-zA-Z-]+){1}\\s([^\"\\s]+|\"[^\"]+\"){1}");
     private String message;
     private String command;
-    private Map<String, String> arguments;
+    private LinkedHashMap<String, String> arguments;
 
     MessageParser(String message) throws IllegalArgumentException {
         if (message == null || message.isEmpty())
@@ -61,9 +61,9 @@ public class MessageParser {
      * @return a map of arguments and their values
      * @throws StringIndexOutOfBoundsException
      */
-    private Map<String, String> parseArguments(Matcher matcher)
+    private LinkedHashMap<String, String> parseArguments(Matcher matcher)
             throws StringIndexOutOfBoundsException {
-        Map<String, String> arguments = new HashMap<>();
+        LinkedHashMap<String, String> arguments = new LinkedHashMap<>();
 
         String argument, value;
         while (matcher.find()) {

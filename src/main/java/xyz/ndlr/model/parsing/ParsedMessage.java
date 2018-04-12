@@ -1,5 +1,6 @@
 package xyz.ndlr.model.parsing;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -7,9 +8,10 @@ import java.util.Map;
  */
 public class ParsedMessage {
     private String command;
-    private Map<String, String> arguments;
+    private LinkedHashMap<String, String> arguments;
+    private Map.Entry<String, String> firstArgument;
 
-    public ParsedMessage(String command, Map<String, String> arguments) {
+    public ParsedMessage(String command, LinkedHashMap<String, String> arguments) {
         this.command = command;
         this.arguments = arguments;
     }
@@ -18,15 +20,15 @@ public class ParsedMessage {
         return command;
     }
 
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
     public Map<String, String> getArguments() {
         return arguments;
     }
 
-    public void setArguments(Map<String, String> arguments) {
-        this.arguments = arguments;
+    public String getFirstArgumentValue() {
+        if (firstArgument == null) {
+            firstArgument = arguments.entrySet().iterator().next();
+        }
+
+        return firstArgument.getValue();
     }
 }

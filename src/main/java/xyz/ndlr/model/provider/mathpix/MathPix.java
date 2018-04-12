@@ -39,7 +39,7 @@ public class MathPix {
         headers.put(APP_KEY_HEADER, Collections.singletonList(appKey));
     }
 
-    public DetectionResult process(Request request) {
+    DetectionResult process(Request request) {
         HttpEntity<Request> uploadEntity = new HttpEntity<>(request, headers);
 
         ResponseEntity<DetectionResult> uploadResponse =

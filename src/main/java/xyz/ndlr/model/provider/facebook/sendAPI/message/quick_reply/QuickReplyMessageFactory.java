@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Component
 public class QuickReplyMessageFactory {
-    private static final String DEFAULT_IMAGE_PROVIDER_ACTION = "upload";
+    private static final String DEFAULT_IMAGE_PROVIDER_ACTION = "-u";
 
     /**
      * Takes an image url and generates image upload payloads for provided providers.

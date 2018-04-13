@@ -25,8 +25,16 @@ public class MessageParser {
         this.setArguments(message);
     }
 
-    public MessageParser(Message message) throws IllegalArgumentException {
-        this(message.getText());
+    public static MessageParser fromMessage(Message message) throws IllegalArgumentException {
+        String text;
+        boolean messageIsQuickReply = message.getQuickReply() != null;
+        if (messageIsQuickReply) {
+            text = message.getQuickReply().getPayload();
+        } else {
+            text = message.getText();
+        }
+
+        return new MessageParser(text);
     }
 
     private void setCommand(String message) throws IllegalArgumentException {

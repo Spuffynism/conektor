@@ -2,7 +2,11 @@ package xyz.ndlr.model.provider.facebook.webhook.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-class QuickReply {
+public class QuickReply {
     @JsonProperty("payload")
     private String payload;
+
+    public String getPayload() {
+        return payload;
+    }
 }

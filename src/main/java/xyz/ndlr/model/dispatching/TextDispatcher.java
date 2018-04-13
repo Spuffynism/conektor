@@ -54,7 +54,7 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
 
     private static ParsedMessage tryGetParsedMessage(Messaging messaging) throws
             IllegalArgumentException {
-        MessageParser parser = new MessageParser(messaging.getMessage());
+        MessageParser parser = MessageParser.fromMessage(messaging.getMessage());
 
         return parser.getParsedMessage();
     }

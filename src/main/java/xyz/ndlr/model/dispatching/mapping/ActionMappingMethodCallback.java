@@ -11,8 +11,8 @@ import java.lang.reflect.Method;
 public class ActionMappingMethodCallback implements ReflectionUtils.MethodCallback {
     private static final Logger logger = Logger.getLogger(ActionMappingMethodCallback.class);
 
-    private ActionRepository actionRepository;
-    private Object bean;
+    private final ActionRepository actionRepository;
+    private final Object bean;
 
     ActionMappingMethodCallback(ActionRepository actionRepository, Object bean) {
         this.actionRepository = actionRepository;

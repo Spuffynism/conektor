@@ -22,7 +22,6 @@ public class FacebookService extends AbstractProviderService {
         return accountService.existsByToken(userId, providerId);
     }
 
-    //TODO: deprecate this and replace with getUserByToken
     public User getUserByPSID(String PSID) {
         String sql = "SELECT user_usr.* FROM user_usr JOIN account_acc ON usr_id = acc_user_id " +
                 "AND acc_token = :acc_token AND acc_provider_id = :provider_id";

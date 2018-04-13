@@ -3,9 +3,9 @@ package xyz.ndlr.model.provider.trello;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class TrelloTestRepository {
+public class TrelloRepository {
 
-    public TrelloTestRepository() {
+    public TrelloRepository() {
     }
 
     public void print() {

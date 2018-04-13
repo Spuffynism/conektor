@@ -8,9 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MessageParser {
-    private static Pattern commandPattern = Pattern.compile("^([a-zA-Z]+){1}");
+    private static final Pattern commandPattern = Pattern.compile("^([a-zA-Z]+)");
     private static Pattern argumentsPattern =
-            Pattern.compile("-([a-zA-Z-]+){1}\\s([^\"\\s]+|\"[^\"]+\"){1}");
+            Pattern.compile("-([a-zA-Z-]+)\\s([^\"\\s]+|\"[^\"]+\")");
     private String message;
     private String command;
     private LinkedHashMap<String, String> arguments;

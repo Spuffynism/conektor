@@ -31,7 +31,7 @@ public class FacebookMessageSender {
     private static final String ACCESS_TOKEN = "access_token";
     private static String pageAccessToken;
     private static String requestURI;
-    private AsyncRestTemplate asyncRestTemplate;
+    private final AsyncRestTemplate asyncRestTemplate;
 
     @Autowired
     public FacebookMessageSender() {

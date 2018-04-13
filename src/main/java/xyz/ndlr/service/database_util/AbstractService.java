@@ -116,10 +116,9 @@ public abstract class AbstractService<T> {
      *
      * @param id the T's id to delete
      */
-    @SuppressWarnings(value = "unchecked")
     public void delete(int id) {
         new QueryExecutor<Void>(session -> {
-            T t = (T) session.load(tClass, id);
+            T t = session.load(tClass, id);
 
             session.beginTransaction();
             session.delete(t);

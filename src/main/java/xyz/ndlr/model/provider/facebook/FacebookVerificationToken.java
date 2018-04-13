@@ -25,7 +25,7 @@ public class FacebookVerificationToken {
     }
 
     public void validate() throws InvalidFacebookVerificationToken {
-        if (mode == null || tokenFromFacebook == null || !mode.equalsIgnoreCase(SUBSCRIBE_MODE) ||
+        if (mode == null || !mode.equalsIgnoreCase(SUBSCRIBE_MODE) ||
                 !actualValidToken.equals(tokenFromFacebook)) {
             throw new InvalidFacebookVerificationToken();
         }

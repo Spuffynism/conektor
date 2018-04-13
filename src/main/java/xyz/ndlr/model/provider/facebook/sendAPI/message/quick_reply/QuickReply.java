@@ -9,13 +9,13 @@ public class QuickReply {
     @JsonProperty("content_type")
     private QuickReplyContentType quickReplyContentType;
     /**
-     * Required if content_type is 'text'. The text to display on the quick reply button. 20
+     * Required if content type is 'text'. The text to display on the quick reply button. 20
      * character limit.
      */
     @JsonProperty("title")
-    public String title;
+    private String title;
     /**
-     * Required if content_type is 'text'. Custom data that will be sent back to you via the
+     * Required if content type is 'text'. Custom data that will be sent back to you via the
      * messaging_postbacks webhook event.
      * <p>
      * May be set to an empty string if image_url is set.
@@ -23,7 +23,7 @@ public class QuickReply {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("payload")
     @Max(1000)
-    public String payload;
+    private String payload;
     /**
      * Optional. URL of image to display on the quick reply button for text quick replies. Image
      * should be a minimum of 24px x 24px. Larger images will be automatically cropped and resized.
@@ -32,11 +32,43 @@ public class QuickReply {
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("image_url")
-    public String imageUrl;
+    private String imageUrl;
 
     public QuickReply(QuickReplyContentType quickReplyContentType, String title, String payload) {
         this.quickReplyContentType = quickReplyContentType;
         this.title = title;
         this.payload = payload;
+    }
+
+    public QuickReplyContentType getQuickReplyContentType() {
+        return quickReplyContentType;
+    }
+
+    public void setQuickReplyContentType(QuickReplyContentType quickReplyContentType) {
+        this.quickReplyContentType = quickReplyContentType;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public void setPayload(String payload) {
+        this.payload = payload;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -28,7 +28,7 @@ public class ErrorDispatcher extends AbstractSubDispatcher implements IMessaging
     }
 
     @Override
-    public void dispatchAndQueue(User user, Messaging messaging) throws CannotDispatchException {
+    public void dispatchAndQueue(User user, Messaging messaging) {
         dispatchAndQueue(user, messaging.getMessage().getText());
     }
 

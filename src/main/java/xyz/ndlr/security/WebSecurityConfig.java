@@ -23,7 +23,7 @@ import xyz.ndlr.service.UserService;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public WebSecurityConfig(UserService userService) {
@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider());
     }
 
@@ -60,7 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        Argon2Encoder encoder = new Argon2Encoder();
-        return encoder;
+        return new Argon2Encoder();
     }
 }

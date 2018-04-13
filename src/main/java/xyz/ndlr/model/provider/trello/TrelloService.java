@@ -12,11 +12,11 @@ import java.util.Map;
 
 @ProviderMapping("trello")
 public class TrelloService {
-    private TrelloTestRepository trelloTestRepository;
+    private final TrelloRepository trelloRepository;
 
     @Autowired
-    TrelloService(TrelloTestRepository trelloTestRepository) {
-        this.trelloTestRepository = trelloTestRepository;
+    TrelloService(TrelloRepository trelloRepository) {
+        this.trelloRepository = trelloRepository;
     }
 
     @ActionMapping("test")

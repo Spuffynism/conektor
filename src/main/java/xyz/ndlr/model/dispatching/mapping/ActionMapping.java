@@ -9,5 +9,5 @@ import java.lang.annotation.*;
 public @interface ActionMapping {
     String[] value();
 
-    public static final String DEFAULT_ACTION = "";
+    String DEFAULT_ACTION = "";
 }

@@ -15,8 +15,6 @@ conf/common_passwords/
 # misc
 conf/ssl/
 conf/notes.md
-src/main/java/xyz/ndlr/Nothing.java
 conf/ngrok/
-/src/main/java/xyz/ndlr/Miscellanious.java
 /src/main/resources/application-dev-local.yml
 /src/main/resources/application-dev-fb.yml

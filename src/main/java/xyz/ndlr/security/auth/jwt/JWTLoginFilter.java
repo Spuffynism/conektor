@@ -34,7 +34,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     public Authentication attemptAuthentication(
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
-            throws AuthenticationException, IOException, ServletException {
+            throws AuthenticationException {
         AccountCredentials credentials;
         Authentication authentication = null;
 

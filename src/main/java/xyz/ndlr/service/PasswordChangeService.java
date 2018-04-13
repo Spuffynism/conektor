@@ -63,21 +63,16 @@ public class PasswordChangeService {
         String sql = "update User set attemptedPasswordChanges = attemptedPasswordChanges + 1" +
                 " where id = :userId";
 
-        new QueryExecutor<Void>(session -> {
-            Query query = session.createQuery(sql)
-                    .setParameter("userId", userId);
-
-            session.beginTransaction();
-            query.executeUpdate();
-            session.getTransaction().commit();
-
-            return null;
-        }).execute();
+        executeForUser(userId, sql);
     }
 
     private void resetPasswordChangeAttempts(int userId) {
         String sql = "update User set attemptedPasswordChanges = 0 where id = :userId";
 
+        executeForUser(userId, sql);
+    }
+
+    private void executeForUser(int userId, String sql) {
         new QueryExecutor<Void>(session -> {
             Query query = session.createQuery(sql)
                     .setParameter("userId", userId);

@@ -10,4 +10,8 @@ public class TemplatePayload extends AbstractPayload {
     public TemplatePayload(TemplateType type) {
         this.type = type;
     }
+
+    public TemplateType getType() {
+        return type;
+    }
 }

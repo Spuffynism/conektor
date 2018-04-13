@@ -34,6 +34,10 @@ public class MathPixService extends ImageService {
 
         DetectionResult detectionResult = mathPix.process(request);
 
-        return new ProviderResponse(user, detectionResult.getLatex());
+        String message = !"".equals(detectionResult.getError())
+                ? detectionResult.getError()
+                : detectionResult.getLatex();
+
+        return new ProviderResponse(user, message);
     }
 }

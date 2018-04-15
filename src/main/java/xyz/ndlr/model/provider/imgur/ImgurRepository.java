@@ -12,24 +12,18 @@ import xyz.ndlr.model.provider.imgur.receive.Image;
 import xyz.ndlr.model.provider.imgur.receive.UploadResponse;
 import xyz.ndlr.model.provider.imgur.send.UploadPayload;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 
 @Repository
 public class ImgurRepository {
     private static final String IMGUR_API_URI = "https://api.imgur.com/3/";
-    private static String accessToken;
+    private static final String AUTHORIZATION_HEADER = "Authorization";
     private AsyncRestTemplate asyncRestTemplate;
 
-    private static final MultiValueMap<String, String> headers;
+    private static final MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 
     static {
-        Map<String, String> map = new HashMap<>();
-        map.put("Content-Type", "application/json");
-        map.put("Authorization", "Bearer " + accessToken);
-
-        headers = new LinkedMultiValueMap<>();
-        headers.setAll(map);
+        headers.put("Content-Type", Collections.singletonList("application/json"));
     }
 
     public ImgurRepository() {
@@ -38,7 +32,7 @@ public class ImgurRepository {
 
     @Value("${imgur.access_token}")
     private void setAccessToken(String accessToken) {
-        ImgurRepository.accessToken = accessToken;
+        headers.put(AUTHORIZATION_HEADER, Collections.singletonList("Bearer " + accessToken));
     }
 
     ListenableFuture<Image> upload(UploadPayload payload) {

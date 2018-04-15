@@ -36,16 +36,22 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
 
         PipelinedMessage pipelinedMessage = new PipelinedMessage(messaging, parsedMessage);
 
+        dispatch(user, pipelinedMessage);
+    }
+
+    private void dispatch(User user, PipelinedMessage pipelinedMessage) throws
+            CannotDispatchException {
+        ParsedMessage parsedMessage = pipelinedMessage.getParsedMessage();
         Map<String, String> arguments = parsedMessage.getArguments();
-        // if no arguments were provided, we try to find the provider's default action
-        if (arguments.isEmpty()) {
+
+        boolean useDefaultAction = arguments.isEmpty();
+        if (useDefaultAction) {
             Action action = actionRepository.getDefault(parsedMessage.getCommand());
 
             apply(action, user, pipelinedMessage);
         } else {
             for (Map.Entry<String, String> entry : arguments.entrySet()) {
-                Action action = actionRepository.get(parsedMessage.getCommand(),
-                        entry.getKey());
+                Action action = actionRepository.get(parsedMessage.getCommand(), entry.getKey());
 
                 apply(action, user, pipelinedMessage);
             }

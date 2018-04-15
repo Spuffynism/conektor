@@ -18,10 +18,9 @@ public class MathPix {
     private static final String APP_KEY_HEADER = "app_key";
 
     private RestTemplate restTemplate;
-    private static final MultiValueMap<String, String> headers;
+    private static final MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 
     static {
-        headers = new LinkedMultiValueMap<>();
         headers.put("Content-Type", Collections.singletonList("application/json"));
     }
 

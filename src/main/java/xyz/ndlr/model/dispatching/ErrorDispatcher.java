@@ -8,13 +8,16 @@ import xyz.ndlr.exception.UnregisteredAccountException;
 import xyz.ndlr.model.ProviderResponseQueue;
 import xyz.ndlr.model.dispatching.mapping.ActionRepository;
 import xyz.ndlr.model.entity.User;
+import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.ProviderResponseError;
 import xyz.ndlr.model.provider.facebook.FacebookService;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 import xyz.ndlr.model.provider.facebook.webhook.Payload;
 
+import java.util.stream.Stream;
+
 @Component
-public class ErrorDispatcher extends AbstractSubDispatcher implements IMessagingDispatcher {
+public class ErrorDispatcher extends AbstractSubDispatcher {
     private static final Logger logger = Logger.getLogger(ErrorDispatcher.class);
 
     private final FacebookService facebookService;
@@ -28,34 +31,35 @@ public class ErrorDispatcher extends AbstractSubDispatcher implements IMessaging
     }
 
     @Override
-    public void dispatchAndQueue(User user, Messaging messaging) {
-        dispatchAndQueue(user, messaging.getMessage().getText());
+    public Stream<ProviderResponse> onDispatchAndQueue(User user, Messaging messaging) {
+        return onDispatchAndQueue(user, messaging.getMessage().getText());
     }
 
-    private void dispatchAndQueue(User user, String message) {
+    private Stream<ProviderResponse> onDispatchAndQueue(User user, String message) {
         ProviderResponseError error = new ProviderResponseError(user, message);
 
-        queueResponse(error);
+        return Stream.of(error);
     }
 
-    public void dispatchIfPossible(Payload payload, Exception exception) {
+    public Stream<ProviderResponse> dispatchIfPossible(Payload payload, Exception exception) {
         String senderId = payload.tryGetSenderId();
 
         if (senderId == null) {
             logger.error("Could not get sender. Error message won't be sent.");
-            return;
+            return null;
         }
 
-        dispatchExceptionMessage(senderId, exception);
+        return dispatchExceptionMessage(senderId, exception);
     }
 
-    private void dispatchExceptionMessage(String senderId, Exception exception) {
+    private Stream<ProviderResponse> dispatchExceptionMessage(String senderId, Exception
+            exception) {
         User user = facebookService.getUserByPSID(senderId);
 
         if (isAllowedException(exception)) {
-            dispatchAndQueue(user, exception.getMessage());
+            return onDispatchAndQueue(user, exception.getMessage());
         } else {
-            sendGenericMessage(user);
+            return sendGenericMessage(user);
         }
     }
 
@@ -70,9 +74,9 @@ public class ErrorDispatcher extends AbstractSubDispatcher implements IMessaging
                 exception instanceof UnregisteredAccountException;
     }
 
-    private void sendGenericMessage(User user) {
+    private Stream<ProviderResponse> sendGenericMessage(User user) {
         String genericErrorMessage = "An unknown error has occured. Please check your message is " +
                 "correctly formatted.";
-        dispatchAndQueue(user, genericErrorMessage);
+        return onDispatchAndQueue(user, genericErrorMessage);
     }
 }

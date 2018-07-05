@@ -12,10 +12,12 @@ import xyz.ndlr.model.provider.facebook.shared.AttachmentType;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 import xyz.ndlr.model.provider.facebook.webhook.event.Message;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Component
-public class MediaDispatcher extends AbstractSubDispatcher implements IMessagingDispatcher {
+public class MediaDispatcher extends AbstractSubDispatcher {
     private QuickReplyMessageFactory quickReplyMessageFactory;
 
     @Autowired
@@ -27,18 +29,21 @@ public class MediaDispatcher extends AbstractSubDispatcher implements IMessaging
     }
 
     @Override
-    public void dispatchAndQueue(User user, Messaging messaging) {
+    public Stream<ProviderResponse> onDispatchAndQueue(User user, Messaging messaging) {
         Message message = messaging.getMessage();
 
+        List<ProviderResponse> responses = new ArrayList<>();
         if (message.contains(AttachmentType.IMAGE)) {
             List<String> urls = message.getAttachmentURLs(AttachmentType.IMAGE);
             for (String url : urls) {
                 TextMessage quickReplyMessage = quickReplyMessageFactory.generateForProviders(url,
                         actionRepository.getImageProviderHumanNames());
-                queueResponse(new ProviderResponse(user, quickReplyMessage));
+                responses.add(new ProviderResponse(user, quickReplyMessage));
             }
         } else {
-            queueResponse(ProviderResponse.notImplemented(user));
+            responses.add(ProviderResponse.notImplemented(user));
         }
+
+        return responses.stream();
     }
 }

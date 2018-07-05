@@ -13,11 +13,13 @@ import xyz.ndlr.model.provider.ProviderResponse;
 import xyz.ndlr.model.provider.facebook.PipelinedMessage;
 import xyz.ndlr.model.provider.facebook.webhook.Messaging;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 @Component
-public class TextDispatcher extends AbstractSubDispatcher implements IMessagingDispatcher {
+public class TextDispatcher extends AbstractSubDispatcher {
     @Autowired
     public TextDispatcher(ActionRepository actionRepository,
                           ProviderResponseQueue sharedResponses) {
@@ -25,7 +27,8 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
     }
 
     @Override
-    public void dispatchAndQueue(User user, Messaging messaging) throws CannotDispatchException {
+    public Stream<ProviderResponse> onDispatchAndQueue(User user, Messaging messaging) throws
+            CannotDispatchException {
         ParsedMessage parsedMessage;
 
         try {
@@ -36,26 +39,30 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
 
         PipelinedMessage pipelinedMessage = new PipelinedMessage(messaging, parsedMessage);
 
-        dispatch(user, pipelinedMessage);
+        return dispatch(user, pipelinedMessage).stream();
     }
 
-    private void dispatch(User user, PipelinedMessage pipelinedMessage) throws
+    private List<ProviderResponse> dispatch(User user, PipelinedMessage pipelinedMessage) throws
             CannotDispatchException {
         ParsedMessage parsedMessage = pipelinedMessage.getParsedMessage();
         Map<String, String> arguments = parsedMessage.getArguments();
+
+        List<ProviderResponse> responses = new ArrayList<>();
 
         boolean useDefaultAction = arguments.isEmpty();
         if (useDefaultAction) {
             Action action = actionRepository.getDefault(parsedMessage.getCommand());
 
-            apply(action, user, pipelinedMessage);
+            responses.add(apply(action, user, pipelinedMessage));
         } else {
             for (Map.Entry<String, String> entry : arguments.entrySet()) {
                 Action action = actionRepository.get(parsedMessage.getCommand(), entry.getKey());
 
-                apply(action, user, pipelinedMessage);
+                responses.add(apply(action, user, pipelinedMessage));
             }
         }
+
+        return responses;
     }
 
     private static ParsedMessage tryGetParsedMessage(Messaging messaging) throws
@@ -65,14 +72,12 @@ public class TextDispatcher extends AbstractSubDispatcher implements IMessagingD
         return parser.getParsedMessage();
     }
 
-    private void apply(Action action, User user, PipelinedMessage pipelinedMessage) throws
+    private ProviderResponse apply(Action action, User user, PipelinedMessage pipelinedMessage)
+            throws
             CannotDispatchException {
         if (action == null)
             throw new CannotDispatchException("invalid action");
 
-        ProviderResponse response = action.apply(user, pipelinedMessage);
-
-        CompletableFuture.completedFuture(response)
-                .thenAccept(this::queueResponse);
+        return action.apply(user, pipelinedMessage);
     }
 }

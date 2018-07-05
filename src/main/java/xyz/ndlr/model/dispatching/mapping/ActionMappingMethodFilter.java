@@ -9,6 +9,7 @@ import xyz.ndlr.model.provider.facebook.PipelinedMessage;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 
 public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
     private static final Logger logger = Logger.getLogger(ActionMappingMethodFilter.class);
@@ -22,13 +23,15 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
     public boolean matches(Method method) {
         boolean isMapping = AnnotationUtils.findAnnotation(method, ActionMapping.class) != null;
         return isMapping
-                && classIsValid(method)
+                && classSignatureIsValid(method)
                 && methodSignatureIsValid(method);
     }
 
-    private boolean classIsValid(Method method) {
+    private boolean classSignatureIsValid(Method method) {
         boolean hasAppropriateAnnotation =
-                method.getDeclaringClass().isAnnotationPresent(ProviderMapping.class);
+                !isInterfaceOrAbstract(method.getDeclaringClass())
+                        && method.getDeclaringClass().isAnnotationPresent(ProviderMapping.class);
+
         if (!hasAppropriateAnnotation) {
             String errorMessage = String.format("A method with @%s must reside in a " +
                             "class with @%s. %s does not",
@@ -38,12 +41,11 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
             logger.error(errorMessage);
         }
 
-        return hasAppropriateAnnotation &&
-                isNotInterfaceNorAbstractClass(method.getDeclaringClass());
+        return hasAppropriateAnnotation;
     }
 
-    private boolean isNotInterfaceNorAbstractClass(Class<?> clazz) {
-        return !clazz.isInterface() && !Modifier.isAbstract(clazz.getModifiers());
+    private boolean isInterfaceOrAbstract(Class<?> clazz) {
+        return clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers());
     }
 
     private boolean methodSignatureIsValid(Method method) throws IllegalArgumentException {
@@ -74,6 +76,9 @@ public class ActionMappingMethodFilter implements ReflectionUtils.MethodFilter {
         boolean hasAppropriateFirstParameter =
                 FIRST_PARAMETER_TYPE.isAssignableFrom(parameterTypes[0]);
         if (!hasAppropriateFirstParameter) {
+            for(Type type : method.getGenericParameterTypes()) {
+                System.out.println(type.getTypeName());
+            }
             String errorMessage = String.format("A method with @%s must have a %s as " +
                             "its first parameter. %s",
                     ActionMapping.class.getSimpleName(),

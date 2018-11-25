@@ -9,8 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import xyz.ndlr.exception.InvalidCredentialsException;
-import xyz.ndlr.exception.UserNotFoundException;
+import xyz.ndlr.domain.exception.InvalidCredentialsException;
+import xyz.ndlr.domain.exception.UserNotFoundException;
 import xyz.ndlr.security.auth.AccountCredentials;
 
 import javax.servlet.FilterChain;

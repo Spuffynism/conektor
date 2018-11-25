@@ -1,7 +1,7 @@
 package xyz.ndlr.service;
 
 import org.springframework.stereotype.Service;
-import xyz.ndlr.model.entity.Provider;
+import xyz.ndlr.domain.entity.Provider;
 import xyz.ndlr.service.database_util.AbstractService;
 
 @Service

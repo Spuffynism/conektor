@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import xyz.ndlr.model.entity.User;
+import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.security.auth.Role;
 
 import java.util.Arrays;

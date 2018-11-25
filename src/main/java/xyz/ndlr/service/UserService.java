@@ -4,10 +4,10 @@ import org.springframework.security.authentication.AccountStatusUserDetailsCheck
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import xyz.ndlr.exception.EmailTakenException;
-import xyz.ndlr.exception.InvalidPasswordException;
-import xyz.ndlr.exception.UsernameTakenException;
-import xyz.ndlr.model.entity.User;
+import xyz.ndlr.domain.exception.EmailTakenException;
+import xyz.ndlr.domain.exception.InvalidPasswordException;
+import xyz.ndlr.domain.exception.UsernameTakenException;
+import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.security.auth.PasswordChange;
 import xyz.ndlr.security.hashing.Argon2Hasher;
 import xyz.ndlr.security.hashing.IPasswordHasher;
@@ -69,10 +69,10 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
             throw new UsernameTakenException("This username is already taken.");
 
         if (getByEmail(dirtyUser.getEmail()) != null)
-            throw new EmailTakenException("This email is already taken.");
+            throw new EmailTakenException(dirtyUser.getEmail());
 
         if (!PasswordChange.matchesPolicy(dirtyUser.getPassword()))
-            throw new InvalidPasswordException("This password is invalid.");
+            throw new InvalidPasswordException();
 
         User cleanUser = new User();
         cleanUser.setUsername(dirtyUser.getUsername());

@@ -2,8 +2,8 @@ package xyz.ndlr.service;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Service;
-import xyz.ndlr.exception.InvalidPasswordException;
-import xyz.ndlr.model.entity.User;
+import xyz.ndlr.domain.exception.InvalidPasswordException;
+import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.security.auth.PasswordChange;
 import xyz.ndlr.security.hashing.Argon2Hasher;
 import xyz.ndlr.security.hashing.IPasswordHasher;

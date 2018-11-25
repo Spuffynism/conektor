@@ -3,7 +3,7 @@ package xyz.ndlr.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import xyz.ndlr.model.entity.User;
+import xyz.ndlr.domain.entity.User;
 
 @Component
 public class AuthHolder {
@@ -18,7 +18,7 @@ public class AuthHolder {
         return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
     }
 
-    public xyz.ndlr.model.entity.User getUser() {
+    public xyz.ndlr.domain.entity.User getUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
 

@@ -1,7 +1,7 @@
 package xyz.ndlr.service;
 
 import org.springframework.stereotype.Service;
-import xyz.ndlr.model.entity.Account;
+import xyz.ndlr.domain.entity.Account;
 import xyz.ndlr.service.database_util.AbstractService;
 import xyz.ndlr.service.database_util.QueryExecutor;
 

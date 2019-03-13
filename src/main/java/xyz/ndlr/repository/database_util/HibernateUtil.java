@@ -1,4 +1,4 @@
-package xyz.ndlr.service.database_util;
+package xyz.ndlr.repository.database_util;
 
 
 import org.apache.log4j.Logger;

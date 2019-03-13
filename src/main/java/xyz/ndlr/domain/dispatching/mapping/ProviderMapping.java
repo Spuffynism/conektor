@@ -22,5 +22,7 @@ public @interface ProviderMapping {
     /**
      * Used for quick-reply titles when the user is asked what we should do with an image they sent.
      */
-    String humanName() default "";
+    String humanName() default DEFAULT_HUMAN_NAME;
+
+    String DEFAULT_HUMAN_NAME = "";
 }

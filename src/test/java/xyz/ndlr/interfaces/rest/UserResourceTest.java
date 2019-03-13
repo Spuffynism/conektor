@@ -9,6 +9,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import xyz.ndlr.ControllerTest;
@@ -37,14 +38,17 @@ public class UserResourceTest {
     @Test
     @WithUserDetails("admin")
     public void controllerProducesJsonUTF8() throws Exception {
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get("/users")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(MockMvcResultHandlers.print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
     @WithUserDetails("admin")
     public void whenAdminGetAllUsersReturnsAllUsers() throws Exception {
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get("/users")
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("id")));
     }
@@ -52,7 +56,8 @@ public class UserResourceTest {
     @Test
     @WithUserDetails("user")
     public void whenNotAdminGetAllUsersIsUnauthorized() throws Exception {
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get("/users")
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string(isEmptyString()));
     }
@@ -100,7 +105,8 @@ public class UserResourceTest {
     @WithUserDetails("admin")
     public void whenAdminGetMeReturnsMe() throws Exception {
         int myId = 1;
-        mockMvc.perform(get("/users/me"))
+        mockMvc.perform(get("/users/me")
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is(myId)));
     }
@@ -109,7 +115,8 @@ public class UserResourceTest {
     @WithUserDetails("user")
     public void whenUserGetMeReturnsMe() throws Exception {
         int myId = 2;
-        mockMvc.perform(get("/users/me"))
+        mockMvc.perform(get("/users/me")
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is(myId)));
     }
@@ -124,7 +131,8 @@ public class UserResourceTest {
     @WithUserDetails("user")
     public void updateUserIsNotImplemented() throws Exception {
         int id = 1;
-        mockMvc.perform(put("/users/" + id))
+        mockMvc.perform(put("/users/" + id)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotImplemented())
                 .andExpect(content().string(isEmptyString()));
     }
@@ -140,7 +148,8 @@ public class UserResourceTest {
     @WithUserDetails("admin")
     public void whenUserDoesNotExistDeleteUserIsNotFound() throws Exception {
         int nonExistingId = Integer.MAX_VALUE;
-        mockMvc.perform(delete("/users/" + nonExistingId))
+        mockMvc.perform(delete("/users/" + nonExistingId)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(isEmptyString()));
     }
@@ -149,7 +158,8 @@ public class UserResourceTest {
     @WithUserDetails("user")
     public void whenNotAdminDeleteUserIsUnauthorized() throws Exception {
         int myId = 1;
-        mockMvc.perform(delete("/users/" + myId))
+        mockMvc.perform(delete("/users/" + myId)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string(isEmptyString()));
     }

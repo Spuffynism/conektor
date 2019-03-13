@@ -1,4 +1,4 @@
-package xyz.ndlr.domain.exception;
+package xyz.ndlr.domain.exception.password;
 
 public class InvalidPasswordException extends Exception {
     public InvalidPasswordException() {

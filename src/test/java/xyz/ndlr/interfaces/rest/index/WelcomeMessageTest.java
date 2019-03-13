@@ -1,6 +1,7 @@
 package xyz.ndlr.interfaces.rest.index;
 
 import org.junit.Test;
+import xyz.ndlr.domain.WelcomeMessage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

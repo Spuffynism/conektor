@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import xyz.ndlr.domain.dispatching.SupportedProvider;
 import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.AbstractProviderService;
+import xyz.ndlr.repository.database_util.QueryExecutor;
 import xyz.ndlr.service.AccountService;
-import xyz.ndlr.service.database_util.QueryExecutor;
 
 @Service
 public class FacebookService extends AbstractProviderService {

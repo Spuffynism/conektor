@@ -1,4 +1,4 @@
-package xyz.ndlr.interfaces.rest.index;
+package xyz.ndlr.domain;
 
 import java.util.Date;
 
@@ -6,7 +6,7 @@ public class WelcomeMessage {
     private long timestamp;
     private String message;
 
-    WelcomeMessage(String message) {
+    public WelcomeMessage(String message) {
         this.timestamp = new Date().getTime();
         this.message = message;
     }

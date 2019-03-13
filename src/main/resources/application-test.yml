@@ -13,7 +13,7 @@ imgur:
   access_token: 00008e5e73fce1a03dad9e8c81089ca45e891767
   refresh_token: 0000608f632fbf9fc4f3d484625069d8f5350d48
   client_secret: 0000e77eed79f9e765d80b884ae238960ad8662b
-mathpix
+mathpix:
   app_id: test_app_id
   app_key: 0000e259eed021089e48cdb3778ea37
 trello:

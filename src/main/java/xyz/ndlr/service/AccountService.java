@@ -2,8 +2,8 @@ package xyz.ndlr.service;
 
 import org.springframework.stereotype.Service;
 import xyz.ndlr.domain.entity.Account;
-import xyz.ndlr.service.database_util.AbstractService;
-import xyz.ndlr.service.database_util.QueryExecutor;
+import xyz.ndlr.repository.database_util.AbstractService;
+import xyz.ndlr.repository.database_util.QueryExecutor;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

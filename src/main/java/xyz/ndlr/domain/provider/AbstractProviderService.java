@@ -1,7 +1,7 @@
 package xyz.ndlr.domain.provider;
 
 import xyz.ndlr.domain.entity.User;
-import xyz.ndlr.service.database_util.AbstractService;
+import xyz.ndlr.repository.database_util.AbstractService;
 
 public abstract class AbstractProviderService extends AbstractService<User> {
     protected int providerId;

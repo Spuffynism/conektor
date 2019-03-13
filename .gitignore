@@ -18,3 +18,9 @@ conf/notes.md
 conf/ngrok/
 /src/main/resources/application-dev-local.yml
 /src/main/resources/application-dev-fb.yml
+
+# compiled sources
+out
+
+# external dependencies
+lib

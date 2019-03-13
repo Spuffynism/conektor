@@ -1,7 +1,7 @@
 package xyz.ndlr.security.auth;
 
 import org.hibernate.Query;
-import xyz.ndlr.service.database_util.QueryExecutor;
+import xyz.ndlr.repository.database_util.QueryExecutor;
 
 import java.math.BigInteger;
 

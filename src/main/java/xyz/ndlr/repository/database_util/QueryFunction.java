@@ -1,11 +1,11 @@
-package xyz.ndlr.service.database_util;
+package xyz.ndlr.repository.database_util;
 
 import org.hibernate.Session;
 
 /**
- * Interface fonctionnel définissant les callback utilisé par QueryExecutor
+ * Callbacks used by QueryExecutor
  *
- * @param <T>
+ * @param <T> the queried element
  */
 @FunctionalInterface
 public interface QueryFunction<T> {

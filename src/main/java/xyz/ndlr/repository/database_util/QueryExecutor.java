@@ -1,11 +1,11 @@
-package xyz.ndlr.service.database_util;
+package xyz.ndlr.repository.database_util;
 
 import org.hibernate.Session;
 
 /**
- * Exécute une fonction QueryFunction
+ * Executes a QueryFunction
  *
- * @param <T> le type de retour T de la QueryFunction
+ * @param <T> the queried element
  */
 public class QueryExecutor<T> {
     private QueryFunction<T> queryFunction;

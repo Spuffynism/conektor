@@ -1,8 +1,9 @@
-package xyz.ndlr.service.database_util;
+package xyz.ndlr.repository.database_util;
 
 import org.hibernate.Query;
 import xyz.ndlr.domain.entity.AbstractDatable;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public abstract class AbstractService<T> {
      * @param id the T's id
      * @return the T
      */
-    public T get(int id) {
+    public T get(Serializable id) {
         return new QueryExecutor<>(session -> session.get(tClass, id)).execute();
     }
 
@@ -35,7 +36,7 @@ public abstract class AbstractService<T> {
      * @param id the T's id
      * @return the T's creation date
      */
-    public Date getDateCreated(int id) {
+    public Date getDateCreated(Serializable id) {
         return (Date) getPropertyById("dateCreated", id);
     }
 
@@ -45,7 +46,7 @@ public abstract class AbstractService<T> {
      * @param id the T's id
      * @return the T's last modification date
      */
-    public Date getDateModified(int id) {
+    public Date getDateModified(Serializable id) {
         return (Date) getPropertyById("dateModified", id);
     }
 
@@ -56,7 +57,7 @@ public abstract class AbstractService<T> {
         }
     }
 
-    public Object getPropertyById(String propertyName, int id) {
+    public Object getPropertyById(String propertyName, Serializable id) {
         return new QueryExecutor<>(session -> {
             String hql = String.format("select %s from %s where id = :id",
                     propertyName, tClass.getSimpleName());
@@ -87,9 +88,7 @@ public abstract class AbstractService<T> {
      */
     public T add(T t) {
         return new QueryExecutor<>(session -> {
-            session.beginTransaction();
             session.save(t);
-            session.getTransaction().commit();
 
             return t;
         }).execute();
@@ -103,9 +102,7 @@ public abstract class AbstractService<T> {
      */
     public T update(T t) {
         return new QueryExecutor<>(session -> {
-            session.beginTransaction();
             session.update(t);
-            session.getTransaction().commit();
 
             return t;
         }).execute();
@@ -119,10 +116,7 @@ public abstract class AbstractService<T> {
     public void delete(int id) {
         new QueryExecutor<Void>(session -> {
             T t = session.load(tClass, id);
-
-            session.beginTransaction();
             session.delete(t);
-            session.getTransaction().commit();
 
             return null;
         }).execute();

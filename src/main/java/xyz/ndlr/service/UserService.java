@@ -4,15 +4,15 @@ import org.springframework.security.authentication.AccountStatusUserDetailsCheck
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import xyz.ndlr.domain.exception.EmailTakenException;
-import xyz.ndlr.domain.exception.InvalidPasswordException;
-import xyz.ndlr.domain.exception.UsernameTakenException;
 import xyz.ndlr.domain.entity.User;
+import xyz.ndlr.domain.exception.EmailTakenException;
+import xyz.ndlr.domain.exception.UsernameTakenException;
+import xyz.ndlr.domain.exception.password.InvalidPasswordException;
+import xyz.ndlr.repository.database_util.AbstractService;
+import xyz.ndlr.repository.database_util.QueryExecutor;
 import xyz.ndlr.security.auth.PasswordChange;
 import xyz.ndlr.security.hashing.Argon2Hasher;
 import xyz.ndlr.security.hashing.IPasswordHasher;
-import xyz.ndlr.service.database_util.AbstractService;
-import xyz.ndlr.service.database_util.QueryExecutor;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

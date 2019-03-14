@@ -3,8 +3,8 @@ package xyz.ndlr.domain.dispatching;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.ndlr.domain.exception.CannotDispatchException;
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.facebook.webhook.Messaging;
+import xyz.ndlr.domain.user.User;
 
 @Component
 public class MainDispatcher implements IMessagingDispatcher {

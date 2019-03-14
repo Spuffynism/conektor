@@ -3,22 +3,25 @@ package xyz.ndlr.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import xyz.ndlr.domain.entity.User;
+import xyz.ndlr.domain.user.User;
+import xyz.ndlr.domain.user.UserId;
+import xyz.ndlr.domain.user.Username;
+import xyz.ndlr.repository.UserRepository;
 
 @Component
 public class AuthHolder {
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public AuthHolder(UserService userService) {
-        this.userService = userService;
+    public AuthHolder(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public boolean isAuthenticated() {
         return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
     }
 
-    public xyz.ndlr.domain.entity.User getUser() {
+    public User getUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
 
@@ -30,11 +33,11 @@ public class AuthHolder {
             username = (String) principal;
         }
 
-        return userService.loadUserByUsername(username);
+        return userRepository.get(new Username(username));
     }
 
-    public boolean isMe(int userId) {
-        return userId == getUser().getId();
+    public boolean isMe(UserId userId) {
+        return userId.getValue() == getUser().getId();
     }
 
     public boolean isMe(User user) {

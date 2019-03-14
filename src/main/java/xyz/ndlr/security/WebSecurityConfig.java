@@ -5,29 +5,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders
-        .AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration
-        .WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import xyz.ndlr.repository.UserRepository;
 import xyz.ndlr.security.auth.jwt.JWTAuthenticationFilter;
 import xyz.ndlr.security.auth.jwt.JWTLoginFilter;
 import xyz.ndlr.security.hashing.Argon2Encoder;
-import xyz.ndlr.service.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public WebSecurityConfig(UserService userService) {
-        this.userService = userService;
+    public WebSecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -52,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-        authProvider.setUserDetailsService(userService);
+        //authProvider.setUserDetailsService(userRepository);
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;

@@ -2,10 +2,10 @@ package xyz.ndlr.service;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Service;
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.exception.password.NonCompliantPasswordException;
 import xyz.ndlr.domain.exception.password.NonMatchingPasswordConfirmationException;
 import xyz.ndlr.domain.exception.password.PasswordChangeAttemptCountReachedException;
+import xyz.ndlr.domain.user.User;
 import xyz.ndlr.repository.database_util.QueryExecutor;
 import xyz.ndlr.security.auth.PasswordChange;
 import xyz.ndlr.security.hashing.Argon2Hasher;
@@ -14,17 +14,17 @@ import xyz.ndlr.security.hashing.IPasswordHasher;
 @Service
 public class PasswordChangeService {
 
-    public void tryChangePassword(User user, PasswordChange passwordChange)
+    public void changePassword(User user, PasswordChange passwordChange)
             throws NonCompliantPasswordException,
             PasswordChangeAttemptCountReachedException, NonMatchingPasswordConfirmationException {
         int userId = user.getId();
 
         addPasswordChangeAttempt(userId);
-        changePassword(user, passwordChange);
+        actuallyChangePassword(user, passwordChange);
         resetPasswordChangeAttempts(userId);
     }
 
-    private void changePassword(User currentUser, PasswordChange passwordChange)
+    private void actuallyChangePassword(User currentUser, PasswordChange passwordChange)
             throws PasswordChangeAttemptCountReachedException,
             NonCompliantPasswordException, NonMatchingPasswordConfirmationException {
         // Checks that we haven't exceeded the maximum allowed password change attempts
@@ -64,13 +64,13 @@ public class PasswordChangeService {
 
     private void addPasswordChangeAttempt(int userId) {
         String sql = "update User set attemptedPasswordChanges = attemptedPasswordChanges + 1" +
-                " where id = :userId";
+                " where id = :UserId";
 
         executeForUser(userId, sql);
     }
 
     private void resetPasswordChangeAttempts(int userId) {
-        String sql = "update User set attemptedPasswordChanges = 0 where id = :userId";
+        String sql = "update User set attemptedPasswordChanges = 0 where id = :UserId";
 
         executeForUser(userId, sql);
     }

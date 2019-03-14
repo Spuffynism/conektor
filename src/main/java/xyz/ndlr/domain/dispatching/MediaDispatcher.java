@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.ndlr.domain.ProviderResponseQueue;
 import xyz.ndlr.domain.dispatching.mapping.ActionRepository;
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.sendAPI.message.TextMessage;
 import xyz.ndlr.domain.provider.facebook.sendAPI.message.quick_reply.QuickReplyMessageFactory;
 import xyz.ndlr.domain.provider.facebook.shared.AttachmentType;
 import xyz.ndlr.domain.provider.facebook.webhook.Messaging;
 import xyz.ndlr.domain.provider.facebook.webhook.event.Message;
+import xyz.ndlr.domain.user.User;
 
 import java.util.ArrayList;
 import java.util.List;

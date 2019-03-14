@@ -1,8 +1,9 @@
-package xyz.ndlr.service;
+package xyz.ndlr.repository;
 
 import org.springframework.stereotype.Service;
-import xyz.ndlr.domain.entity.Account;
-import xyz.ndlr.repository.database_util.AbstractService;
+import xyz.ndlr.domain.account.Account;
+import xyz.ndlr.domain.account.IAccountRepository;
+import xyz.ndlr.repository.database_util.AbstractRepository;
 import xyz.ndlr.repository.database_util.QueryExecutor;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -11,8 +12,8 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Service
-public class AccountService extends AbstractService<Account> {
-    public AccountService() {
+public class AccountRepository extends AbstractRepository<Account> implements IAccountRepository {
+    protected AccountRepository() {
         super(Account.class);
     }
 
@@ -41,7 +42,7 @@ public class AccountService extends AbstractService<Account> {
             CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
             Root<Account> root = criteria.from(Account.class);
             criteria.select(root);
-            criteria.where(builder.equal(root.get("userId"), userId));
+            criteria.where(builder.equal(root.get("UserId"), userId));
 
             return session.createQuery(criteria).getResultList();
         }).execute();

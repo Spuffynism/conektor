@@ -7,15 +7,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import xyz.ndlr.domain.entity.User;
+import xyz.ndlr.domain.Limit;
+import xyz.ndlr.domain.exception.UserNotFoundException;
+import xyz.ndlr.domain.user.User;
+import xyz.ndlr.domain.user.UserId;
 import xyz.ndlr.service.AuthHolder;
 import xyz.ndlr.service.UserService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/users", consumes = {MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_JSON_UTF8_VALUE},
+@RequestMapping(path = "/users",
+        consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class UserResource {
 
@@ -29,11 +32,11 @@ public class UserResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers(@RequestParam Limit limit) {
         if (!authHolder.getUser().isAdmin())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        List<User> users = userService.getAll();
+        List<User> users = userService.fetchAll(limit);
         if (users.isEmpty())
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
@@ -41,13 +44,16 @@ public class UserResource {
     }
 
     @GetMapping(Route.ID)
-    public ResponseEntity<User> getUser(@PathVariable(Route.Attribute.ID) int id) {
+    public ResponseEntity<User> getUser(@PathVariable(Route.Attribute.ID) UserId id) {
         if (!authHolder.isMe(id) && !authHolder.getUser().isAdmin())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        User user = userService.get(id);
-        if (user == null)
+        User user;
+        try {
+            user = userService.fetchById(id);
+        } catch (UserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -61,7 +67,7 @@ public class UserResource {
     public ResponseEntity<Exception> createUser(@RequestBody User user,
                                                 UriComponentsBuilder ucBuilder) {
         try {
-            userService.tryCreateNewUser(user);
+            userService.createNewUser(user);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
@@ -72,20 +78,16 @@ public class UserResource {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @PutMapping(Route.ID)
-    public ResponseEntity<User> updateUser(@PathVariable(Route.Attribute.ID) int id) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
     @DeleteMapping(Route.ID)
-    public ResponseEntity<User> deleteUser(@PathVariable(Route.Attribute.ID) int id) {
+    public ResponseEntity<User> deleteUser(@PathVariable(Route.Attribute.ID) UserId userId) {
         if (!authHolder.getUser().isAdmin())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        if (!userService.exists(id))
+        try {
+            userService.delete(userId);
+        } catch (UserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        userService.delete(id);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

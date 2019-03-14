@@ -1,8 +1,8 @@
 package xyz.ndlr.domain.dispatching.mapping;
 
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.PipelinedMessage;
+import xyz.ndlr.domain.user.User;
 
 import java.util.function.BiFunction;
 

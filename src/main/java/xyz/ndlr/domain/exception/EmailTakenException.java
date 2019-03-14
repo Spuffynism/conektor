@@ -1,8 +1,10 @@
 package xyz.ndlr.domain.exception;
 
 
+import xyz.ndlr.domain.Email;
+
 public class EmailTakenException extends Exception {
-    public EmailTakenException(String email) {
-        super("Email " + email + " is already taken.");
+    public EmailTakenException(Email email) {
+        super("Email " + email.getValue() + " is already taken.");
     }
 }

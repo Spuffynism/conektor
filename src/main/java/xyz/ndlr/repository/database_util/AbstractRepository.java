@@ -1,7 +1,7 @@
 package xyz.ndlr.repository.database_util;
 
 import org.hibernate.Query;
-import xyz.ndlr.domain.entity.AbstractDatable;
+import xyz.ndlr.domain.AbstractDatable;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,10 +13,10 @@ import java.util.List;
  *
  * @param <T> the object that is managed by its service which extends this class
  */
-public abstract class AbstractService<T> {
+public abstract class AbstractRepository<T> implements IAbstractRepository<T> {
     private final Class<T> tClass;
 
-    protected AbstractService(Class<T> tClass) {
+    protected AbstractRepository(Class<T> tClass) {
         this.tClass = tClass;
     }
 
@@ -58,9 +58,10 @@ public abstract class AbstractService<T> {
     }
 
     public Object getPropertyById(String propertyName, Serializable id) {
+        String hql = String.format("select %s from %s where id = :id",
+                propertyName, tClass.getSimpleName());
+
         return new QueryExecutor<>(session -> {
-            String hql = String.format("select %s from %s where id = :id",
-                    propertyName, tClass.getSimpleName());
             Query query = session.createQuery(hql);
             query.setParameter("id", id);
 
@@ -113,7 +114,7 @@ public abstract class AbstractService<T> {
      *
      * @param id the T's id to delete
      */
-    public void delete(int id) {
+    public void delete(Serializable id) {
         new QueryExecutor<Void>(session -> {
             T t = session.load(tClass, id);
             session.delete(t);
@@ -128,7 +129,7 @@ public abstract class AbstractService<T> {
      * @param id the T's id
      * @return if the T exists or not
      */
-    public Boolean exists(int id) {
+    public Boolean exists(Serializable id) {
         return new QueryExecutor<>(session -> get(id) != null).execute();
     }
 }

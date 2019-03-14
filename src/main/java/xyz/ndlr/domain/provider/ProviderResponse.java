@@ -1,8 +1,8 @@
 package xyz.ndlr.domain.provider;
 
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.facebook.sendAPI.message.Message;
 import xyz.ndlr.domain.provider.facebook.sendAPI.message.TextMessage;
+import xyz.ndlr.domain.user.User;
 
 /**
  * All provider calls made return this

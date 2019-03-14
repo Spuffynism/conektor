@@ -1,74 +1,61 @@
 package xyz.ndlr.service;
 
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import xyz.ndlr.domain.entity.User;
+import xyz.ndlr.domain.Email;
+import xyz.ndlr.domain.Limit;
 import xyz.ndlr.domain.exception.EmailTakenException;
+import xyz.ndlr.domain.exception.UserNotFoundException;
 import xyz.ndlr.domain.exception.UsernameTakenException;
 import xyz.ndlr.domain.exception.password.InvalidPasswordException;
-import xyz.ndlr.repository.database_util.AbstractService;
-import xyz.ndlr.repository.database_util.QueryExecutor;
+import xyz.ndlr.domain.user.IUserRepository;
+import xyz.ndlr.domain.user.User;
+import xyz.ndlr.domain.user.UserId;
+import xyz.ndlr.domain.user.Username;
 import xyz.ndlr.security.auth.PasswordChange;
 import xyz.ndlr.security.hashing.Argon2Hasher;
 import xyz.ndlr.security.hashing.IPasswordHasher;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import java.util.List;
 
 @Service
-public class UserService extends AbstractService<User> implements UserDetailsService {
-
+public class UserService {
     private final AccountStatusUserDetailsChecker detailsChecker
             = new AccountStatusUserDetailsChecker();
+    private final IUserRepository userRepository;
 
-    public UserService() {
-        super(User.class);
+    public UserService(IUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @Override
-    public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = getByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("user not found");
-        }
+    public List<User> fetchAll(Limit limit) {
+        //TODO(nich): Make use of limit
+        return userRepository.getAll();
+    }
 
-        detailsChecker.check(user);
+    private User fetchByUsername(Username username) {
+        return userRepository.get(username);
+    }
+
+    private User fetchByEmail(Email email) {
+        return userRepository.get(email);
+    }
+
+    public User fetchById(UserId userId) throws UserNotFoundException {
+        User user = userRepository.get(userId);
+
+        if(user == null)
+            throw new UserNotFoundException(userId);
+
         return user;
     }
 
-    private User getByUsername(String username) {
-        return new QueryExecutor<>(session -> {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<User> criteria = builder.createQuery(User.class);
-            Root<User> root = criteria.from(User.class);
-            criteria.select(root);
-            criteria.where(builder.equal(root.get("username"), username));
-
-            return session.createQuery(criteria).getSingleResult();
-        }).execute();
-    }
-
-    private User getByEmail(String email) {
-        return new QueryExecutor<>(session -> {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<User> criteria = builder.createQuery(User.class);
-            Root<User> root = criteria.from(User.class);
-            criteria.select(root);
-            criteria.where(builder.equal(root.get("email"), email));
-
-            return session.createQuery(criteria).uniqueResult();
-        }).execute();
-    }
-
-    public void tryCreateNewUser(User dirtyUser) throws UsernameTakenException, EmailTakenException,
+    public void createNewUser(User dirtyUser) throws UsernameTakenException, EmailTakenException,
             InvalidPasswordException {
-        if (getByUsername(dirtyUser.getUsername()) != null)
-            throw new UsernameTakenException("This username is already taken.");
+        if (fetchByUsername(dirtyUser.getUsername()) != null)
+            throw new UsernameTakenException(dirtyUser.getUsername());
 
-        if (getByEmail(dirtyUser.getEmail()) != null)
+        if (fetchByEmail(dirtyUser.getEmail()) != null)
             throw new EmailTakenException(dirtyUser.getEmail());
 
         if (!PasswordChange.matchesPolicy(dirtyUser.getPassword()))
@@ -76,11 +63,18 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
 
         User cleanUser = new User();
         cleanUser.setUsername(dirtyUser.getUsername());
-        cleanUser.setEmail(dirtyUser.getUsername());
+        cleanUser.setEmail(dirtyUser.getEmail());
 
         IPasswordHasher argon2 = new Argon2Hasher();
         cleanUser.setPassword(argon2.hash(dirtyUser.getPassword()));
 
-        add(cleanUser);
+        userRepository.add(cleanUser);
+    }
+
+    public void delete(UserId userid) throws UserNotFoundException {
+        if(!userRepository.exists(userid))
+            throw new UserNotFoundException(userid);
+
+        userRepository.delete(userid);
     }
 }

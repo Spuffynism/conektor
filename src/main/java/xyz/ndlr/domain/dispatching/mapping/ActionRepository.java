@@ -12,7 +12,7 @@ import java.util.Map;
  * Holds all provider actions.
  */
 @Component
-public class ActionRepository {
+public class ActionRepository  implements IActionRepository {
     /**
      * All available provider actions.
      * Is populated during the application bootstrapping step by
@@ -43,30 +43,36 @@ public class ActionRepository {
      * @param actionName name of the action
      * @param action     the registered action
      */
-    void register(String provider, String actionName, Action action) {
+    @Override
+    public void register(String provider, String actionName, Action action) {
         actions.put(provider, actionName, action);
     }
 
+    @Override
     public Action get(String provider, String actionName) {
         return actions.get(provider, actionName);
     }
 
+    @Override
     public Action getDefault(String provider) {
         return actions.get(provider, ActionMapping.DEFAULT_ACTION);
     }
 
-    void registerHumanName(String provider, String providerHumanName) {
+    @Override
+    public void registerHumanName(String provider, String providerHumanName) {
         providerHumanNames.put(provider, providerHumanName);
     }
 
     /**
      * @return an immutable provider human names mapping
      */
+    @Override
     public Map<String, String> getProviderHumanNames() {
         return Collections.unmodifiableMap(providerHumanNames);
     }
 
-    void registerImageProviderHumanName(String provider, String providerHumanName) {
+    @Override
+    public void registerImageProviderHumanName(String provider, String providerHumanName) {
         imageProviderHumanNames.put(provider, providerHumanName);
     }
 

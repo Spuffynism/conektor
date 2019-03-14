@@ -3,23 +3,23 @@ package xyz.ndlr.domain.provider.facebook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.ndlr.domain.dispatching.SupportedProvider;
-import xyz.ndlr.domain.entity.User;
-import xyz.ndlr.domain.provider.AbstractProviderService;
+import xyz.ndlr.domain.provider.AbstractProviderRepository;
+import xyz.ndlr.domain.user.User;
 import xyz.ndlr.repository.database_util.QueryExecutor;
-import xyz.ndlr.service.AccountService;
+import xyz.ndlr.service.AccountFetchingService;
 
 @Service
-public class FacebookService extends AbstractProviderService {
-    private final AccountService accountService;
+public class FacebookRepository extends AbstractProviderRepository {
+    private final AccountFetchingService accountFetchingService;
 
     @Autowired
-    public FacebookService(AccountService accountService) {
+    public FacebookRepository(AccountFetchingService accountFetchingService) {
         super(SupportedProvider.FACEBOOK.getProviderId());
-        this.accountService = accountService;
+        this.accountFetchingService = accountFetchingService;
     }
 
     public boolean userIsRegistered(String userId) {
-        return accountService.existsByToken(userId, providerId);
+        return accountFetchingService.existsByToken(userId, providerId);
     }
 
     public User getUserByPSID(String PSID) {

@@ -15,8 +15,7 @@ import xyz.ndlr.service.PasswordChangeService;
 
 @RestController
 @RequestMapping(name = "/password_change",
-        consumes = {MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_JSON_UTF8_VALUE},
+        consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PasswordChangeResource {
 
@@ -33,7 +32,7 @@ public class PasswordChangeResource {
     @PostMapping
     public ResponseEntity<Exception> changePassword(@RequestBody PasswordChange passwordChange) {
         try {
-            passwordChangeService.tryChangePassword(authHolder.getUser(), passwordChange);
+            passwordChangeService.changePassword(authHolder.getUser(), passwordChange);
         } catch (PasswordException e) {
             return new ResponseEntity<>(e, HttpStatus.UNAUTHORIZED);
         }

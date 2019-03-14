@@ -17,7 +17,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-@SpringBootTest(classes = {Application.class, UserDetailsServiceTestConfiguration.class})
+@SpringBootTest(classes = {Application.class})
 @AutoConfigureMockMvc
 public @interface ControllerTest {
 }

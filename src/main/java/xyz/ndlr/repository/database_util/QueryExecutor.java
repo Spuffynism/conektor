@@ -15,7 +15,7 @@ public class QueryExecutor<T> {
     }
 
     /**
-     * @return le résultat T de la QueryFunction
+     * @return QueryFunction's execution result
      */
     public T execute() {
         Session session = null;

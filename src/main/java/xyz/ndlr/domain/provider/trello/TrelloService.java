@@ -3,10 +3,10 @@ package xyz.ndlr.domain.provider.trello;
 import org.springframework.beans.factory.annotation.Autowired;
 import xyz.ndlr.domain.dispatching.mapping.ActionMapping;
 import xyz.ndlr.domain.dispatching.mapping.ProviderMapping;
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.PipelinedMessage;
 import xyz.ndlr.domain.provider.facebook.sendAPI.message.TextMessage;
+import xyz.ndlr.domain.user.User;
 
 import java.util.Map;
 

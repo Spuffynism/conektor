@@ -1,11 +1,11 @@
 package xyz.ndlr.domain.provider.mathpix;
 
 import xyz.ndlr.domain.dispatching.mapping.ProviderMapping;
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.ImageService;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.PipelinedMessage;
 import xyz.ndlr.domain.provider.mathpix.request.Request;
+import xyz.ndlr.domain.user.User;
 
 /**
  * @see <a href="mathpix">https://docs.mathpix.com/</a>

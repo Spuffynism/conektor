@@ -3,9 +3,9 @@ package xyz.ndlr.domain.dispatching.mapping;
 import org.apache.log4j.Logger;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.PipelinedMessage;
+import xyz.ndlr.domain.user.User;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

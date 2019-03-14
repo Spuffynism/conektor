@@ -2,16 +2,16 @@ package xyz.ndlr.domain.dispatching;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xyz.ndlr.domain.exception.CannotDispatchException;
 import xyz.ndlr.domain.ProviderResponseQueue;
 import xyz.ndlr.domain.dispatching.mapping.Action;
 import xyz.ndlr.domain.dispatching.mapping.ActionRepository;
-import xyz.ndlr.domain.entity.User;
+import xyz.ndlr.domain.exception.CannotDispatchException;
 import xyz.ndlr.domain.parsing.MessageParser;
 import xyz.ndlr.domain.parsing.ParsedMessage;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.PipelinedMessage;
 import xyz.ndlr.domain.provider.facebook.webhook.Messaging;
+import xyz.ndlr.domain.user.User;
 
 import java.util.ArrayList;
 import java.util.List;

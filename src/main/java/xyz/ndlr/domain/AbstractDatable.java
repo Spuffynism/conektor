@@ -1,4 +1,4 @@
-package xyz.ndlr.domain.entity;
+package xyz.ndlr.domain;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -8,8 +8,8 @@ import java.util.Date;
  * Entities which have a creation and modification date
  */
 public abstract class AbstractDatable {
-    Date dateCreated;
-    Date dateModified;
+    protected Date dateCreated;
+    protected Date dateModified;
 
     /**
      * Needs to be overridden because the name of the database column referring to the creation date

@@ -1,23 +1,24 @@
-package xyz.ndlr.domain.entity;
+package xyz.ndlr.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import xyz.ndlr.domain.AbstractDatable;
+import xyz.ndlr.domain.Email;
+import xyz.ndlr.domain.account.Account;
 import xyz.ndlr.domain.dispatching.SupportedProvider;
 import xyz.ndlr.security.auth.Role;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user_usr")
-public class User extends AbstractDatable implements UserDetails {
+public class User extends AbstractDatable {
     private int id;
-    private String username;
-    private String email;
+    private Username username;
+    private Email email;
     @JsonIgnore
     private String password;
     @JsonIgnore
@@ -26,12 +27,8 @@ public class User extends AbstractDatable implements UserDetails {
     private int attemptedPasswordChanges;
     @JsonIgnoreProperties("user")
     private Set<Account> accounts;
-    @JsonIgnore
-    private List<GrantedAuthority> grantedAuthorities;
 
     public User() {
-        // needed because we use the UserDetails class but not its grantedAuthoritites property.
-        grantedAuthorities = Collections.emptyList();
     }
 
     @Transient
@@ -67,8 +64,6 @@ public class User extends AbstractDatable implements UserDetails {
         return role == Role.NONE.value();
     }
 
-    //<editor-fold> Default getters and setters
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usr_id")
@@ -80,28 +75,26 @@ public class User extends AbstractDatable implements UserDetails {
         this.id = id;
     }
 
-    @Override
     @Basic
     @Column(name = "usr_username")
-    public String getUsername() {
+    public Username getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(Username username) {
         this.username = username;
     }
 
     @Basic
     @Column(name = "usr_email")
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(Email email) {
         this.email = email;
     }
 
-    @Override
     @Basic
     @Column(name = "usr_password")
     public String getPassword() {
@@ -159,64 +152,4 @@ public class User extends AbstractDatable implements UserDetails {
     public Date getDateModified() {
         return dateModified;
     }
-
-    //</editor-fold>
-
-    //<editor-fold> UserDetails Authorization getters and setters
-
-    @JsonIgnore
-    @Override
-    @Transient
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return grantedAuthorities;
-    }
-
-    @JsonProperty
-    public void setAuthorities(List<? extends GrantedAuthority> grantedAuthorities) { }
-
-    @JsonIgnore
-    @Override
-    @Transient
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @JsonProperty
-    public void setAccountNonExpired(boolean accountNonExpired) {
-    }
-
-    @JsonIgnore
-    @Override
-    @Transient
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @JsonProperty
-    public void setAccountNonLocked(boolean accountNonLocked) {
-    }
-
-    @JsonIgnore
-    @Override
-    @Transient
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @JsonProperty
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-    }
-
-    @JsonIgnore
-    @Override
-    @Transient
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @JsonProperty
-    public void setEnabled(boolean enabled) {
-    }
-
-    //</editor-fold>
 }

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import xyz.ndlr.domain.ListenableFutureAdapter;
 import xyz.ndlr.domain.dispatching.mapping.ActionMapping;
 import xyz.ndlr.domain.dispatching.mapping.ProviderMapping;
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.ImageService;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.PipelinedMessage;
@@ -13,6 +12,7 @@ import xyz.ndlr.domain.provider.facebook.webhook.event.Message;
 import xyz.ndlr.domain.provider.imgur.receive.Image;
 import xyz.ndlr.domain.provider.imgur.receive.UploadResponse;
 import xyz.ndlr.domain.provider.imgur.send.UploadPayload;
+import xyz.ndlr.domain.user.User;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

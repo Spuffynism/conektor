@@ -2,12 +2,12 @@ package xyz.ndlr.domain.provider.random;
 
 import xyz.ndlr.domain.dispatching.mapping.ActionMapping;
 import xyz.ndlr.domain.dispatching.mapping.ProviderMapping;
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.PipelinedMessage;
 import xyz.ndlr.domain.provider.random.card.Card;
 import xyz.ndlr.domain.provider.random.card.Suit;
 import xyz.ndlr.domain.provider.random.card.Value;
+import xyz.ndlr.domain.user.User;
 
 import java.util.Random;
 

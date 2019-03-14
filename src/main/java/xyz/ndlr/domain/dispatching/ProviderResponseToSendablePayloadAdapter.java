@@ -1,7 +1,7 @@
 package xyz.ndlr.domain.dispatching;
 
 import org.springframework.stereotype.Component;
-import xyz.ndlr.domain.entity.Account;
+import xyz.ndlr.domain.account.Account;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.sendAPI.MessageSendablePayload;
 import xyz.ndlr.domain.provider.facebook.sendAPI.SendablePayload;

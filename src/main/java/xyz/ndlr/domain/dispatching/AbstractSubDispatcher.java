@@ -2,12 +2,12 @@ package xyz.ndlr.domain.dispatching;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
-import xyz.ndlr.domain.exception.CannotDispatchException;
 import xyz.ndlr.domain.ProviderResponseQueue;
 import xyz.ndlr.domain.dispatching.mapping.ActionRepository;
-import xyz.ndlr.domain.entity.User;
+import xyz.ndlr.domain.exception.CannotDispatchException;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.webhook.Messaging;
+import xyz.ndlr.domain.user.User;
 
 import java.util.stream.Stream;
 

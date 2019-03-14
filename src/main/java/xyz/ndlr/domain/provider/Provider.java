@@ -1,6 +1,8 @@
-package xyz.ndlr.domain.entity;
+package xyz.ndlr.domain.provider;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import xyz.ndlr.domain.AbstractDatable;
+import xyz.ndlr.domain.account.Account;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -33,7 +33,7 @@ public class ActionMappingAnnotationProcessor implements BeanPostProcessor {
     }
 
     /**
-     * Populates the ActionRepository's image services human names.
+     * Populates the IActionRepository's image services human names.
      *
      * @param bean the bean that is maybe an ImageService
      */

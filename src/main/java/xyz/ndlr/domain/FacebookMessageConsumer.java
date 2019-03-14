@@ -2,8 +2,8 @@ package xyz.ndlr.domain;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
-import xyz.ndlr.domain.exception.CannotSendMessageException;
 import xyz.ndlr.domain.dispatching.ProviderResponseToSendablePayloadAdapter;
+import xyz.ndlr.domain.exception.CannotSendMessageException;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.FacebookMessageSender;
 import xyz.ndlr.domain.provider.facebook.sendAPI.SendablePayload;
@@ -31,6 +31,8 @@ public class FacebookMessageConsumer implements Runnable {
 
     public void startConsuming() {
         consume = true;
+
+        new Thread(this).start();
     }
 
     public void stopConsuming() {

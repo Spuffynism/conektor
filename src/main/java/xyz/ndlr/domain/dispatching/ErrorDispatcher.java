@@ -3,16 +3,16 @@ package xyz.ndlr.domain.dispatching;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xyz.ndlr.domain.exception.CannotDispatchException;
-import xyz.ndlr.domain.exception.UnregisteredAccountException;
 import xyz.ndlr.domain.ProviderResponseQueue;
 import xyz.ndlr.domain.dispatching.mapping.ActionRepository;
-import xyz.ndlr.domain.entity.User;
+import xyz.ndlr.domain.exception.CannotDispatchException;
+import xyz.ndlr.domain.exception.UnregisteredAccountException;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.ProviderResponseError;
-import xyz.ndlr.domain.provider.facebook.FacebookService;
+import xyz.ndlr.domain.provider.facebook.FacebookRepository;
 import xyz.ndlr.domain.provider.facebook.webhook.Messaging;
 import xyz.ndlr.domain.provider.facebook.webhook.Payload;
+import xyz.ndlr.domain.user.User;
 
 import java.util.stream.Stream;
 
@@ -20,12 +20,12 @@ import java.util.stream.Stream;
 public class ErrorDispatcher extends AbstractSubDispatcher {
     private static final Logger logger = Logger.getLogger(ErrorDispatcher.class);
 
-    private final FacebookService facebookService;
+    private final FacebookRepository facebookService;
 
     @Autowired
     ErrorDispatcher(ActionRepository actionRepository,
                     ProviderResponseQueue sharedResponses,
-                    FacebookService facebookService) {
+                    FacebookRepository facebookService) {
         super(actionRepository, sharedResponses);
         this.facebookService = facebookService;
     }

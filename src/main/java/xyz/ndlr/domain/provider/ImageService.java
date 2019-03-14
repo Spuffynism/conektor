@@ -1,8 +1,8 @@
 package xyz.ndlr.domain.provider;
 
 import xyz.ndlr.domain.dispatching.mapping.ActionMapping;
-import xyz.ndlr.domain.entity.User;
 import xyz.ndlr.domain.provider.facebook.PipelinedMessage;
+import xyz.ndlr.domain.user.User;
 
 /**
  * Image uploading services

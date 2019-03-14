@@ -1,10 +1,11 @@
 package xyz.ndlr.service;
 
-import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
 import org.springframework.stereotype.Service;
 import xyz.ndlr.domain.Email;
+import xyz.ndlr.domain.IAuthHolder;
 import xyz.ndlr.domain.Limit;
 import xyz.ndlr.domain.exception.EmailTakenException;
+import xyz.ndlr.domain.exception.UnauthorizedException;
 import xyz.ndlr.domain.exception.UserNotFoundException;
 import xyz.ndlr.domain.exception.UsernameTakenException;
 import xyz.ndlr.domain.exception.password.InvalidPasswordException;
@@ -17,31 +18,29 @@ import xyz.ndlr.security.hashing.Argon2Hasher;
 import xyz.ndlr.security.hashing.IPasswordHasher;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
-    private final AccountStatusUserDetailsChecker detailsChecker
-            = new AccountStatusUserDetailsChecker();
     private final IUserRepository userRepository;
+    private final IAuthHolder authHolder;
 
-    public UserService(IUserRepository userRepository) {
+    public UserService(IAuthHolder authHolder, IUserRepository userRepository) {
         this.userRepository = userRepository;
+        this.authHolder = authHolder;
     }
 
-    public List<User> fetchAll(Limit limit) {
-        //TODO(nich): Make use of limit
-        return userRepository.getAll();
+    public List<User> fetchAll(Optional<Limit> limit) throws UnauthorizedException {
+        if (!authHolder.getUser().isAdmin())
+            throw new UnauthorizedException();
+
+        return userRepository.getAll(limit.orElse(Limit.DEFAULT));
     }
 
-    private User fetchByUsername(Username username) {
-        return userRepository.get(username);
-    }
+    public User fetchById(UserId userId) throws UserNotFoundException, UnauthorizedException {
+        if (!authHolder.isMe(userId) && !authHolder.getUser().isAdmin())
+            throw new UnauthorizedException();
 
-    private User fetchByEmail(Email email) {
-        return userRepository.get(email);
-    }
-
-    public User fetchById(UserId userId) throws UserNotFoundException {
         User user = userRepository.get(userId);
 
         if(user == null)
@@ -71,7 +70,18 @@ public class UserService {
         userRepository.add(cleanUser);
     }
 
-    public void delete(UserId userid) throws UserNotFoundException {
+    private User fetchByUsername(Username username) {
+        return userRepository.get(username);
+    }
+
+    private User fetchByEmail(Email email) {
+        return userRepository.get(email);
+    }
+
+    public void delete(UserId userid) throws UserNotFoundException, UnauthorizedException {
+        if (!authHolder.getUser().isAdmin())
+            throw new UnauthorizedException();
+
         if(!userRepository.exists(userid))
             throw new UserNotFoundException(userid);
 

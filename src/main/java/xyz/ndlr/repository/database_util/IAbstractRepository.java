@@ -1,5 +1,7 @@
 package xyz.ndlr.repository.database_util;
 
+import xyz.ndlr.domain.Limit;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +39,7 @@ public interface IAbstractRepository<T> {
      * @return a T List
      */
     @SuppressWarnings(value = "unchecked")
-    List<T> getAll();
+    List<T> getAll(Limit limit);
 
     /**
      * Adds a T

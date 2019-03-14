@@ -1,6 +1,7 @@
 package xyz.ndlr.domain.user;
 
 import xyz.ndlr.domain.Email;
+import xyz.ndlr.domain.Limit;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface IUserRepository {
 
     User get(UserId userId);
 
-    List<User> getAll();
+    List<User> getAll(Limit limit);
 
     User add(User user);
 

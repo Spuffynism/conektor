@@ -2,6 +2,7 @@ package xyz.ndlr.repository.database_util;
 
 import org.hibernate.Query;
 import xyz.ndlr.domain.AbstractDatable;
+import xyz.ndlr.domain.Limit;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -75,7 +76,8 @@ public abstract class AbstractRepository<T> implements IAbstractRepository<T> {
      * @return a T List
      */
     @SuppressWarnings(value = "unchecked")
-    public List<T> getAll() {
+    public List<T> getAll(Limit limit) {
+        //TODO(nich): Implement limit usage
         return new QueryExecutor<>(session -> {
             return (List<T>) session.createQuery("from " + tClass.getSimpleName()).list();
         }).execute();

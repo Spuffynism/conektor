@@ -19,13 +19,13 @@ import java.util.List;
 public class FacebookWebhookService {
     private static final Logger logger = Logger.getLogger(FacebookWebhookService.class);
 
-    private final FacebookRepository facebookService;
+    private final FacebookRepository facebookRepository;
     private final ErrorDispatcher errorDispatcher;
     private final MainDispatcher mainDispatcher;
 
-    FacebookWebhookService(FacebookRepository facebookService, ErrorDispatcher errorDispatcher,
+    FacebookWebhookService(FacebookRepository facebookRepository, ErrorDispatcher errorDispatcher,
                            MainDispatcher mainDispatcher) {
-        this.facebookService = facebookService;
+        this.facebookRepository = facebookRepository;
         this.errorDispatcher = errorDispatcher;
         this.mainDispatcher = mainDispatcher;
     }
@@ -36,7 +36,7 @@ public class FacebookWebhookService {
      * @param payload the message payload sent by facebook
      * @throws IllegalArgumentException     when some payload info is invalid
      */
-    public void processPayload(Payload payload) throws UnsupportedPayloadException {
+    public void processPayload(Payload payload) {
         try {
             if (payload == null || !payload.isPage())
                 throw new UnsupportedPayloadException();
@@ -55,7 +55,8 @@ public class FacebookWebhookService {
     private void dispatchMessageFacade(FacebookMessageFacade messageFacade)
             throws UnregisteredAccountException, CannotDispatchException {
         String senderId = messageFacade.getSender().getId();
-        if (!facebookService.userIsRegistered(senderId))
+
+        if (!facebookRepository.userIsRegistered(senderId))
             throw new UnregisteredAccountException("unrecognized facebook account - are you " +
                     "registered?");
 
@@ -72,7 +73,7 @@ public class FacebookWebhookService {
      */
     private void dispatch(String senderId, Messaging messaging)
             throws CannotDispatchException {
-        User user = facebookService.getUserByPSID(senderId);
+        User user = facebookRepository.getUserByPSID(senderId);
         mainDispatcher.dispatchAndQueue(user, messaging);
     }
 }

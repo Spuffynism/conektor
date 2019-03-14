@@ -2,7 +2,7 @@ package xyz.ndlr.domain.provider.facebook;
 
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-import xyz.ndlr.domain.exception.InvalidFacebookVerificationToken;
+import xyz.ndlr.domain.exception.InvalidFacebookVerificationTokenException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -93,6 +93,6 @@ public class FacebookVerificationTokenTest {
 
         ReflectionTestUtils.setField(token, "actualValidToken", "test_verify_token",
                 String.class);
-        assertThrows(InvalidFacebookVerificationToken.class, token::validate);
+        assertThrows(InvalidFacebookVerificationTokenException.class, token::validate);
     }
 }

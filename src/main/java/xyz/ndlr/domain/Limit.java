@@ -4,7 +4,7 @@ public class Limit {
     int limit;
     int page;
 
-    private static final Limit DEFAULT = new Limit(50, 0);
+    public static final Limit DEFAULT = new Limit(50, 0);
 
     public Limit(int limit, int page) {
         this.limit = limit;

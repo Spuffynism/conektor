@@ -2,7 +2,7 @@ package xyz.ndlr.domain.provider.facebook;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import xyz.ndlr.domain.exception.InvalidFacebookVerificationToken;
+import xyz.ndlr.domain.exception.InvalidFacebookVerificationTokenException;
 
 import java.util.Map;
 
@@ -24,10 +24,10 @@ public class FacebookVerificationToken {
         this.tokenFromFacebook = requestParams.get("hub.verify_token");
     }
 
-    public void validate() throws InvalidFacebookVerificationToken {
+    public void validate() throws InvalidFacebookVerificationTokenException {
         if (mode == null || !mode.equalsIgnoreCase(SUBSCRIBE_MODE) ||
                 !actualValidToken.equals(tokenFromFacebook)) {
-            throw new InvalidFacebookVerificationToken();
+            throw new InvalidFacebookVerificationTokenException();
         }
     }
 

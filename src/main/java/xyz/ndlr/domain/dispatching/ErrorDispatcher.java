@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.ndlr.domain.ProviderResponseQueue;
-import xyz.ndlr.domain.dispatching.mapping.ActionRepository;
+import xyz.ndlr.domain.dispatching.mapping.IActionRepository;
 import xyz.ndlr.domain.exception.CannotDispatchException;
 import xyz.ndlr.domain.exception.UnregisteredAccountException;
 import xyz.ndlr.domain.provider.ProviderResponse;
@@ -23,7 +23,7 @@ public class ErrorDispatcher extends AbstractSubDispatcher {
     private final FacebookRepository facebookService;
 
     @Autowired
-    ErrorDispatcher(ActionRepository actionRepository,
+    ErrorDispatcher(IActionRepository actionRepository,
                     ProviderResponseQueue sharedResponses,
                     FacebookRepository facebookService) {
         super(actionRepository, sharedResponses);

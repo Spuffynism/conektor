@@ -9,7 +9,7 @@ import xyz.ndlr.domain.user.User;
 @ProviderMapping("help")
 public class HelpService implements SimpleService {
 
-    //TODO
+    //TODO(nich)
     private static final String HELP_MESSAGE = "";
 
     @Override

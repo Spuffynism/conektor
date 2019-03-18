@@ -10,10 +10,10 @@ import xyz.ndlr.domain.provider.ImageService;
 @Component
 public class ActionMappingAnnotationProcessor implements BeanPostProcessor {
 
-    private final ActionRepository actionRepository;
+    private final IActionRepository actionRepository;
 
     @Autowired
-    public ActionMappingAnnotationProcessor(ActionRepository actionRepository) {
+    public ActionMappingAnnotationProcessor(IActionRepository actionRepository) {
         this.actionRepository = actionRepository;
     }
 

@@ -3,7 +3,7 @@ package xyz.ndlr.domain.dispatching;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.ndlr.domain.ProviderResponseQueue;
-import xyz.ndlr.domain.dispatching.mapping.ActionRepository;
+import xyz.ndlr.domain.dispatching.mapping.IActionRepository;
 import xyz.ndlr.domain.provider.ProviderResponse;
 import xyz.ndlr.domain.provider.facebook.sendAPI.message.TextMessage;
 import xyz.ndlr.domain.provider.facebook.sendAPI.message.quick_reply.QuickReplyMessageFactory;
@@ -21,7 +21,7 @@ public class MediaDispatcher extends AbstractSubDispatcher {
     private QuickReplyMessageFactory quickReplyMessageFactory;
 
     @Autowired
-    MediaDispatcher(ActionRepository actionRepository,
+    MediaDispatcher(IActionRepository actionRepository,
                     ProviderResponseQueue sharedResponses,
                     QuickReplyMessageFactory quickReplyMessageFactory) {
         super(actionRepository, sharedResponses);
@@ -38,6 +38,7 @@ public class MediaDispatcher extends AbstractSubDispatcher {
             for (String url : urls) {
                 TextMessage quickReplyMessage = quickReplyMessageFactory.generateForProviders(url,
                         actionRepository.getImageProviderHumanNames());
+                // TODO(nich): Create & use ProviderResponseFactory
                 responses.add(new ProviderResponse(user, quickReplyMessage));
             }
         } else {

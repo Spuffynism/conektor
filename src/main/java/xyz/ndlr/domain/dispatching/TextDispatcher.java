@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.ndlr.domain.ProviderResponseQueue;
 import xyz.ndlr.domain.dispatching.mapping.Action;
-import xyz.ndlr.domain.dispatching.mapping.ActionRepository;
+import xyz.ndlr.domain.dispatching.mapping.IActionRepository;
 import xyz.ndlr.domain.exception.CannotDispatchException;
 import xyz.ndlr.domain.parsing.MessageParser;
 import xyz.ndlr.domain.parsing.ParsedMessage;
@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 @Component
 public class TextDispatcher extends AbstractSubDispatcher {
     @Autowired
-    public TextDispatcher(ActionRepository actionRepository,
+    public TextDispatcher(IActionRepository actionRepository,
                           ProviderResponseQueue sharedResponses) {
         super(actionRepository, sharedResponses);
     }

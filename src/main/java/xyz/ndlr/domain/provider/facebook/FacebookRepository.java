@@ -19,6 +19,7 @@ public class FacebookRepository extends AbstractProviderRepository {
     }
 
     public boolean userIsRegistered(String userId) {
+        //TODO(nich): Remove Repo -> Service usage
         return accountFetchingService.existsByToken(userId, providerId);
     }
 

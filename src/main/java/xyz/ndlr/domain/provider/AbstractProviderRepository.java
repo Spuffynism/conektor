@@ -4,9 +4,9 @@ import xyz.ndlr.domain.user.User;
 import xyz.ndlr.repository.database_util.AbstractRepository;
 
 public abstract class AbstractProviderRepository extends AbstractRepository<User> {
-    protected int providerId;
+    protected ProviderId providerId;
 
-    protected AbstractProviderRepository(int providerId) {
+    protected AbstractProviderRepository(ProviderId providerId) {
         super(User.class);
         this.providerId = providerId;
     }

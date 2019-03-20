@@ -1,9 +1,12 @@
 package xyz.ndlr.domain.account;
 
+import xyz.ndlr.domain.provider.ProviderId;
+import xyz.ndlr.domain.user.UserId;
+
 import java.util.List;
 
 public interface IAccountRepository {
-    Account getByToken(String token, int providerId);
+    Account getByToken(String token, ProviderId providerId);
 
     /**
      * Gets a user's accounts.
@@ -11,7 +14,7 @@ public interface IAccountRepository {
      * @param userId user's id
      * @return user's providers
      */
-    List<Account> getByUserId(int userId);
+    List<Account> getByUserId(UserId userId);
 
-    boolean existsByToken(String token, int providerId);
+    boolean existsByToken(String token, ProviderId providerId);
 }

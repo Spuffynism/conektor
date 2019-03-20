@@ -1,18 +1,20 @@
 package xyz.ndlr.domain.dispatching;
 
+import xyz.ndlr.domain.provider.ProviderId;
+
 public enum SupportedProvider {
-    FACEBOOK("facebook", 1),
-    IMGUR("imgur", 4),
-    TRELLO("trello", 2),
-    SSH("ssh", 3);
+    FACEBOOK("facebook", ProviderId.from(1)),
+    IMGUR("imgur", ProviderId.from(4)),
+    TRELLO("trello", ProviderId.from(2)),
+    SSH("ssh", ProviderId.from(3));
 
     private final String value;
     /**
      * id used in the database
      */
-    private final int providerId;
+    private final ProviderId providerId;
 
-    SupportedProvider(String value, int providerId) {
+    SupportedProvider(String value, ProviderId providerId) {
         this.value = value;
         this.providerId = providerId;
     }
@@ -33,7 +35,7 @@ public enum SupportedProvider {
         return value;
     }
 
-    public int getProviderId() {
+    public ProviderId getProviderId() {
         return providerId;
     }
 }

@@ -3,6 +3,8 @@ package xyz.ndlr.repository;
 import org.springframework.stereotype.Service;
 import xyz.ndlr.domain.account.Account;
 import xyz.ndlr.domain.account.IAccountRepository;
+import xyz.ndlr.domain.provider.ProviderId;
+import xyz.ndlr.domain.user.UserId;
 import xyz.ndlr.repository.database_util.AbstractRepository;
 import xyz.ndlr.repository.database_util.QueryExecutor;
 
@@ -17,14 +19,14 @@ public class AccountRepository extends AbstractRepository<Account> implements IA
         super(Account.class);
     }
 
-    public Account getByToken(String token, int providerId) {
+    public Account getByToken(String token, ProviderId providerId) {
         return new QueryExecutor<>(session -> {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
             Root<Account> root = criteria.from(Account.class);
             criteria.select(root);
             criteria.where(builder.equal(root.get("token"), token));
-            criteria.where(builder.equal(root.get("providerId"), providerId));
+            criteria.where(builder.equal(root.get("providerId"), providerId.getValue()));
 
             return session.createQuery(criteria).uniqueResult();
         }).execute();
@@ -36,19 +38,19 @@ public class AccountRepository extends AbstractRepository<Account> implements IA
      * @param userId user's id
      * @return user's providers
      */
-    public List<Account> getByUserId(int userId) {
+    public List<Account> getByUserId(UserId userId) {
         return new QueryExecutor<>(session -> {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
             Root<Account> root = criteria.from(Account.class);
             criteria.select(root);
-            criteria.where(builder.equal(root.get("UserId"), userId));
+            criteria.where(builder.equal(root.get("userId"), userId.getValue()));
 
             return session.createQuery(criteria).getResultList();
         }).execute();
     }
 
-    public boolean existsByToken(String token, int providerId) {
+    public boolean existsByToken(String token, ProviderId providerId) {
         return new QueryExecutor<>(session -> getByToken(token, providerId) != null).execute();
     }
 }

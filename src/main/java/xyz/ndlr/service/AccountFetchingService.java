@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.ndlr.domain.account.Account;
 import xyz.ndlr.domain.account.IAccountRepository;
+import xyz.ndlr.domain.provider.ProviderId;
+import xyz.ndlr.domain.user.UserId;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class AccountFetchingService {
         this.accountRepository = accountRepository;
     }
 
-    public Account fetchByToken(String token, int providerId) {
+    Account fetchByToken(String token, ProviderId providerId) {
         return accountRepository.getByToken(token, providerId);
     }
 
@@ -26,11 +28,11 @@ public class AccountFetchingService {
      * @param userId user's id
      * @return user's providers
      */
-    public List<Account> fetchByUserId(int userId) {
+    public List<Account> fetchByUserId(UserId userId) {
         return accountRepository.getByUserId(userId);
     }
 
-    public boolean existsByToken(String token, int providerId) {
+    public boolean existsByToken(String token, ProviderId providerId) {
         return accountRepository.existsByToken(token, providerId);
     }
 }

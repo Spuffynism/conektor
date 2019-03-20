@@ -4,8 +4,12 @@ public class UserId {
 
     private final int value;
 
-    public UserId(int value) {
+    private UserId(int value) {
         this.value = value;
+    }
+
+    public static UserId from(int i) {
+        return new UserId(i);
     }
 
     public int getValue() {

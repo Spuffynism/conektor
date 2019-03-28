@@ -6,7 +6,8 @@ import xyz.ndlr.domain.AbstractDatable;
 import xyz.ndlr.domain.Email;
 import xyz.ndlr.domain.account.Account;
 import xyz.ndlr.domain.dispatching.SupportedProvider;
-import xyz.ndlr.security.auth.Role;
+import xyz.ndlr.domain.password.HashedPassword;
+import xyz.ndlr.infrastructure.security.auth.Role;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,19 +17,28 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "user_usr")
 public class User extends AbstractDatable {
-    private int id;
+    private UserId id;
     private Username username;
     private Email email;
+    // TODO(nich): Move this to value object
     @JsonIgnore
-    private String password;
+    private HashedPassword password;
+    // TODO(nich): Move this to value object
     @JsonIgnore
     private int role;
     @JsonIgnore
+    // TODO(nich): Move this to a UserChangingPassword class
     private int attemptedPasswordChanges;
     @JsonIgnoreProperties("user")
     private Set<Account> accounts;
 
     public User() {
+    }
+
+    public User(Username username, Email email, HashedPassword password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 
     @Transient
@@ -67,11 +77,11 @@ public class User extends AbstractDatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usr_id")
-    public int getId() {
+    public UserId getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UserId id) {
         this.id = id;
     }
 
@@ -97,11 +107,11 @@ public class User extends AbstractDatable {
 
     @Basic
     @Column(name = "usr_password")
-    public String getPassword() {
+    public HashedPassword getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(HashedPassword password) {
         this.password = password;
     }
 
@@ -117,16 +127,6 @@ public class User extends AbstractDatable {
 
     public void setRole(Role role) {
         this.role = role.value();
-    }
-
-    @Basic
-    @Column(name = "usr_attempted_password_changes")
-    public int getAttemptedPasswordChanges() {
-        return attemptedPasswordChanges;
-    }
-
-    public void setAttemptedPasswordChanges(int attemptedPasswordChanges) {
-        this.attemptedPasswordChanges = attemptedPasswordChanges;
     }
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.ndlr.domain.account.Account;
-import xyz.ndlr.domain.user.UserId;
 import xyz.ndlr.service.AccountFetchingService;
 
 import java.util.List;
@@ -27,9 +26,8 @@ public class AccountResource {
 
     @GetMapping(Route.ME)
     public ResponseEntity<List<Account>> getMyAccounts() {
-        //TODO(nich): Take into account multiple accounts and multiple users
-        //int userId = authHolder.getUser().getId();
-        List<Account> accounts = accountFetchingService.fetchByUserId(UserId.from(1));
+        List<Account> accounts = accountFetchingService.fetchCurrentUserAccounts();
+
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 }

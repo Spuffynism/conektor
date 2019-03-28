@@ -1,56 +1,42 @@
 package xyz.ndlr.service;
 
 import org.springframework.stereotype.Service;
+import xyz.ndlr.domain.IAuthHolder;
 import xyz.ndlr.domain.IPasswordChangeRepository;
-import xyz.ndlr.domain.exception.password.NonCompliantPasswordException;
-import xyz.ndlr.domain.exception.password.NonMatchingPasswordConfirmationException;
-import xyz.ndlr.domain.exception.password.PasswordChangeAttemptCountReachedException;
+import xyz.ndlr.domain.password.HashedPassword;
+import xyz.ndlr.domain.password.PasswordChange;
+import xyz.ndlr.domain.password.PasswordProducingService;
+import xyz.ndlr.domain.password.exception.NonCompliantPasswordException;
+import xyz.ndlr.domain.password.exception.NonMatchingCurrentPasswordException;
+import xyz.ndlr.domain.password.exception.PasswordChangeAttemptCountReachedException;
 import xyz.ndlr.domain.user.User;
-import xyz.ndlr.security.auth.PasswordChange;
-import xyz.ndlr.security.hashing.IPasswordHasher;
+import xyz.ndlr.domain.user.UserId;
 
 @Service
 public class PasswordChangeService {
 
     private final IPasswordChangeRepository passwordChangeRepository;
-    private final IPasswordHasher passwordHasher;
+    private final PasswordProducingService passwordProducingService;
+    private final IAuthHolder authHolder;
 
     public PasswordChangeService(IPasswordChangeRepository passwordChangeRepository,
-                                 IPasswordHasher passwordHasher) {
+                                 PasswordProducingService passwordProducingService,
+                                 IAuthHolder authHolder) {
         this.passwordChangeRepository = passwordChangeRepository;
-        this.passwordHasher = passwordHasher;
+        this.passwordProducingService = passwordProducingService;
+        this.authHolder = authHolder;
     }
 
-    public void changePassword(User user, PasswordChange passwordChange)
+    public void changeCurrentUserPassword(PasswordChange passwordChange)
             throws NonCompliantPasswordException,
-            PasswordChangeAttemptCountReachedException, NonMatchingPasswordConfirmationException {
-        int userId = user.getId();
+            PasswordChangeAttemptCountReachedException, NonMatchingCurrentPasswordException {
+        User user = authHolder.getUser();
+        UserId userId = user.getId();
 
         passwordChangeRepository.addPasswordChangeAttempt(userId);
-        actuallyChangePassword(user, passwordChange);
+        HashedPassword hashedPassword = passwordProducingService
+                .produceHashedPassword(user, passwordChange);
+        passwordChangeRepository.updatePassword(userId, hashedPassword);
         passwordChangeRepository.resetPasswordChangeAttempts(userId);
-    }
-
-    private void actuallyChangePassword(User currentUser, PasswordChange passwordChange)
-            throws PasswordChangeAttemptCountReachedException,
-            NonCompliantPasswordException, NonMatchingPasswordConfirmationException {
-        // Checks that we haven't exceeded the maximum allowed password change attempts
-        if (currentUser.getAttemptedPasswordChanges() > PasswordChange
-                .MAX_ALLOWED_PASSWORD_CHANGE_ATTEMPTS)
-            throw new PasswordChangeAttemptCountReachedException();
-
-        // Checks that the new password complies to our security requirements
-        if (!passwordChange.complies())
-            throw new NonCompliantPasswordException();
-
-        // Checks that the user knows their password (protection against session token theft)
-        boolean currentPasswordIsRight = passwordHasher.verify(currentUser.getPassword(),
-                passwordChange.getCurrentPassword());
-        if (!currentPasswordIsRight)
-            throw new NonMatchingPasswordConfirmationException();
-
-        // If all the checks pass, we change the password
-        String hashedPassword = passwordHasher.hash(passwordChange.getNewPassword());
-        passwordChangeRepository.updatePassword(currentUser.getId(), hashedPassword);
     }
 }

@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.ndlr.domain.exception.password.PasswordException;
-import xyz.ndlr.infrastructure.auth.AuthHolder;
-import xyz.ndlr.security.auth.PasswordChange;
+import xyz.ndlr.domain.password.PasswordChange;
+import xyz.ndlr.domain.password.exception.PasswordException;
 import xyz.ndlr.service.PasswordChangeService;
 
 @RestController
@@ -19,21 +18,18 @@ import xyz.ndlr.service.PasswordChangeService;
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PasswordChangeResource {
 
-    private final AuthHolder authHolder;
     private final PasswordChangeService passwordChangeService;
 
     @Autowired
-    public PasswordChangeResource(AuthHolder authHolder,
-                                  PasswordChangeService passwordChangeService) {
-        this.authHolder = authHolder;
+    public PasswordChangeResource(PasswordChangeService passwordChangeService) {
         this.passwordChangeService = passwordChangeService;
     }
 
     @PostMapping
-    public ResponseEntity<Exception> changePassword(@RequestBody PasswordChange passwordChange)
+    public ResponseEntity changePassword(@RequestBody PasswordChange passwordChange)
             throws PasswordException {
-        passwordChangeService.changePassword(authHolder.getUser(), passwordChange);
+        passwordChangeService.changeCurrentUserPassword(passwordChange);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

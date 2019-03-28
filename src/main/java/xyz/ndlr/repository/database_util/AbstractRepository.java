@@ -1,12 +1,18 @@
 package xyz.ndlr.repository.database_util;
 
-import org.hibernate.Query;
+import org.hibernate.query.NativeQuery;
 import xyz.ndlr.domain.AbstractDatable;
 import xyz.ndlr.domain.Limit;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * This class Contains basic CRUD operations that can be made on T entities which are mapped to
@@ -14,7 +20,7 @@ import java.util.List;
  *
  * @param <T> the object that is managed by its service which extends this class
  */
-public abstract class AbstractRepository<T> implements IAbstractRepository<T> {
+public abstract class AbstractRepository<T> {
     private final Class<T> tClass;
 
     protected AbstractRepository(Class<T> tClass) {
@@ -63,7 +69,7 @@ public abstract class AbstractRepository<T> implements IAbstractRepository<T> {
                 propertyName, tClass.getSimpleName());
 
         return new QueryExecutor<>(session -> {
-            Query query = session.createQuery(hql);
+            NativeQuery query = session.createNativeQuery(hql);
             query.setParameter("id", id);
 
             return query.uniqueResult();
@@ -133,5 +139,41 @@ public abstract class AbstractRepository<T> implements IAbstractRepository<T> {
      */
     public Boolean exists(Serializable id) {
         return new QueryExecutor<>(session -> get(id) != null).execute();
+    }
+
+    protected T findOne(
+            BiFunction<CriteriaBuilder, Root<T>, Expression<Boolean>>... conditions) {
+        return new QueryExecutor<>(session -> {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<T> criteria = builder.createQuery(tClass);
+            Root<T> root = criteria.from(tClass);
+            criteria.select(root);
+
+            Arrays.stream(conditions)
+                    .forEach((condition) -> {
+                        Expression<Boolean> expression = condition.apply(builder, root);
+                        criteria.where(expression);
+                    });
+
+            return session.createQuery(criteria).uniqueResult();
+        }).execute();
+    }
+
+    protected List<T> findMany(
+            BiFunction<CriteriaBuilder, Root<T>, Expression<Boolean>>... conditions) {
+        return new QueryExecutor<>(session -> {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<T> criteria = builder.createQuery(tClass);
+            Root<T> root = criteria.from(tClass);
+            criteria.select(root);
+
+            Arrays.stream(conditions)
+                    .forEach((condition) -> {
+                        Expression<Boolean> expression = condition.apply(builder, root);
+                        criteria.where(expression);
+                    });
+
+            return session.createQuery(criteria).getResultList();
+        }).execute();
     }
 }

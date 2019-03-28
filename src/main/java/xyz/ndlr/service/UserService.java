@@ -8,14 +8,11 @@ import xyz.ndlr.domain.exception.EmailTakenException;
 import xyz.ndlr.domain.exception.UnauthorizedException;
 import xyz.ndlr.domain.exception.UserNotFoundException;
 import xyz.ndlr.domain.exception.UsernameTakenException;
-import xyz.ndlr.domain.exception.password.InvalidPasswordException;
-import xyz.ndlr.domain.user.IUserRepository;
-import xyz.ndlr.domain.user.User;
-import xyz.ndlr.domain.user.UserId;
-import xyz.ndlr.domain.user.Username;
-import xyz.ndlr.security.auth.PasswordChange;
-import xyz.ndlr.security.hashing.Argon2Hasher;
-import xyz.ndlr.security.hashing.IPasswordHasher;
+import xyz.ndlr.domain.password.HashedPassword;
+import xyz.ndlr.domain.password.IPasswordHasher;
+import xyz.ndlr.domain.password.exception.InvalidPasswordLengthException;
+import xyz.ndlr.domain.password.exception.NonCompliantPasswordException;
+import xyz.ndlr.domain.user.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,10 +21,18 @@ import java.util.Optional;
 public class UserService {
     private final IUserRepository userRepository;
     private final IAuthHolder authHolder;
+    private final UserFactory userFactory;
+    private final IPasswordHasher passwordHasher;
+    private final PasswordChangeService passwordChangeService;
 
-    public UserService(IAuthHolder authHolder, IUserRepository userRepository) {
+    public UserService(IAuthHolder authHolder, IUserRepository userRepository,
+                       UserFactory userFactory, IPasswordHasher passwordHasher,
+                       PasswordChangeService passwordChangeService) {
         this.userRepository = userRepository;
         this.authHolder = authHolder;
+        this.userFactory = userFactory;
+        this.passwordHasher = passwordHasher;
+        this.passwordChangeService = passwordChangeService;
     }
 
     public List<User> fetchAll(Optional<Limit> limit) throws UnauthorizedException {
@@ -43,31 +48,31 @@ public class UserService {
 
         User user = userRepository.get(userId);
 
-        if(user == null)
+        if (user == null)
             throw new UserNotFoundException(userId);
 
         return user;
     }
 
-    public void createNewUser(User dirtyUser) throws UsernameTakenException, EmailTakenException,
-            InvalidPasswordException {
-        if (fetchByUsername(dirtyUser.getUsername()) != null)
-            throw new UsernameTakenException(dirtyUser.getUsername());
+    public User createNewUser(UserCreationRequest userCreationRequest)
+            throws UsernameTakenException,
+            EmailTakenException, NonCompliantPasswordException {
+        if (fetchByUsername(userCreationRequest.getUsername()) != null)
+            throw new UsernameTakenException(userCreationRequest.getUsername());
 
-        if (fetchByEmail(dirtyUser.getEmail()) != null)
-            throw new EmailTakenException(dirtyUser.getEmail());
+        if (fetchByEmail(userCreationRequest.getEmail()) != null)
+            throw new EmailTakenException(userCreationRequest.getEmail());
 
-        if (!PasswordChange.matchesPolicy(dirtyUser.getPassword()))
-            throw new InvalidPasswordException();
+        // TODO(nich): Duplicated logic
+        if (!userCreationRequest.getPassword().meetsPolicyRequirements())
+            throw new InvalidPasswordLengthException(userCreationRequest.getPassword().length());
 
-        User cleanUser = new User();
-        cleanUser.setUsername(dirtyUser.getUsername());
-        cleanUser.setEmail(dirtyUser.getEmail());
+        HashedPassword hashedPassword = passwordHasher.hash(userCreationRequest.getPassword());
+        User createdUser = userFactory.create(userCreationRequest, hashedPassword);
 
-        IPasswordHasher argon2 = new Argon2Hasher();
-        cleanUser.setPassword(argon2.hash(dirtyUser.getPassword()));
+        userRepository.add(createdUser);
 
-        userRepository.add(cleanUser);
+        return createdUser;
     }
 
     private User fetchByUsername(Username username) {
@@ -82,7 +87,7 @@ public class UserService {
         if (!authHolder.getUser().isAdmin())
             throw new UnauthorizedException();
 
-        if(!userRepository.exists(userid))
+        if (!userRepository.exists(userid))
             throw new UserNotFoundException(userid);
 
         userRepository.delete(userid);

@@ -1,6 +1,6 @@
 package xyz.ndlr.repository;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import xyz.ndlr.domain.Email;
 import xyz.ndlr.domain.user.IUserRepository;
 import xyz.ndlr.domain.user.User;
@@ -13,7 +13,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-@Service
+@Repository
 public class UserRepository extends AbstractRepository<User> implements IUserRepository {
 
     public UserRepository() {

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import xyz.ndlr.domain.exception.EmailTakenException;
 import xyz.ndlr.domain.exception.UsernameTakenException;
-import xyz.ndlr.domain.exception.password.InvalidPasswordException;
+import xyz.ndlr.domain.password.exception.InvalidPasswordException;
 
 @ControllerAdvice
 public class PasswordChangeExceptionHandler {

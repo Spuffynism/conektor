@@ -41,11 +41,11 @@ public class AuthHolder implements IAuthHolder {
 
     @Override
     public boolean isMe(UserId userId) {
-        return userId.getValue() == getUser().getId();
+        return userId.equals(getUser().getId());
     }
 
     @Override
     public boolean isMe(User user) {
-        return user != null && user.getId() == getUser().getId();
+        return user != null && user.getId().equals(getUser().getId());
     }
 }

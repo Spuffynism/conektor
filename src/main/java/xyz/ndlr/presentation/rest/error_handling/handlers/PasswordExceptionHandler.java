@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import xyz.ndlr.domain.exception.password.PasswordException;
+import xyz.ndlr.domain.password.exception.PasswordException;
 
 @ControllerAdvice
 public class PasswordExceptionHandler {

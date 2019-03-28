@@ -1,7 +1,6 @@
 package xyz.ndlr.presentation.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +12,9 @@ import xyz.ndlr.domain.exception.EmailTakenException;
 import xyz.ndlr.domain.exception.UnauthorizedException;
 import xyz.ndlr.domain.exception.UserNotFoundException;
 import xyz.ndlr.domain.exception.UsernameTakenException;
-import xyz.ndlr.domain.exception.password.InvalidPasswordException;
+import xyz.ndlr.domain.password.exception.NonCompliantPasswordException;
 import xyz.ndlr.domain.user.User;
+import xyz.ndlr.domain.user.UserCreationRequest;
 import xyz.ndlr.domain.user.UserId;
 import xyz.ndlr.service.UserService;
 
@@ -60,16 +60,14 @@ public class UserResource {
     }
 
     @PostMapping
-    public ResponseEntity<Exception> createUser(@RequestBody User user,
-                                                UriComponentsBuilder ucBuilder)
-            throws UsernameTakenException, InvalidPasswordException, EmailTakenException {
-        userService.createNewUser(user);
+    public ResponseEntity createUser(@RequestBody UserCreationRequest creationRequest,
+                                     UriComponentsBuilder ucBuilder)
+            throws UsernameTakenException, EmailTakenException, NonCompliantPasswordException {
+        User user = userService.createNewUser(creationRequest);
 
-        HttpHeaders headers = new HttpHeaders();
         URI userLocation = ucBuilder.path(PATH + Route.ID).buildAndExpand(user.getId()).toUri();
-        headers.setLocation(userLocation);
 
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        return ResponseEntity.created(userLocation).build();
     }
 
     @DeleteMapping(Route.ID)

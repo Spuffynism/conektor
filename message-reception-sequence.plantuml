@@ -1,0 +1,24 @@
+@startuml
+actor User
+User -> FacebookWebhookResource : receiveMessage(payload)
+FacebookWebhookResource -> FacebookWebhookService : processPayload(payload)
+loop every message in payload
+    FacebookWebhookService -> MainDispatcher : dispatchAndQueue(user, messaging)
+    alt message contains media
+        MainDispatcher -> MediaDispatcher : dispatchAndQueue(user, messaging)
+        alt messaging contains image
+            MediaDispatcher -> MediaDispatcher : generate public url
+        end
+    else
+        MainDispatcher -> TextDispatcher : dispatchAndQueue(user, messaging)
+        TextDispatcher -> ActionRepository : get(command, key) : action
+        TextDispatcher -> TextDispatcher : action.apply(user, message)
+    end
+end
+@enduml
+
+/'
+1. payload processing
+2. message dispatcher dispatching
+3. message provider dispatching by call to ProviderAction
+'/

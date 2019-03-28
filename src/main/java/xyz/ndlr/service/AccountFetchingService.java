@@ -2,6 +2,7 @@ package xyz.ndlr.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import xyz.ndlr.domain.IAuthHolder;
 import xyz.ndlr.domain.account.Account;
 import xyz.ndlr.domain.account.IAccountRepository;
 import xyz.ndlr.domain.provider.ProviderId;
@@ -12,10 +13,13 @@ import java.util.List;
 @Service
 public class AccountFetchingService {
     private final IAccountRepository accountRepository;
+    private final IAuthHolder authHolder;
 
     @Autowired
-    public AccountFetchingService(IAccountRepository accountRepository) {
+    public AccountFetchingService(IAccountRepository accountRepository,
+                                  IAuthHolder authHolder) {
         this.accountRepository = accountRepository;
+        this.authHolder = authHolder;
     }
 
     Account fetchByToken(String token, ProviderId providerId) {
@@ -30,6 +34,12 @@ public class AccountFetchingService {
      */
     public List<Account> fetchByUserId(UserId userId) {
         return accountRepository.getByUserId(userId);
+    }
+
+    public List<Account> fetchCurrentUserAccounts() {
+        UserId userId = authHolder.getUser().getId();
+
+        return this.fetchByUserId(userId);
     }
 
     public boolean existsByToken(String token, ProviderId providerId) {

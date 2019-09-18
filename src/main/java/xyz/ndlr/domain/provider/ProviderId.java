@@ -1,17 +1,17 @@
 package xyz.ndlr.domain.provider;
 
 public class ProviderId {
-    private int value;
+    private final long value;
 
-    private ProviderId(int value) {
+    private ProviderId(long value) {
         this.value = value;
     }
 
-    public static ProviderId from(int i) {
-        return new ProviderId(i);
+    public static ProviderId from(long value) {
+        return new ProviderId(value);
     }
 
-    public int getValue() {
+    public long getValue() {
         return this.value;
     }
 }

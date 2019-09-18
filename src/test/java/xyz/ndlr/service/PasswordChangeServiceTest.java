@@ -5,10 +5,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import xyz.ndlr.domain.IPasswordChangeRepository;
-import xyz.ndlr.domain.password.IPasswordHasher;
+import xyz.ndlr.domain.PasswordChangeRepository;
 import xyz.ndlr.domain.password.Password;
 import xyz.ndlr.domain.password.PasswordChange;
+import xyz.ndlr.domain.password.PasswordHasher;
 import xyz.ndlr.domain.user.User;
 
 import static org.mockito.Mockito.verify;
@@ -22,10 +22,10 @@ public class PasswordChangeServiceTest {
                     new Password("current password"));
 
     @Mock
-    IPasswordChangeRepository passwordChangeRepository;
+    PasswordChangeRepository passwordChangeRepository;
 
     @Mock
-    IPasswordHasher passwordHasher;
+    PasswordHasher passwordHasher;
 
     @InjectMocks
     PasswordChangeService passwordChangeService;

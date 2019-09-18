@@ -1,8 +1,8 @@
 package xyz.ndlr.service;
 
 import org.springframework.stereotype.Service;
-import xyz.ndlr.domain.IAuthHolder;
-import xyz.ndlr.domain.IPasswordChangeRepository;
+import xyz.ndlr.domain.AuthenticationHolder;
+import xyz.ndlr.domain.PasswordChangeRepository;
 import xyz.ndlr.domain.password.HashedPassword;
 import xyz.ndlr.domain.password.PasswordChange;
 import xyz.ndlr.domain.password.PasswordProducingService;
@@ -15,13 +15,13 @@ import xyz.ndlr.domain.user.UserId;
 @Service
 public class PasswordChangeService {
 
-    private final IPasswordChangeRepository passwordChangeRepository;
+    private final PasswordChangeRepository passwordChangeRepository;
     private final PasswordProducingService passwordProducingService;
-    private final IAuthHolder authHolder;
+    private final AuthenticationHolder authHolder;
 
-    public PasswordChangeService(IPasswordChangeRepository passwordChangeRepository,
+    public PasswordChangeService(PasswordChangeRepository passwordChangeRepository,
                                  PasswordProducingService passwordProducingService,
-                                 IAuthHolder authHolder) {
+                                 AuthenticationHolder authHolder) {
         this.passwordChangeRepository = passwordChangeRepository;
         this.passwordProducingService = passwordProducingService;
         this.authHolder = authHolder;

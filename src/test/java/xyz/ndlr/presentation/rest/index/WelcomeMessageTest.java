@@ -1,7 +1,7 @@
 package xyz.ndlr.presentation.rest.index;
 
 import org.junit.Test;
-import xyz.ndlr.domain.WelcomeMessage;
+import xyz.ndlr.presentation.WelcomeMessage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

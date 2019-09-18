@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import xyz.ndlr.domain.IAuthHolder;
+import xyz.ndlr.domain.AuthenticationHolder;
 import xyz.ndlr.domain.Limit;
 import xyz.ndlr.domain.exception.EmailTakenException;
 import xyz.ndlr.domain.exception.UnauthorizedException;
@@ -29,11 +29,11 @@ import java.util.Optional;
 public class UserResource {
 
     static final String PATH = "/users";
-    private final IAuthHolder authHolder;
+    private final AuthenticationHolder authHolder;
     private final UserService userService;
 
     @Autowired
-    public UserResource(IAuthHolder authHolder, UserService userService) {
+    public UserResource(AuthenticationHolder authHolder, UserService userService) {
         this.authHolder = authHolder;
         this.userService = userService;
     }

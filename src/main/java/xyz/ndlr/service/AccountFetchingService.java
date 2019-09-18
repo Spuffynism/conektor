@@ -2,9 +2,10 @@ package xyz.ndlr.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import xyz.ndlr.domain.IAuthHolder;
+import xyz.ndlr.domain.AuthenticationHolder;
 import xyz.ndlr.domain.account.Account;
-import xyz.ndlr.domain.account.IAccountRepository;
+import xyz.ndlr.domain.account.AccountRepository;
+import xyz.ndlr.domain.account.AccountToken;
 import xyz.ndlr.domain.provider.ProviderId;
 import xyz.ndlr.domain.user.UserId;
 
@@ -12,17 +13,20 @@ import java.util.List;
 
 @Service
 public class AccountFetchingService {
-    private final IAccountRepository accountRepository;
-    private final IAuthHolder authHolder;
+    private final AccountRepository accountRepository;
+    private final AuthenticationHolder authHolder;
 
     @Autowired
-    public AccountFetchingService(IAccountRepository accountRepository,
-                                  IAuthHolder authHolder) {
+    public AccountFetchingService(AccountRepository accountRepository,
+                                  AuthenticationHolder authHolder) {
         this.accountRepository = accountRepository;
         this.authHolder = authHolder;
     }
 
-    Account fetchByToken(String token, ProviderId providerId) {
+    Account fetchByToken(AccountFetchingRequest accountFetchingRequest) {
+        AccountToken token = accountFetchingRequest.getAccountToken();
+        ProviderId providerId = accountFetchingRequest.getProviderId();
+
         return accountRepository.getByToken(token, providerId);
     }
 
@@ -42,7 +46,10 @@ public class AccountFetchingService {
         return this.fetchByUserId(userId);
     }
 
-    public boolean existsByToken(String token, ProviderId providerId) {
+    public boolean existsByToken(AccountFetchingRequest accountFetchingRequest) {
+        AccountToken token = accountFetchingRequest.getAccountToken();
+        ProviderId providerId = accountFetchingRequest.getProviderId();
+
         return accountRepository.existsByToken(token, providerId);
     }
 }

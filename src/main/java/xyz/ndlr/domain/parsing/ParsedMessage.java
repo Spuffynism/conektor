@@ -11,7 +11,7 @@ public class ParsedMessage {
     private LinkedHashMap<String, String> arguments;
     private Map.Entry<String, String> firstArgument;
 
-    ParsedMessage(String command, LinkedHashMap<String, String> arguments) {
+    public ParsedMessage(String command, LinkedHashMap<String, String> arguments) {
         this.command = command;
         this.arguments = arguments;
     }

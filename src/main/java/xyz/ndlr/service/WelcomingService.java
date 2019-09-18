@@ -1,7 +1,7 @@
 package xyz.ndlr.service;
 
 import org.springframework.stereotype.Service;
-import xyz.ndlr.domain.WelcomeMessage;
+import xyz.ndlr.presentation.WelcomeMessage;
 
 @Service
 public class WelcomingService {

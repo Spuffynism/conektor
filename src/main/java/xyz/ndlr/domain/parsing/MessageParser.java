@@ -1,6 +1,6 @@
 package xyz.ndlr.domain.parsing;
 
-import xyz.ndlr.domain.provider.facebook.webhook.event.Message;
+import xyz.ndlr.infrastructure.provider.facebook.webhook.event.Message;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

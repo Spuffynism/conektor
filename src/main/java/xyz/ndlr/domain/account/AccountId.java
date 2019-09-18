@@ -1,14 +1,17 @@
 package xyz.ndlr.domain.account;
 
 public class AccountId {
-    private int value;
+    private final long value;
 
-    public AccountId(int value) {
+    private AccountId(long value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public static AccountId from(long value) {
+        return new AccountId(value);
+    }
 
+    public long getValue() {
         return this.value;
     }
 }

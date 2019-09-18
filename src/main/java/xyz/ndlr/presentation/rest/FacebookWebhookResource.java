@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import xyz.ndlr.domain.FacebookMessageConsumer;
 import xyz.ndlr.domain.exception.InvalidFacebookVerificationTokenException;
-import xyz.ndlr.domain.provider.facebook.webhook.Payload;
+import xyz.ndlr.infrastructure.FacebookMessageConsumer;
+import xyz.ndlr.infrastructure.provider.facebook.webhook.Payload;
 import xyz.ndlr.service.FacebookWebhookService;
-import xyz.ndlr.service.FacebookWebhookSubscribtionService;
+import xyz.ndlr.service.FacebookWebhookSubscriptionService;
 
 import java.util.Map;
 
@@ -21,17 +21,17 @@ import java.util.Map;
 public class FacebookWebhookResource {
 
     private final FacebookWebhookService facebookWebhookService;
-    private final FacebookWebhookSubscribtionService facebookWebhookSubscribtionService;
+    private final FacebookWebhookSubscriptionService facebookWebhookSubscriptionService;
 
     @Autowired
     public FacebookWebhookResource(FacebookMessageConsumer facebookMessageConsumer,
                                    FacebookWebhookService facebookWebhookService,
-                                   FacebookWebhookSubscribtionService
-                                           facebookWebhookSubscribtionService) {
+                                   FacebookWebhookSubscriptionService
+                                           facebookWebhookSubscriptionService) {
         this.facebookWebhookService = facebookWebhookService;
-        this.facebookWebhookSubscribtionService = facebookWebhookSubscribtionService;
+        this.facebookWebhookSubscriptionService = facebookWebhookSubscriptionService;
 
-        // TODO(nich): Handle this thread better
+        // TODO(nich): Start this thread in infrastructure
         facebookMessageConsumer.startConsuming();
     }
 
@@ -46,7 +46,7 @@ public class FacebookWebhookResource {
     @GetMapping
     public ResponseEntity<String> subscribe(@RequestParam Map<String, String> requestParams)
             throws InvalidFacebookVerificationTokenException {
-        String challenge = facebookWebhookSubscribtionService.subscribe(requestParams);
+        String challenge = facebookWebhookSubscriptionService.subscribe(requestParams);
 
         return new ResponseEntity<>(challenge, HttpStatus.OK);
     }

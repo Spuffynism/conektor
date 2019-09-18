@@ -7,11 +7,11 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import xyz.ndlr.domain.FacebookMessageConsumer;
 import xyz.ndlr.domain.exception.InvalidFacebookVerificationTokenException;
-import xyz.ndlr.domain.provider.facebook.webhook.Payload;
+import xyz.ndlr.infrastructure.FacebookMessageConsumer;
+import xyz.ndlr.infrastructure.provider.facebook.webhook.Payload;
 import xyz.ndlr.service.FacebookWebhookService;
-import xyz.ndlr.service.FacebookWebhookSubscribtionService;
+import xyz.ndlr.service.FacebookWebhookSubscriptionService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class FacebookWebhookResourceTest {
     FacebookWebhookService facebookWebhookService;
 
     @Mock
-    FacebookWebhookSubscribtionService facebookWebhookSubscribtionService;
+    FacebookWebhookSubscriptionService facebookWebhookSubscriptionService;
 
     @InjectMocks
     FacebookWebhookResource facebookWebhookResource;
@@ -52,7 +52,7 @@ public class FacebookWebhookResourceTest {
             throws InvalidFacebookVerificationTokenException {
         String expectedChallenge = "expected challenge";
 
-        when(facebookWebhookSubscribtionService.subscribe(SOME_REQUEST_PARAMS))
+        when(facebookWebhookSubscriptionService.subscribe(SOME_REQUEST_PARAMS))
                 .thenReturn(expectedChallenge);
         ResponseEntity<String> response = facebookWebhookResource.subscribe(SOME_REQUEST_PARAMS);
 
@@ -71,7 +71,7 @@ public class FacebookWebhookResourceTest {
     public void givenInvalidToken_whenSubscribing_throwsException()
             throws InvalidFacebookVerificationTokenException {
         doThrow(InvalidFacebookVerificationTokenException.class)
-                .when(facebookWebhookSubscribtionService)
+                .when(facebookWebhookSubscriptionService)
                 .subscribe(SOME_REQUEST_PARAMS);
 
         facebookWebhookResource.subscribe(SOME_REQUEST_PARAMS);

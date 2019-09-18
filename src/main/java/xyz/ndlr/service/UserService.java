@@ -1,15 +1,14 @@
 package xyz.ndlr.service;
 
 import org.springframework.stereotype.Service;
-import xyz.ndlr.domain.Email;
-import xyz.ndlr.domain.IAuthHolder;
+import xyz.ndlr.domain.AuthenticationHolder;
 import xyz.ndlr.domain.Limit;
 import xyz.ndlr.domain.exception.EmailTakenException;
 import xyz.ndlr.domain.exception.UnauthorizedException;
 import xyz.ndlr.domain.exception.UserNotFoundException;
 import xyz.ndlr.domain.exception.UsernameTakenException;
 import xyz.ndlr.domain.password.HashedPassword;
-import xyz.ndlr.domain.password.IPasswordHasher;
+import xyz.ndlr.domain.password.PasswordHasher;
 import xyz.ndlr.domain.password.exception.InvalidPasswordLengthException;
 import xyz.ndlr.domain.password.exception.NonCompliantPasswordException;
 import xyz.ndlr.domain.user.*;
@@ -19,14 +18,14 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private final IUserRepository userRepository;
-    private final IAuthHolder authHolder;
+    private final UserRepository userRepository;
+    private final AuthenticationHolder authHolder;
     private final UserFactory userFactory;
-    private final IPasswordHasher passwordHasher;
+    private final PasswordHasher passwordHasher;
     private final PasswordChangeService passwordChangeService;
 
-    public UserService(IAuthHolder authHolder, IUserRepository userRepository,
-                       UserFactory userFactory, IPasswordHasher passwordHasher,
+    public UserService(AuthenticationHolder authHolder, UserRepository userRepository,
+                       UserFactory userFactory, PasswordHasher passwordHasher,
                        PasswordChangeService passwordChangeService) {
         this.userRepository = userRepository;
         this.authHolder = authHolder;

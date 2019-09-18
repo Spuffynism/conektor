@@ -2,16 +2,16 @@ package xyz.ndlr.service;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import xyz.ndlr.domain.dispatching.ErrorDispatcher;
-import xyz.ndlr.domain.dispatching.MainDispatcher;
 import xyz.ndlr.domain.exception.CannotDispatchException;
 import xyz.ndlr.domain.exception.UnregisteredAccountException;
 import xyz.ndlr.domain.exception.UnsupportedPayloadException;
-import xyz.ndlr.domain.provider.facebook.FacebookMessageFacade;
-import xyz.ndlr.domain.provider.facebook.FacebookRepository;
-import xyz.ndlr.domain.provider.facebook.webhook.Messaging;
-import xyz.ndlr.domain.provider.facebook.webhook.Payload;
 import xyz.ndlr.domain.user.User;
+import xyz.ndlr.infrastructure.dispatching.ErrorDispatcher;
+import xyz.ndlr.infrastructure.dispatching.MainDispatcher;
+import xyz.ndlr.infrastructure.provider.facebook.FacebookMessageFacade;
+import xyz.ndlr.infrastructure.provider.facebook.FacebookUserService;
+import xyz.ndlr.infrastructure.provider.facebook.webhook.Messaging;
+import xyz.ndlr.infrastructure.provider.facebook.webhook.Payload;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ import java.util.List;
 public class FacebookWebhookService {
     private static final Logger logger = Logger.getLogger(FacebookWebhookService.class);
 
-    private final FacebookRepository facebookRepository;
+    private final FacebookUserService facebookRepository;
     private final ErrorDispatcher errorDispatcher;
     private final MainDispatcher mainDispatcher;
 
-    FacebookWebhookService(FacebookRepository facebookRepository, ErrorDispatcher errorDispatcher,
+    FacebookWebhookService(FacebookUserService facebookRepository, ErrorDispatcher errorDispatcher,
                            MainDispatcher mainDispatcher) {
         this.facebookRepository = facebookRepository;
         this.errorDispatcher = errorDispatcher;
@@ -57,8 +57,7 @@ public class FacebookWebhookService {
         String senderId = messageFacade.getSender().getId();
 
         if (!facebookRepository.userIsRegistered(senderId))
-            throw new UnregisteredAccountException("unrecognized facebook account - are you " +
-                    "registered?");
+            throw new UnregisteredAccountException();
 
         dispatch(senderId, messageFacade.getMessaging());
     }

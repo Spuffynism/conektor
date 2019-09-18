@@ -1,8 +1,8 @@
 package xyz.ndlr.domain;
 
 public class Limit {
-    int limit;
-    int page;
+    private final int limit;
+    private final int page;
 
     public static final Limit DEFAULT = new Limit(50, 0);
 

@@ -3,10 +3,9 @@ package xyz.ndlr.domain.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import xyz.ndlr.domain.AbstractDatable;
-import xyz.ndlr.domain.Email;
 import xyz.ndlr.domain.account.Account;
-import xyz.ndlr.domain.dispatching.SupportedProvider;
 import xyz.ndlr.domain.password.HashedPassword;
+import xyz.ndlr.infrastructure.dispatching.SupportedProvider;
 import xyz.ndlr.infrastructure.security.auth.Role;
 
 import javax.persistence.*;

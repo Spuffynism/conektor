@@ -1,18 +1,17 @@
 package xyz.ndlr.domain.user;
 
 public class UserId {
+    private final long value;
 
-    private final int value;
-
-    private UserId(int value) {
+    private UserId(long value) {
         this.value = value;
     }
 
-    public static UserId from(int i) {
-        return new UserId(i);
+    public static UserId from(long value) {
+        return new UserId(value);
     }
 
-    public int getValue() {
+    public long getValue() {
         return this.value;
     }
 

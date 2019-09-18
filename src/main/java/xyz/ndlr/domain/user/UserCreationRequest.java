@@ -1,6 +1,5 @@
 package xyz.ndlr.domain.user;
 
-import xyz.ndlr.domain.Email;
 import xyz.ndlr.domain.password.Password;
 
 public class UserCreationRequest {

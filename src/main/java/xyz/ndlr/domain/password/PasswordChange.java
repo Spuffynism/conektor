@@ -34,7 +34,7 @@ public class PasswordChange {
         return this.newPassword.length();
     }
 
-    public HashedPassword hash(IPasswordHasher passwordHasher) {
+    public HashedPassword hash(PasswordHasher passwordHasher) {
         return passwordHasher.hash(this.newPassword);
     }
 }

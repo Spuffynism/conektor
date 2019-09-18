@@ -4,13 +4,13 @@ import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.stereotype.Service;
 import xyz.ndlr.domain.password.HashedPassword;
-import xyz.ndlr.domain.password.IPasswordHasher;
 import xyz.ndlr.domain.password.Password;
+import xyz.ndlr.domain.password.PasswordHasher;
 
 import java.nio.charset.StandardCharsets;
 
 @Service
-public class Argon2Hasher implements IPasswordHasher {
+public class Argon2Hasher implements PasswordHasher {
     private static final int SALT_LENGTH = 32;
     private static final int HASH_OUTPUT_LENGTH = 64;
     private static final int HASHING_ITERATIONS = 10; // takes ~ 1 second to hash

@@ -3,21 +3,23 @@ package xyz.ndlr.domain.account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import xyz.ndlr.domain.provider.Provider;
+import xyz.ndlr.domain.provider.ProviderId;
 import xyz.ndlr.domain.user.User;
+import xyz.ndlr.domain.user.UserId;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "account_acc")
 public class Account {
-    private int id;
-    private String token;
+    private AccountId id;
+    private AccountToken token;
     @JsonProperty("user_id")
-    private int userId;
+    private UserId userId;
     @JsonIgnore
     private User user;
     @JsonProperty("provider_id")
-    private int providerId;
+    private ProviderId providerId;
     @JsonIgnore
     private Provider provider;
 
@@ -26,31 +28,31 @@ public class Account {
 
     @Id
     @Column(name = "acc_id")
-    public int getId() {
+    public AccountId getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(AccountId id) {
         this.id = id;
     }
 
     @Basic
     @Column(name = "acc_token")
-    public String getToken() {
+    public AccountToken getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(AccountToken token) {
         this.token = token;
     }
 
     @Basic
     @Column(name = "acc_user_id")
-    public int getUserId() {
+    public UserId getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(UserId userId) {
         this.userId = userId;
     }
 
@@ -66,11 +68,11 @@ public class Account {
 
     @Basic
     @Column(name = "acc_provider_id")
-    public int getProviderId() {
+    public ProviderId getProviderId() {
         return providerId;
     }
 
-    public void setProviderId(int providerId) {
+    public void setProviderId(ProviderId providerId) {
         this.providerId = providerId;
     }
 

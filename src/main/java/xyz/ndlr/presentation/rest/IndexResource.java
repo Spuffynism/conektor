@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.ndlr.domain.WelcomeMessage;
+import xyz.ndlr.presentation.WelcomeMessage;
 import xyz.ndlr.service.WelcomingService;
 
 @RestController

@@ -1,7 +1,7 @@
 package xyz.ndlr.domain.password;
 
 import org.springframework.stereotype.Component;
-import xyz.ndlr.domain.IPasswordChangeRepository;
+import xyz.ndlr.domain.PasswordChangeRepository;
 import xyz.ndlr.domain.password.exception.*;
 import xyz.ndlr.domain.user.User;
 import xyz.ndlr.domain.user.UserId;
@@ -9,11 +9,11 @@ import xyz.ndlr.domain.user.UserId;
 @Component
 public class PasswordProducingService {
 
-    private final IPasswordChangeRepository passwordChangeRepository;
-    private final IPasswordHasher passwordHasher;
+    private final PasswordChangeRepository passwordChangeRepository;
+    private final PasswordHasher passwordHasher;
 
-    public PasswordProducingService(IPasswordChangeRepository passwordChangeRepository,
-                                    IPasswordHasher passwordHasher) {
+    public PasswordProducingService(PasswordChangeRepository passwordChangeRepository,
+                                    PasswordHasher passwordHasher) {
         this.passwordChangeRepository = passwordChangeRepository;
         this.passwordHasher = passwordHasher;
     }

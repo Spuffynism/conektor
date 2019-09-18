@@ -1,0 +1,17 @@
+package xyz.ndlr.infrastructure.provider.facebook.sendAPI.message.attachment.template;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import xyz.ndlr.infrastructure.provider.facebook.sendAPI.message.attachment.AbstractPayload;
+
+public class TemplatePayload extends AbstractPayload {
+    @JsonProperty("template_type")
+    private TemplateType type;
+
+    public TemplatePayload(TemplateType type) {
+        this.type = type;
+    }
+
+    public TemplateType getType() {
+        return type;
+    }
+}

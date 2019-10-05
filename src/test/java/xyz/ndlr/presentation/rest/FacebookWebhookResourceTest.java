@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import xyz.ndlr.domain.exception.InvalidFacebookVerificationTokenException;
 import xyz.ndlr.infrastructure.FacebookMessageConsumer;
+import xyz.ndlr.infrastructure.provider.facebook.Challenge;
 import xyz.ndlr.infrastructure.provider.facebook.webhook.Payload;
 import xyz.ndlr.service.FacebookWebhookService;
 import xyz.ndlr.service.FacebookWebhookSubscriptionService;
@@ -50,13 +51,13 @@ public class FacebookWebhookResourceTest {
     @Test
     public void whenSubscribing_includesChallengeInResponse()
             throws InvalidFacebookVerificationTokenException {
-        String expectedChallenge = "expected challenge";
+        Challenge expectedChallenge = Challenge.fromString("expected challenge");
 
         when(facebookWebhookSubscriptionService.subscribe(SOME_REQUEST_PARAMS))
                 .thenReturn(expectedChallenge);
         ResponseEntity<String> response = facebookWebhookResource.subscribe(SOME_REQUEST_PARAMS);
 
-        assertEquals(expectedChallenge, response.getBody());
+        assertEquals(expectedChallenge.getValue(), response.getBody());
     }
 
     @Test

@@ -42,20 +42,18 @@ public class Message {
 
     }
 
-    public String getMid() {
-        return mid;
+    public String getContent() {
+        return this.isQuickReply()
+                ? this.quickReply.getPayload()
+                : this.text;
+    }
+
+    private boolean isQuickReply() {
+        return this.quickReply != null;
     }
 
     public String getText() {
         return text;
-    }
-
-    public String getSeq() {
-        return seq;
-    }
-
-    public List<Attachment> getAttachments() {
-        return attachments;
     }
 
     public QuickReply getQuickReply() {

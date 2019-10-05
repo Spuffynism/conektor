@@ -26,15 +26,7 @@ public class MessageParser {
     }
 
     public static MessageParser fromMessage(Message message) throws IllegalArgumentException {
-        String text;
-        boolean messageIsQuickReply = message.getQuickReply() != null;
-        if (messageIsQuickReply) {
-            text = message.getQuickReply().getPayload();
-        } else {
-            text = message.getText();
-        }
-
-        return new MessageParser(text);
+        return new MessageParser(message.getContent());
     }
 
     private void setCommand(String message) throws IllegalArgumentException {

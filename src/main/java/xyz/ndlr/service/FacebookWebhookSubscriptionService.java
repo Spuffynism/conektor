@@ -2,16 +2,26 @@ package xyz.ndlr.service;
 
 import org.springframework.stereotype.Service;
 import xyz.ndlr.domain.exception.InvalidFacebookVerificationTokenException;
+import xyz.ndlr.infrastructure.provider.facebook.Challenge;
 import xyz.ndlr.infrastructure.provider.facebook.FacebookVerificationToken;
+import xyz.ndlr.infrastructure.provider.facebook.FacebookVerificationTokenFactory;
 
 import java.util.Map;
 
 @Service
 public class FacebookWebhookSubscriptionService {
 
-    public String subscribe(Map<String, String> requestParams)
+    private FacebookVerificationTokenFactory facebookVerificationTokenFactory;
+
+    public FacebookWebhookSubscriptionService(
+            FacebookVerificationTokenFactory facebookVerificationTokenFactory) {
+        this.facebookVerificationTokenFactory = facebookVerificationTokenFactory;
+    }
+
+    public Challenge subscribe(Map<String, String> requestParameters)
             throws InvalidFacebookVerificationTokenException {
-        FacebookVerificationToken token = new FacebookVerificationToken(requestParams);
+        FacebookVerificationToken token = this.facebookVerificationTokenFactory
+                .createFromRequestParameters(requestParameters);
 
         token.validate();
 

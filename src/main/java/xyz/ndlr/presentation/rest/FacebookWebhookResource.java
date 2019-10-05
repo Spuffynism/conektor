@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xyz.ndlr.domain.exception.InvalidFacebookVerificationTokenException;
 import xyz.ndlr.infrastructure.FacebookMessageConsumer;
+import xyz.ndlr.infrastructure.provider.facebook.Challenge;
 import xyz.ndlr.infrastructure.provider.facebook.webhook.Payload;
 import xyz.ndlr.service.FacebookWebhookService;
 import xyz.ndlr.service.FacebookWebhookSubscriptionService;
@@ -37,8 +38,7 @@ public class FacebookWebhookResource {
 
     /**
      * Entry point Facebook uses to verify OUR webhook's authenticity by having us return a
-     * challenge. We also validatePasswordCompliesWithPolicy the verify_token that they send to
-     * verify THEIR authenticity.
+     * challenge. We also validate the verify_token that they send to verify THEIR authenticity.
      *
      * @param requestParams the params. facebook sends to use to authentify
      * @return a confirmation response
@@ -46,9 +46,9 @@ public class FacebookWebhookResource {
     @GetMapping
     public ResponseEntity<String> subscribe(@RequestParam Map<String, String> requestParams)
             throws InvalidFacebookVerificationTokenException {
-        String challenge = facebookWebhookSubscriptionService.subscribe(requestParams);
+        Challenge challenge = facebookWebhookSubscriptionService.subscribe(requestParams);
 
-        return new ResponseEntity<>(challenge, HttpStatus.OK);
+        return new ResponseEntity<>(challenge.getValue(), HttpStatus.OK);
     }
 
     /**

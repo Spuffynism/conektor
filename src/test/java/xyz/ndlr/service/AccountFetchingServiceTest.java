@@ -48,7 +48,7 @@ public class AccountFetchingServiceTest {
     }
 
     @Test
-    public void givenTokenAndProviderId_whenFetchingByToken_fetchesCorrespondingAccount(){
+    public void givenTokenAndProviderId_whenFetchingByToken_fetchesCorrespondingAccount() {
         when(accountRepository.getByToken(A_TOKEN, A_PROVIDER_ID))
                 .thenReturn(AN_ACCOUNT);
 
@@ -58,20 +58,22 @@ public class AccountFetchingServiceTest {
     }
 
     @Test
-    public void givenUserId_whenFetchingByUserId_fetchesByUserId(){
+    public void givenUserId_whenFetchingByUserId_fetchesByUserId() {
         accountFetchingService.fetchByUserId(A_USER_ID);
 
         verify(accountRepository).getByUserId(A_USER_ID);
     }
 
     @Test
-    public void givenUserId_whenFetchingByUserId_fetchesCorrespondingAccount(){
+    public void givenUserId_whenFetchingByUserId_fetchesCorrespondingAccount() {
         when(accountRepository.getByUserId(A_USER_ID))
                 .thenReturn(Collections.singletonList(AN_ACCOUNT));
 
         List<Account> foundAccounts = accountFetchingService.fetchByUserId(A_USER_ID);
 
-        assertEquals(1, foundAccounts.size());
+        int expectedAccountListSize = 1;
+
+        assertEquals(expectedAccountListSize, foundAccounts.size());
         assertEquals(AN_ACCOUNT, foundAccounts.get(0));
     }
 }

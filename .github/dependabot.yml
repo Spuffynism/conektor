@@ -1,0 +1,48 @@
+version: 2
+registries:
+  maven-repository-website-url:
+    type: maven-repository
+    url: https://website.url
+    username: asdasd
+    password: "${{secrets.MAVEN_REPOSITORY_WEBSITE_URL_PASSWORD}}"
+
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.springframework.boot:spring-boot-starter-security
+    versions:
+    - 2.4.2
+    - 2.4.4
+  - dependency-name: org.springframework.boot:spring-boot-starter-parent
+    versions:
+    - 2.4.2
+    - 2.4.4
+  - dependency-name: org.hibernate:hibernate-core
+    versions:
+    - 5.4.27.Final
+    - 5.4.29.Final
+  - dependency-name: com.fasterxml.jackson.core:jackson-annotations
+    versions:
+    - 2.12.2
+  - dependency-name: mysql:mysql-connector-java
+    versions:
+    - 8.0.23
+  - dependency-name: org.springframework.security:spring-security-test
+    versions:
+    - 5.4.2
+    - 5.4.4
+  - dependency-name: de.mkammerer:argon2-jvm
+    versions:
+    - "2.9"
+  - dependency-name: org.junit.jupiter:junit-jupiter-engine
+    versions:
+    - 5.7.0
+  - dependency-name: com.google.guava:guava
+    versions:
+    - 29.0-jre
+  registries:
+  - maven-repository-website-url
